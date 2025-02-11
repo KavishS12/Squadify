@@ -4,6 +4,7 @@
 
 /* Reset and full-screen configuration */
 html, body, #root {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
   height: 100%;
@@ -27,7 +28,6 @@ html, body, #root {
 /* Remove default flex and centering from body */
 body {
   margin: 0;
-  min-width: 320px;
 }
 
 /* Tailwind will handle most of your base styling now */

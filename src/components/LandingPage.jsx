@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronRight, Database, TrendingUp, Shield, Users } from 'lucide-react';
-import heroImage from "../assets/hero.png";
+import heroImage from '../assets/hero-main.jpeg';
 
 const LandingPage = () => {
   const [activeFeature, setActiveFeature] = useState(0);
@@ -26,39 +26,13 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-blue-800 to-purple-700 text-white min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 lg:grid lg:grid-cols-2 lg:gap-16">
-          <div className="mt-10 lg:mt-0">
-          <h1 className="text-4xl font-extrabold tracking-wide sm:text-9xl" style={{ fontFamily: '"Barrio", serif' }}>
-            Squadify
-          </h1>
-          <h3 className='text-2xl mt-5 font-semibold text-gray-300' style={{fontFamily:'"Barrio",serif'}}>An AI-Driven Football Squad Optimization</h3>
-            <p className="mt-10 text-xl text-blue-100">
-              Transform squad building with data-driven insights. Maximize team performance within a €150M budget using cutting-edge machine learning.
-            </p>
-            <div className="mt-10 sm:flex sm:space-x-4">
-              <a 
-                href="#" 
-                className="flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 md:py-4 md:text-lg md:px-10"
-              >
-                Get Started <ChevronRight className="ml-2 h-5 w-5" />
-              </a>
-              <a 
-                href="#features" 
-                className="mt-3 sm:mt-0 flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-100 bg-blue-600 bg-opacity-25 hover:bg-opacity-40 md:py-4 md:text-lg md:px-10"
-              >
-                Learn More
-              </a>
-            </div>
-          </div>
-          <div className="hidden lg:block relative">
-            <img 
-              src={heroImage}
-              alt="Football Squad Visualization" 
-              className="w-full max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl rounded-full shadow-black-lg mx-auto"
-              style={{ maxWidth: '100%' }} // Ensure image does not overflow
-            />
-          </div>
+      <div className="relative min-h-screen">
+        <div className="h-screen">
+          <img
+            src={heroImage}
+            alt="Football Squad"
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
 
@@ -77,22 +51,23 @@ const LandingPage = () => {
             </p>
           </div>
 
-          <div className="mt-16 lg:grid lg:grid-cols-3 lg:gap-8">
+          <div className="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <div 
                 key={feature.title} 
-                className={`flex flex-col p-6 rounded-lg transition-all duration-300 ${
+                className={`flex flex-col p-6 rounded-lg transition-all duration-300 transform ${
                   activeFeature === index 
                     ? 'bg-gray-300 shadow-lg scale-105' 
                     : 'hover:bg-gray-100'
                 }`}
                 onMouseEnter={() => setActiveFeature(index)}
+                style={{ transformOrigin: 'center' }}
               >
-                <div className="flex-shrink-0">
+                <div>
                   {feature.icon}
                 </div>
                 <div className="mt-2">
-                  <h3 className={`text-lg font-semibold text-gray-300 ${activeFeature === index ? 'text-black' : 'hover:text-black'}`}>
+                  <h3 className={`text-lg font-semibold ${activeFeature === index ? 'text-gray-800' : 'text-gray-300 hover:text-gray-800'}`}>
                     {feature.title}
                   </h3>
                   <p className="mt-2 text-base text-gray-500">
@@ -105,6 +80,7 @@ const LandingPage = () => {
         </div>
       </div>
 
+      {/* Rest of the sections remain the same but with proper container constraints */}
       {/* Key Technologies Section */}
       <div className="bg-gray-100 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -168,7 +144,7 @@ const LandingPage = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-12">
+      <footer className="bg-gray-800 text-white py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p>Copyright &copy; 2025 All rights reserved.</p>
