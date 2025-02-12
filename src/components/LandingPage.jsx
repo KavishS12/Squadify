@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronRight, Database, TrendingUp, Shield, Users } from 'lucide-react';
-import heroImage from '../assets/hero-main.jpeg';
+import heroImage from '../assets/hero-main.png';
 
 const LandingPage = () => {
   const [activeFeature, setActiveFeature] = useState(0);
