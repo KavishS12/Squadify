@@ -97,4 +97,9 @@ const Navbar = ({ page, setPage }) => {
   );
 };
 
+Navbar.propTypes = {
+  page: PropTypes.string.isRequired,
+  setPage: PropTypes.func.isRequired,
+};
+
 export default Navbar;
