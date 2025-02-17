@@ -41,7 +41,6 @@ const Navbar = ({ page, setPage }) => {
             <button 
               onClick={() => handleNavigation('landing')}
               className="text-purple-700 font-bold text-3xl transition duration-300" 
-              style={{ textShadow: '0px 0px 8px rgba(128, 0, 128, 0.8)' }}
             >
               Squadify
             </button>
