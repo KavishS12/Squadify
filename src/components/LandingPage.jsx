@@ -82,7 +82,7 @@ const LandingPage = () => {
 
       {/* Rest of the sections remain the same but with proper container constraints */}
       {/* Key Technologies Section */}
-      <div className="bg-gray-100 py-16">
+      <div id="technology" className="bg-gray-100 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
             <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">
@@ -144,7 +144,7 @@ const LandingPage = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-4">
+      <footer id="footer" className="bg-gray-800 text-white py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p>Copyright &copy; 2025 All rights reserved.</p>
