@@ -30,38 +30,35 @@ const nationFlags = {
 };
 
 const PlayersPage = () => {
-    const data = [
-      { id: 1, name: "Kylian Mbappé", nation: "France", pos: "ST", age: 24, defense_ratings: 38, passing_ratings: 82, shooting_ratings: 91, potential_ratings: 95, overall_ratings: 91 },
-      { id: 2, name: "Erling Haaland", nation: "Norway", pos: "ST", age: 22, defense_ratings: 45, passing_ratings: 75, shooting_ratings: 93, potential_ratings: 94, overall_ratings: 89 },
-      { id: 3, name: "Jude Bellingham", nation: "England", pos: "CM", age: 20, defense_ratings: 78, passing_ratings: 85, shooting_ratings: 75, potential_ratings: 92, overall_ratings: 86 },
-      { id: 4, name: "Vinícius Jr.", nation: "Brazil", pos: "LW", age: 23, defense_ratings: 42, passing_ratings: 79, shooting_ratings: 83, potential_ratings: 92, overall_ratings: 89 },
-      { id: 5, name: "Phil Foden", nation: "England", pos: "CAM", age: 23, defense_ratings: 52, passing_ratings: 85, shooting_ratings: 81, potential_ratings: 90, overall_ratings: 85 },
-      { id: 6, name: "Federico Valverde", nation: "Uruguay", pos: "CM", age: 24, defense_ratings: 81, passing_ratings: 86, shooting_ratings: 82, potential_ratings: 90, overall_ratings: 88 },
-      { id: 7, name: "Gavi", nation: "Spain", pos: "CM", age: 19, defense_ratings: 72, passing_ratings: 83, shooting_ratings: 70, potential_ratings: 91, overall_ratings: 83 },
-      { id: 8, name: "Rafael Leão", nation: "Portugal", pos: "LW", age: 23, defense_ratings: 35, passing_ratings: 78, shooting_ratings: 84, potential_ratings: 89, overall_ratings: 85 },
-      { id: 9, name: "Bukayo Saka", nation: "England", pos: "RW", age: 22, defense_ratings: 62, passing_ratings: 82, shooting_ratings: 81, potential_ratings: 90, overall_ratings: 86 },
-      { id: 10, name: "Pedri", nation: "Spain", pos: "CM", age: 21, defense_ratings: 68, passing_ratings: 87, shooting_ratings: 75, potential_ratings: 93, overall_ratings: 86 },
-      { id: 11, name: "Jamal Musiala", nation: "Germany", pos: "CAM", age: 20, defense_ratings: 55, passing_ratings: 87, shooting_ratings: 79, potential_ratings: 92, overall_ratings: 86 },
-      { id: 12, name: "João Félix", nation: "Portugal", pos: "CF", age: 24, defense_ratings: 50, passing_ratings: 84, shooting_ratings: 80, potential_ratings: 89, overall_ratings: 84 },
-      { id: 13, name: "Rodrygo", nation: "Brazil", pos: "RW", age: 23, defense_ratings: 47, passing_ratings: 80, shooting_ratings: 82, potential_ratings: 90, overall_ratings: 85 },
-      { id: 14, name: "Ansu Fati", nation: "Spain", pos: "LW", age: 21, defense_ratings: 45, passing_ratings: 78, shooting_ratings: 79, potential_ratings: 89, overall_ratings: 83 },
-      { id: 15, name: "Eduardo Camavinga", nation: "France", pos: "CDM", age: 21, defense_ratings: 80, passing_ratings: 85, shooting_ratings: 74, potential_ratings: 90, overall_ratings: 86 },
-      { id: 16, name: "Jules Koundé", nation: "France", pos: "CB", age: 25, defense_ratings: 85, passing_ratings: 78, shooting_ratings: 60, potential_ratings: 88, overall_ratings: 87 },
-      { id: 17, name: "Alphonso Davies", nation: "Canada", pos: "LB", age: 23, defense_ratings: 82, passing_ratings: 80, shooting_ratings: 70, potential_ratings: 90, overall_ratings: 85 },
-      { id: 18, name: "Declan Rice", nation: "England", pos: "CDM", age: 25, defense_ratings: 86, passing_ratings: 83, shooting_ratings: 72, potential_ratings: 89, overall_ratings: 87 },
-      { id: 19, name: "Florian Wirtz", nation: "Germany", pos: "CAM", age: 21, defense_ratings: 58, passing_ratings: 86, shooting_ratings: 78, potential_ratings: 91, overall_ratings: 86 },
-      { id: 20, name: "Gabriel Martinelli", nation: "Brazil", pos: "LW", age: 22, defense_ratings: 46, passing_ratings: 79, shooting_ratings: 81, potential_ratings: 88, overall_ratings: 85 },
-      { id: 21, name: "Khvicha Kvaratskhelia", nation: "Georgia", pos: "LW", age: 23, defense_ratings: 50, passing_ratings: 82, shooting_ratings: 85, potential_ratings: 89, overall_ratings: 86 },
-      { id: 22, name: "Victor Osimhen", nation: "Nigeria", pos: "ST", age: 25, defense_ratings: 42, passing_ratings: 75, shooting_ratings: 88, potential_ratings: 89, overall_ratings: 87 },
-      { id: 23, name: "Rasmus Højlund", nation: "Denmark", pos: "ST", age: 21, defense_ratings: 40, passing_ratings: 73, shooting_ratings: 86, potential_ratings: 90, overall_ratings: 85 },
-      { id: 24, name: "Moises Caicedo", nation: "Ecuador", pos: "CDM", age: 22, defense_ratings: 84, passing_ratings: 80, shooting_ratings: 70, potential_ratings: 88, overall_ratings: 85 },
-      { id: 25, name: "Enzo Fernández", nation: "Argentina", pos: "CM", age: 23, defense_ratings: 80, passing_ratings: 86, shooting_ratings: 78, potential_ratings: 90, overall_ratings: 86 },
-      { id: 26, name: "Josko Gvardiol", nation: "Croatia", pos: "CB", age: 22, defense_ratings: 88, passing_ratings: 78, shooting_ratings: 60, potential_ratings: 89, overall_ratings: 87 },
-      { id: 27, name: "William Saliba", nation: "France", pos: "CB", age: 23, defense_ratings: 87, passing_ratings: 76, shooting_ratings: 62, potential_ratings: 89, overall_ratings: 86 },
-      { id: 28, name: "Trent Alexander-Arnold", nation: "England", pos: "RB", age: 25, defense_ratings: 78, passing_ratings: 90, shooting_ratings: 70, potential_ratings: 88, overall_ratings: 87 },
-      { id: 29, name: "Mike Maignan", nation: "France", pos: "GK", age: 28, defense_ratings: 88, passing_ratings: 85, shooting_ratings: 50, potential_ratings: 89, overall_ratings: 88 },
-      { id: 30, name: "Gianluigi Donnarumma", nation: "Italy", pos: "GK", age: 25, defense_ratings: 90, passing_ratings: 82, shooting_ratings: 52, potential_ratings: 90, overall_ratings: 89 },
-    ];
+  const data = [
+    { id: 1, name: "Kylian Mbappé", nation: "France", pos: "ST", age: 24, defense_ratings: 38, passing_ratings: 82, shooting_ratings: 91, potential_ratings: 95, overall_ratings: 91, market_value: 18000000 },
+    { id: 2, name: "Erling Haaland", nation: "Norway", pos: "ST", age: 22, defense_ratings: 45, passing_ratings: 75, shooting_ratings: 93, potential_ratings: 94, overall_ratings: 89, market_value: 17000000 },
+    { id: 3, name: "Jude Bellingham", nation: "England", pos: "CM", age: 20, defense_ratings: 78, passing_ratings: 85, shooting_ratings: 75, potential_ratings: 92, overall_ratings: 86, market_value: 12000000 },
+    { id: 4, name: "Vinícius Jr.", nation: "Brazil", pos: "LW", age: 23, defense_ratings: 42, passing_ratings: 79, shooting_ratings: 83, potential_ratings: 92, overall_ratings: 89, market_value: 15000000 },
+    { id: 5, name: "Phil Foden", nation: "England", pos: "CAM", age: 23, defense_ratings: 52, passing_ratings: 85, shooting_ratings: 81, potential_ratings: 90, overall_ratings: 85, market_value: 11000000 },
+    { id: 6, name: "Federico Valverde", nation: "Uruguay", pos: "CM", age: 24, defense_ratings: 81, passing_ratings: 86, shooting_ratings: 82, potential_ratings: 90, overall_ratings: 88, market_value: 13000000 },
+    { id: 7, name: "Gavi", nation: "Spain", pos: "CM", age: 19, defense_ratings: 72, passing_ratings: 83, shooting_ratings: 70, potential_ratings: 91, overall_ratings: 83, market_value: 9000000 },
+    { id: 8, name: "Rafael Leão", nation: "Portugal", pos: "LW", age: 23, defense_ratings: 35, passing_ratings: 78, shooting_ratings: 84, potential_ratings: 89, overall_ratings: 85, market_value: 9500000 },
+    { id: 9, name: "Bukayo Saka", nation: "England", pos: "RW", age: 22, defense_ratings: 62, passing_ratings: 82, shooting_ratings: 81, potential_ratings: 90, overall_ratings: 86, market_value: 12000000 },
+    { id: 10, name: "Pedri", nation: "Spain", pos: "CM", age: 21, defense_ratings: 68, passing_ratings: 87, shooting_ratings: 75, potential_ratings: 93, overall_ratings: 86, market_value: 13000000 },
+    { id: 11, name: "Jamal Musiala", nation: "Germany", pos: "CAM", age: 20, defense_ratings: 55, passing_ratings: 87, shooting_ratings: 79, potential_ratings: 92, overall_ratings: 86, market_value: 11500000 },
+    { id: 12, name: "João Félix", nation: "Portugal", pos: "CF", age: 24, defense_ratings: 50, passing_ratings: 84, shooting_ratings: 80, potential_ratings: 89, overall_ratings: 84, market_value: 8500000 },
+    { id: 13, name: "Rodrygo", nation: "Brazil", pos: "RW", age: 23, defense_ratings: 47, passing_ratings: 80, shooting_ratings: 82, potential_ratings: 90, overall_ratings: 85, market_value: 10000000 },
+    { id: 14, name: "Ansu Fati", nation: "Spain", pos: "LW", age: 21, defense_ratings: 45, passing_ratings: 78, shooting_ratings: 79, potential_ratings: 89, overall_ratings: 83, market_value: 8000000 },
+    { id: 15, name: "Eduardo Camavinga", nation: "France", pos: "CDM", age: 21, defense_ratings: 80, passing_ratings: 85, shooting_ratings: 74, potential_ratings: 90, overall_ratings: 86, market_value: 11000000 },
+    { id: 16, name: "Jules Koundé", nation: "France", pos: "CB", age: 25, defense_ratings: 85, passing_ratings: 78, shooting_ratings: 60, potential_ratings: 88, overall_ratings: 87, market_value: 9500000 },
+    { id: 17, name: "Alphonso Davies", nation: "Canada", pos: "LB", age: 23, defense_ratings: 82, passing_ratings: 80, shooting_ratings: 70, potential_ratings: 90, overall_ratings: 85, market_value: 10500000 },
+    { id: 18, name: "Declan Rice", nation: "England", pos: "CDM", age: 25, defense_ratings: 86, passing_ratings: 83, shooting_ratings: 72, potential_ratings: 89, overall_ratings: 87, market_value: 12000000 },
+    { id: 19, name: "Florian Wirtz", nation: "Germany", pos: "CAM", age: 21, defense_ratings: 58, passing_ratings: 86, shooting_ratings: 78, potential_ratings: 91, overall_ratings: 86, market_value: 10000000 },
+    { id: 20, name: "Gabriel Martinelli", nation: "Brazil", pos: "LW", age: 22, defense_ratings: 46, passing_ratings: 79, shooting_ratings: 81, potential_ratings: 88, overall_ratings: 85, market_value: 9000000 },
+    { id: 21, name: "Khvicha Kvaratskhelia", nation: "Georgia", pos: "LW", age: 23, defense_ratings: 50, passing_ratings: 82, shooting_ratings: 85, potential_ratings: 89, overall_ratings: 86, market_value: 9500000 },
+    { id: 22, name: "Victor Osimhen", nation: "Nigeria", pos: "ST", age: 25, defense_ratings: 42, passing_ratings: 75, shooting_ratings: 88, potential_ratings: 89, overall_ratings: 87, market_value: 12000000 },
+    { id: 23, name: "Rasmus Højlund", nation: "Denmark", pos: "ST", age: 21, defense_ratings: 40, passing_ratings: 73, shooting_ratings: 86, potential_ratings: 90, overall_ratings: 85, market_value: 8000000 },
+    { id: 24, name: "Moises Caicedo", nation: "Ecuador", pos: "CDM", age: 22, defense_ratings: 84, passing_ratings: 80, shooting_ratings: 70, potential_ratings: 88, overall_ratings: 85, market_value: 9500000 },
+    { id: 25, name: "Enzo Fernández", nation: "Argentina", pos: "CM", age: 23, defense_ratings: 80, passing_ratings: 86, shooting_ratings: 78, potential_ratings: 90, overall_ratings: 86, market_value: 10500000 },
+    { id: 26, name: "Josko Gvardiol", nation: "Croatia", pos: "CB", age: 22, defense_ratings: 88, passing_ratings: 78, shooting_ratings: 60, potential_ratings: 89, overall_ratings: 87, market_value: 11000000 },
+    { id: 27, name: "William Saliba", nation: "France", pos: "CB", age: 23, defense_ratings: 87, passing_ratings: 76, shooting_ratings: 62, potential_ratings: 89, overall_ratings: 86, market_value: 10000000 },
+  ];
 
   const [selectedNation, setSelectedNation] = useState("all");
   const [selectedPosition, setSelectedPosition] = useState("all");
@@ -194,6 +191,7 @@ const PlayersPage = () => {
                   <th className="p-2 text-center text-blue-100 font-semibold">Shooting</th>
                   <th className="p-2 text-center text-blue-100 font-semibold">Overall</th>
                   <th className="p-2 text-center text-blue-100 font-semibold">Potential</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Market Value</th>
                 </tr>
               </thead>
               <tbody>
@@ -238,6 +236,7 @@ const PlayersPage = () => {
                         {row.potential_ratings}
                       </div>
                     </td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">{row.market_value}</td>
                   </tr>
                 ))}
               </tbody>
