@@ -1,14 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); 
+const dotenv = require('dotenv');
+const cors = require('cors');
+const playerRoutes = require('./routes/playerRoute');   
 
-require('dotenv').config();
+dotenv.config();
+const dbURI = process.env.MONGO_URI;
 
 const app = express();
 const port = process.env.PORT || 5000;
-const dbURI = process.env.MONGO_URI;
 
 app.use(express.json());
+
 app.use(cors({
     origin: "http://localhost:3000", // frontend URL
     credentials: true,
@@ -19,12 +22,13 @@ app.get('/',(req,res) => {
     res.send('Hello world!')
 });
 
-// app.use('/player', playerRoutes);
+app.use('/players', playerRoutes);
 
 //start server
 app.listen(port,() => {
     console.log(`Server running on port ${port}`);
 });
+
 
 mongoose.connect(dbURI)
     .then((result) => {
