@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Hide scrollbar in table for Chrome, Safari, and Edge */
+.table-container::-webkit-scrollbar {
+  display: none;
+}

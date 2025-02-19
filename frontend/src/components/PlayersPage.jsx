@@ -1,81 +1,151 @@
 import React from 'react';
 
-const SoccerStatsTable = () => {
-    const data = [
-        { id: 1, player: "Erling Haaland", team: "Man City", goals: 36, assists: 8, played: 35, goalsPerNinety: 1.17, mpg: 77, totalShots: 107, shotAccuracy: 56 },
-        { id: 2, player: "Harry Kane", team: "Tottenham", goals: 30, assists: 3, played: 38, goalsPerNinety: 0.79, mpg: 114, totalShots: 100, shotAccuracy: 63 },
-        { id: 3, player: "Ivan Toney", team: "Brentford", goals: 20, assists: 4, played: 33, goalsPerNinety: 0.61, mpg: 148, totalShots: 78, shotAccuracy: 54 },
-        { id: 4, player: "Mohamed Salah", team: "Liverpool", goals: 19, assists: 12, played: 38, goalsPerNinety: 0.52, mpg: 173, totalShots: 97, shotAccuracy: 48 },
-        { id: 5, player: "Callum Wilson", team: "Newcastle", goals: 18, assists: 5, played: 31, goalsPerNinety: 0.86, mpg: 105, totalShots: 63, shotAccuracy: 56 },
-        { id: 6, player: "Marcus Rashford", team: "Man Utd", goals: 17, assists: 5, played: 35, goalsPerNinety: 0.53, mpg: 170, totalShots: 81, shotAccuracy: 62 },
-        { id: 7, player: "Gabriel Martinelli", team: "Arsenal", goals: 15, assists: 5, played: 36, goalsPerNinety: 0.48, mpg: 187, totalShots: 55, shotAccuracy: 58 },
-        { id: 8, player: "Ollie Watkins", team: "Aston Villa", goals: 15, assists: 6, played: 37, goalsPerNinety: 0.43, mpg: 209, totalShots: 70, shotAccuracy: 67 },
-        { id: 9, player: "Martin Ødegaard", team: "Arsenal", goals: 15, assists: 7, played: 37, goalsPerNinety: 0.43, mpg: 210, totalShots: 60, shotAccuracy: 55 },
-        { id: 10, player: "Bukayo Saka", team: "Arsenal", goals: 14, assists: 11, played: 38, goalsPerNinety: 0.39, mpg: 228, totalShots: 60, shotAccuracy: 53 },
-        { id: 11, player: "Alexander Mitrovic", team: "Fulham", goals: 14, assists: 1, played: 34, goalsPerNinety: 0.48, mpg: 144, totalShots: 71, shotAccuracy: 46 },
-        { id: 12, player: "Rodrigo", team: "Leeds", goals: 13, assists: 1, played: 31, goalsPerNinety: 0.52, mpg: 156, totalShots: 65, shotAccuracy: 51 },
-        { id: 13, player: "Phil Foden", team: "Man City", goals: 11, assists: 5, played: 32, goalsPerNinety: 0.41, mpg: 198, totalShots: 58, shotAccuracy: 59 },
-        { id: 14, player: "Darwin Núñez", team: "Liverpool", goals: 9, assists: 3, played: 29, goalsPerNinety: 0.38, mpg: 212, totalShots: 75, shotAccuracy: 44 },
-        { id: 15, player: "James Maddison", team: "Leicester", goals: 9, assists: 8, played: 30, goalsPerNinety: 0.35, mpg: 225, totalShots: 52, shotAccuracy: 50 },
-        { id: 16, player: "Kai Havertz", team: "Chelsea", goals: 7, assists: 3, played: 35, goalsPerNinety: 0.22, mpg: 315, totalShots: 45, shotAccuracy: 47 },
-        { id: 17, player: "Bruno Fernandes", team: "Man Utd", goals: 8, assists: 8, played: 37, goalsPerNinety: 0.23, mpg: 298, totalShots: 68, shotAccuracy: 49 },
-        { id: 18, player: "Leandro Trossard", team: "Brighton", goals: 8, assists: 3, played: 30, goalsPerNinety: 0.31, mpg: 245, totalShots: 42, shotAccuracy: 52 },
-        { id: 19, player: "Son Heung-min", team: "Tottenham", goals: 10, assists: 6, played: 36, goalsPerNinety: 0.30, mpg: 234, totalShots: 58, shotAccuracy: 57 },
-        { id: 20, player: "Gabriel Jesus", team: "Arsenal", goals: 11, assists: 6, played: 26, goalsPerNinety: 0.47, mpg: 156, totalShots: 51, shotAccuracy: 61 },
-        { id: 21, player: "Miguel Almirón", team: "Newcastle", goals: 11, assists: 2, played: 35, goalsPerNinety: 0.34, mpg: 208, totalShots: 48, shotAccuracy: 58 },
-        { id: 22, player: "Raheem Sterling", team: "Chelsea", goals: 6, assists: 2, played: 28, goalsPerNinety: 0.24, mpg: 301, totalShots: 39, shotAccuracy: 51 },
-        { id: 23, player: "Wilfried Zaha", team: "Crystal Palace", goals: 7, assists: 2, played: 27, goalsPerNinety: 0.29, mpg: 249, totalShots: 41, shotAccuracy: 54 },
-        { id: 24, player: "Eberechi Eze", team: "Crystal Palace", goals: 10, assists: 4, played: 38, goalsPerNinety: 0.28, mpg: 246, totalShots: 54, shotAccuracy: 57 },
-        { id: 25, player: "James Ward-Prowse", team: "Southampton", goals: 9, assists: 4, played: 38, goalsPerNinety: 0.25, mpg: 272, totalShots: 46, shotAccuracy: 59 }
-    ];
+const nationFlags = {
+  "Argentina": "ar",
+  "Australia": "au",
+  "Belgium": "be",
+  "Brazil": "br",
+  "Canada": "ca",
+  "Croatia": "hr",
+  "Denmark": "dk",
+  "Ecuador": "ec",
+  "England": "gb",
+  "France": "fr",
+  "Germany": "de",
+  "Georgia": "ge",
+  "Italy": "it",
+  "Japan": "jp",
+  "Mexico": "mx",
+  "Morocco": "ma",
+  "Netherlands": "nl",
+  "Nigeria": "ng",
+  "Norway": "no",
+  "Portugal": "pt",
+  "Senegal": "sn",
+  "South Korea": "kr",
+  "Spain": "es",
+  "Switzerland": "ch",
+  "United States": "us",
+  "Uruguay": "uy"
+};
 
-    return (
-        <div className="w-full min-h-screen bg-black pt-16">
-          <div className="max-w-[90vw] mx-auto p-4">
-            <div className="overflow-x-auto rounded-lg shadow-lg">
-              <table className="min-w-full table-auto">
-                <thead>
-                  <tr className="bg-purple-900">
-                    <th className="p-2 text-left text-violet-100 font-semibold border-b border-purple-700 whitespace-nowrap">#</th>
-                    <th className="p-2 text-left text-violet-100 font-semibold border-b border-purple-700 whitespace-nowrap">Player</th>
-                    <th className="p-2 text-left text-violet-100 font-semibold border-b border-purple-700 whitespace-nowrap">Team</th>
-                    <th className="p-2 text-left text-violet-100 font-semibold border-b border-purple-700 whitespace-nowrap">Goals</th>
-                    <th className="p-2 text-left text-violet-100 font-semibold border-b border-purple-700 whitespace-nowrap">Assists</th>
-                    <th className="p-2 text-left text-violet-100 font-semibold border-b border-purple-700 whitespace-nowrap">Played</th>
-                    <th className="p-2 text-left text-violet-100 font-semibold border-b border-purple-700 whitespace-nowrap">G/90</th>
-                    <th className="p-2 text-left text-violet-100 font-semibold border-b border-purple-700 whitespace-nowrap">MPG</th>
-                    <th className="p-2 text-left text-violet-100 font-semibold border-b border-purple-700 whitespace-nowrap">Shots</th>
-                    <th className="p-2 text-left text-violet-100 font-semibold border-b border-purple-700 whitespace-nowrap">Accuracy</th>
+const SoccerStatsTable = () => {
+  const data = [
+    { id: 1, name: "Kylian Mbappé", nation: "France", pos: "ST", age: 24, defense_ratings: 38, passing_ratings: 82, shooting_ratings: 91, potential_ratings: 95, overall_ratings: 91 },
+    { id: 2, name: "Erling Haaland", nation: "Norway", pos: "ST", age: 22, defense_ratings: 45, passing_ratings: 75, shooting_ratings: 93, potential_ratings: 94, overall_ratings: 89 },
+    { id: 3, name: "Jude Bellingham", nation: "England", pos: "CM", age: 20, defense_ratings: 78, passing_ratings: 85, shooting_ratings: 75, potential_ratings: 92, overall_ratings: 86 },
+    { id: 4, name: "Vinícius Jr.", nation: "Brazil", pos: "LW", age: 23, defense_ratings: 42, passing_ratings: 79, shooting_ratings: 83, potential_ratings: 92, overall_ratings: 89 },
+    { id: 5, name: "Phil Foden", nation: "England", pos: "CAM", age: 23, defense_ratings: 52, passing_ratings: 85, shooting_ratings: 81, potential_ratings: 90, overall_ratings: 85 },
+    { id: 6, name: "Federico Valverde", nation: "Uruguay", pos: "CM", age: 24, defense_ratings: 81, passing_ratings: 86, shooting_ratings: 82, potential_ratings: 90, overall_ratings: 88 },
+    { id: 7, name: "Gavi", nation: "Spain", pos: "CM", age: 19, defense_ratings: 72, passing_ratings: 83, shooting_ratings: 70, potential_ratings: 91, overall_ratings: 83 },
+    { id: 8, name: "Rafael Leão", nation: "Portugal", pos: "LW", age: 23, defense_ratings: 35, passing_ratings: 78, shooting_ratings: 84, potential_ratings: 89, overall_ratings: 85 },
+    { id: 9, name: "Bukayo Saka", nation: "England", pos: "RW", age: 22, defense_ratings: 62, passing_ratings: 82, shooting_ratings: 81, potential_ratings: 90, overall_ratings: 86 },
+    { id: 10, name: "Pedri", nation: "Spain", pos: "CM", age: 21, defense_ratings: 68, passing_ratings: 87, shooting_ratings: 75, potential_ratings: 93, overall_ratings: 86 },
+    { id: 11, name: "Jamal Musiala", nation: "Germany", pos: "CAM", age: 20, defense_ratings: 55, passing_ratings: 87, shooting_ratings: 79, potential_ratings: 92, overall_ratings: 86 },
+    { id: 12, name: "João Félix", nation: "Portugal", pos: "CF", age: 24, defense_ratings: 50, passing_ratings: 84, shooting_ratings: 80, potential_ratings: 89, overall_ratings: 84 },
+    { id: 13, name: "Rodrygo", nation: "Brazil", pos: "RW", age: 23, defense_ratings: 47, passing_ratings: 80, shooting_ratings: 82, potential_ratings: 90, overall_ratings: 85 },
+    { id: 14, name: "Ansu Fati", nation: "Spain", pos: "LW", age: 21, defense_ratings: 45, passing_ratings: 78, shooting_ratings: 79, potential_ratings: 89, overall_ratings: 83 },
+    { id: 15, name: "Eduardo Camavinga", nation: "France", pos: "CDM", age: 21, defense_ratings: 80, passing_ratings: 85, shooting_ratings: 74, potential_ratings: 90, overall_ratings: 86 },
+    { id: 16, name: "Jules Koundé", nation: "France", pos: "CB", age: 25, defense_ratings: 85, passing_ratings: 78, shooting_ratings: 60, potential_ratings: 88, overall_ratings: 87 },
+    { id: 17, name: "Alphonso Davies", nation: "Canada", pos: "LB", age: 23, defense_ratings: 82, passing_ratings: 80, shooting_ratings: 70, potential_ratings: 90, overall_ratings: 85 },
+    { id: 18, name: "Declan Rice", nation: "England", pos: "CDM", age: 25, defense_ratings: 86, passing_ratings: 83, shooting_ratings: 72, potential_ratings: 89, overall_ratings: 87 },
+    { id: 19, name: "Florian Wirtz", nation: "Germany", pos: "CAM", age: 21, defense_ratings: 58, passing_ratings: 86, shooting_ratings: 78, potential_ratings: 91, overall_ratings: 86 },
+    { id: 20, name: "Gabriel Martinelli", nation: "Brazil", pos: "LW", age: 22, defense_ratings: 46, passing_ratings: 79, shooting_ratings: 81, potential_ratings: 88, overall_ratings: 85 },
+    { id: 21, name: "Khvicha Kvaratskhelia", nation: "Georgia", pos: "LW", age: 23, defense_ratings: 50, passing_ratings: 82, shooting_ratings: 85, potential_ratings: 89, overall_ratings: 86 },
+    { id: 22, name: "Victor Osimhen", nation: "Nigeria", pos: "ST", age: 25, defense_ratings: 42, passing_ratings: 75, shooting_ratings: 88, potential_ratings: 89, overall_ratings: 87 },
+    { id: 23, name: "Rasmus Højlund", nation: "Denmark", pos: "ST", age: 21, defense_ratings: 40, passing_ratings: 73, shooting_ratings: 86, potential_ratings: 90, overall_ratings: 85 },
+    { id: 24, name: "Moises Caicedo", nation: "Ecuador", pos: "CDM", age: 22, defense_ratings: 84, passing_ratings: 80, shooting_ratings: 70, potential_ratings: 88, overall_ratings: 85 },
+    { id: 25, name: "Enzo Fernández", nation: "Argentina", pos: "CM", age: 23, defense_ratings: 80, passing_ratings: 86, shooting_ratings: 78, potential_ratings: 90, overall_ratings: 86 },
+    { id: 26, name: "Josko Gvardiol", nation: "Croatia", pos: "CB", age: 22, defense_ratings: 88, passing_ratings: 78, shooting_ratings: 60, potential_ratings: 89, overall_ratings: 87 },
+    { id: 27, name: "William Saliba", nation: "France", pos: "CB", age: 23, defense_ratings: 87, passing_ratings: 76, shooting_ratings: 62, potential_ratings: 89, overall_ratings: 86 },
+    { id: 28, name: "Trent Alexander-Arnold", nation: "England", pos: "RB", age: 25, defense_ratings: 78, passing_ratings: 90, shooting_ratings: 70, potential_ratings: 88, overall_ratings: 87 },
+    { id: 29, name: "Mike Maignan", nation: "France", pos: "GK", age: 28, defense_ratings: 88, passing_ratings: 85, shooting_ratings: 50, potential_ratings: 89, overall_ratings: 88 },
+    { id: 30, name: "Gianluigi Donnarumma", nation: "Italy", pos: "GK", age: 25, defense_ratings: 90, passing_ratings: 82, shooting_ratings: 52, potential_ratings: 90, overall_ratings: 89 },
+  ];
+
+  const getRatingColor = (rating) => {
+    if (rating >= 90) return 'bg-blue-900';
+    if (rating >= 80) return 'bg-blue-800';
+    if (rating >= 70) return 'bg-blue-700';
+    if (rating >= 60) return 'bg-blue-600';
+    if (rating >= 50) return 'bg-blue-500';
+    if (rating >= 40) return 'bg-blue-400';
+    if (rating >= 30) return 'bg-blue-300';
+    if (rating >= 20) return 'bg-blue-200';
+    return 'bg-blue-100';
+  };
+
+  return (
+    <div className="w-full min-h-screen bg-black pt-16">
+      <div className="max-w-[90vw] mx-auto p-4">
+        <div className="overflow-hidden rounded-lg shadow-lg border border-blue-300">
+          <div className="table-container max-h-[590px] overflow-auto relative">
+            <table className="min-w-full table-auto">
+              <thead className="sticky top-0 z-10"> 
+                <tr className="bg-blue-950 shadow-md">
+                  <th className="p-2 text-center text-blue-100 font-semibold">#</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Name</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Nation</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Pos</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Age</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Defense</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Passing</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Shooting</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Overall</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Potential</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((row) => (
+                  <tr   
+                    key={row.id}
+                    className="hover:bg-blue-700/25 transition-colors"
+                  >
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 first:border-l-0">{row.id}</td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">{row.name}</td>
+                    <td className="px-1 py-2 text-center border-b border-blue-300">
+                      <img
+                        src={`https://flagcdn.com/w40/${nationFlags[row.nation]}.png`}
+                        alt={row.nation}
+                        className="h-6 mx-auto"
+                      />
+                    </td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">{row.pos}</td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">{row.age}</td>
+                    <td className="px-1 py-2 border-b border-blue-300">
+                      <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(row.defense_ratings)} bg-opacity-80`}>
+                        {row.defense_ratings}
+                      </div>
+                    </td>
+                    <td className="px-1 py-2 border-b border-blue-300">
+                      <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(row.passing_ratings)} bg-opacity-80`}>
+                        {row.passing_ratings}
+                      </div>
+                    </td>
+                    <td className="px-1 py-2 border-b border-blue-300">
+                      <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(row.shooting_ratings)} bg-opacity-80`}>
+                        {row.shooting_ratings}
+                      </div>
+                    </td>
+                    <td className="px-1 py-2 border-b border-blue-300">
+                      <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
+                        {row.overall_ratings}
+                      </div>
+                    </td>
+                    <td className="px-1 py-2 border-b border-blue-300 last:border-r-0">
+                      <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
+                        {row.potential_ratings}
+                      </div>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {data.map((row) => (
-                    <tr 
-                      key={row.id}
-                      className="hover:bg-purple-900/30 transition-colors"
-                    >
-                      <td className="p-2 text-violet-200 border-b border-purple-800 whitespace-nowrap">{row.id}</td>
-                      <td className="p-2 text-violet-200 border-b border-purple-800 font-medium whitespace-nowrap">{row.player}</td>
-                      <td className="p-2 text-violet-300 border-b border-purple-800 whitespace-nowrap">{row.team}</td>
-                      <td className="p-2 border-b border-purple-800 whitespace-nowrap">
-                        <div className="bg-violet-800 text-violet-100 px-2 py-1 rounded w-10 text-center">
-                          {row.goals}
-                        </div>
-                      </td>
-                      <td className="p-2 text-violet-200 border-b border-purple-800 whitespace-nowrap">{row.assists}</td>
-                      <td className="p-2 text-violet-200 border-b border-purple-800 whitespace-nowrap">{row.played}</td>
-                      <td className="p-2 text-violet-200 border-b border-purple-800 whitespace-nowrap">{row.goalsPerNinety}</td>
-                      <td className="p-2 text-violet-200 border-b border-purple-800 whitespace-nowrap">{row.mpg}</td>
-                      <td className="p-2 text-violet-200 border-b border-purple-800 whitespace-nowrap">{row.totalShots}</td>
-                      <td className="p-2 text-violet-200 border-b border-purple-800 whitespace-nowrap">{row.shotAccuracy}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default SoccerStatsTable;

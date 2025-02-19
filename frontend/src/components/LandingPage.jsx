@@ -3,7 +3,7 @@ import { ChevronRight, Database, TrendingUp, Shield, Users } from 'lucide-react'
 import heroImage from '../assets/hero-main.png';
 
 const LandingPage = () => {
-  const [activeFeature, setActiveFeature] = useState(0);
+  const [activeFeature, setActiveFeature] = useState(1);
 
   const features = [
     {

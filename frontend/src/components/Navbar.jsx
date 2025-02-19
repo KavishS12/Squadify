@@ -31,8 +31,8 @@ const Navbar = ({ page, setPage }) => {
 
   return (
     <nav 
-      className={`fixed w-full z-50 border-b-2 border-purple-600/50 backdrop-blur-sm transition-colors duration-300 ${
-        page === "landing" ? "bg-black/80" : "bg-purple-950/50"
+      className={`fixed w-full z-50 border-b-2 border-blue-600/50 backdrop-blur-sm transition-colors duration-300 ${
+        page === "landing" ? "bg-black/80" : "bg-blue-700/20"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,7 +40,7 @@ const Navbar = ({ page, setPage }) => {
           <div className="flex-shrink-0">
             <button 
               onClick={() => handleNavigation('landing')}
-              className="text-purple-700 font-bold text-3xl transition duration-300" 
+              className="text-blue-800 font-bold text-3xl transition duration-300" 
             >
               Squadify
             </button>
@@ -76,7 +76,7 @@ const Navbar = ({ page, setPage }) => {
       {/* Mobile Navigation */}
       {isOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-black/80 backdrop-blur-sm border-t border-purple-600/30">
+          <div className="px-2 pt-2 pb-3 space-y-1 bg-black/80 backdrop-blur-sm border-t border-blue-600/30">
             {navItems.map((item) => (
               <button
                 key={item.title}
@@ -88,7 +88,7 @@ const Navbar = ({ page, setPage }) => {
               >
                 {item.title}
               </button>
-            ))}
+              ))}
           </div>
         </div>
       )}
