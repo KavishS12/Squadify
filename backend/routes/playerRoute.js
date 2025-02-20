@@ -3,9 +3,9 @@ const Player = require('../models/Player');
 const router = express.Router();
 
 //sample route for testing
-router.get('/',(req,res) => {
-    res.send('Welcome to player dashboard');
-});
+// router.get('/',(req,res) => {
+//     res.send('Welcome to player dashboard');
+// });
 
 // POST : Add a single player
 router.post("/add-single-player", async (req, res) => {
@@ -66,7 +66,7 @@ router.post("/add-players", async (req, res) => {
 
         // Insert multiple players into MongoDB
         const insertedPlayers = await Player.insertMany(players, { ordered: false });
-        res.status(201).json({ message: "Players added successfully", players: insertedPlayers });
+        res.status(201).json({ message: `${insertedPlayers.length} players added successfully`, players: insertedPlayers });
     } catch (error) {
         console.error("Error adding players:", error);
 
@@ -87,6 +87,17 @@ router.delete("/delete-all", async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 });
+
+// GET : Retrieve all players
+router.get('/',async(req,res) => {
+    try{
+        const players = await Player.find();
+        res.status(200).json(players);
+    } 
+    catch(err) {
+        res.status(500).json({message : "Error retrieving posts", error : error.message});
+    }
+})
 
 
 module.exports = router;
