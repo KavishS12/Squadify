@@ -30,7 +30,7 @@ const nationFlags = {
 };
 
 const PlayersPage = () => {
-  const data = [
+   const data = [
     { id: 1, name: "Kylian Mbappé", nation: "France", pos: "ST", age: 24, defense_ratings: 38, passing_ratings: 82, shooting_ratings: 91, potential_ratings: 95, overall_ratings: 91, market_value: 18000000 },
     { id: 2, name: "Erling Haaland", nation: "Norway", pos: "ST", age: 22, defense_ratings: 45, passing_ratings: 75, shooting_ratings: 93, potential_ratings: 94, overall_ratings: 89, market_value: 17000000 },
     { id: 3, name: "Jude Bellingham", nation: "England", pos: "CM", age: 20, defense_ratings: 78, passing_ratings: 85, shooting_ratings: 75, potential_ratings: 92, overall_ratings: 86, market_value: 12000000 },
@@ -60,6 +60,7 @@ const PlayersPage = () => {
     { id: 27, name: "William Saliba", nation: "France", pos: "CB", age: 23, defense_ratings: 87, passing_ratings: 76, shooting_ratings: 62, potential_ratings: 89, overall_ratings: 86, market_value: 10000000 },
   ];
 
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedNation, setSelectedNation] = useState("all");
   const [selectedPosition, setSelectedPosition] = useState("all");
   const [ageRange, setAgeRange] = useState([18, 35]);
@@ -70,13 +71,15 @@ const PlayersPage = () => {
   const nations = [...new Set(data.map(player => player.nation))].sort();
 
   const filteredData = data.filter(player => {
+    const searchMatch = searchTerm === "" || 
+      player.name.toLowerCase().includes(searchTerm.toLowerCase());
     const nationMatch = selectedNation === "all" || player.nation === selectedNation;
     const posMatch = selectedPosition === "all" || player.pos === selectedPosition;
     const ageMatch = player.age >= ageRange[0] && player.age <= ageRange[1];
     const overallMatch = player.overall_ratings >= minOverall;
     const potentialMatch = player.potential_ratings >= minPotential;
     
-    return nationMatch && posMatch && ageMatch && overallMatch && potentialMatch;
+    return searchMatch && nationMatch && posMatch && ageMatch && overallMatch && potentialMatch;
   });
 
   const getRatingColor = (rating) => {
@@ -95,7 +98,19 @@ const PlayersPage = () => {
     <div className="w-full min-h-screen bg-black pt-8">
       <div className="max-w-[90vw] mx-auto p-4">
         {/* Filters Section */}
-        <div className="mb-8 mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 bg-blue-950 p-4 rounded-lg">
+        <div className="mb-8 mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 bg-blue-950 p-4 rounded-lg">
+          {/* Search Input */}
+          <div>
+            <label className="block text-blue-100 mb-2">Search Player</label>
+            <input
+              type="text"
+              placeholder="Search by name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full p-2 rounded bg-blue-900 text-blue-100 border border-blue-700 placeholder-blue-400"
+            />
+          </div>
+
           <div>
             <label className="block text-blue-100 mb-2">Nation</label>
             <select 
