@@ -92,12 +92,34 @@ router.delete("/delete-all", async (req, res) => {
 router.get('/',async(req,res) => {
     try{
         const players = await Player.find();
-        res.status(200).json(players);
+        const total = await Player.countDocuments();
+        res.status(200).json({total, players});
     } 
     catch(err) {
         res.status(500).json({message : "Error retrieving posts", error : error.message});
     }
 })
 
+// GET: Retrieve all players with pagination
+router.get('/pagination',async(req,res) => {
+    try {
+        const {page = 1,limit = 50, author} = req.query; // Default to page 1, 5 players per page
+        const skip = (page - 1) * limit; // Calculate the number of players to skip
+        let query = {};
+        const players = await Player.find(query)
+            .skip(skip)
+            .limit(parseInt(limit));
+        const total = await Player.countDocuments(); // Get total count of posts
+        res.status(200).json({
+            total,
+            page: parseInt(page),
+            totalPages: Math.ceil(total / limit),
+            players
+        });
+    } 
+    catch (error) {
+        res.status(500).json({ message: 'Error fetching posts', error: error.message });
+    }
+});
 
 module.exports = router;
