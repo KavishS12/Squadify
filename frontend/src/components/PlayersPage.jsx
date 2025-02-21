@@ -268,9 +268,7 @@ const PlayersPage = () => {
                         className="w-8 h-8 rounded-full object-cover border border-white mx-auto"
                       />
                     </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">
-                      {player.name}
-                    </td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">{player.name}</td>
                     <td className="px-1 py-2 text-center border-b border-blue-300">
                       <img
                         src={`https://flagcdn.com/w40/${nationFlags[player.nation]}.png`}
