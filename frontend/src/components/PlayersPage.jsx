@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Plus, Minus } from 'lucide-react';
 
 const nationFlags = {
   "ENG": "gb", "CZE": "cz", "POL": "pl", "USA": "us", "FRA": "fr", "ISR": "il", "ESP": "es", "NGA": "ng", "WAL": "gb-wls",
@@ -30,6 +30,7 @@ const PlayersPage = () => {
   const [minOverall, setMinOverall] = useState(70);
   const [minPotential, setMinPotential] = useState(70);
   const [isLoading, setIsLoading] = useState(false);
+  const [expandedRows, setExpandedRows] = useState(new Set());
 
   const getRatingColor = (rating) => {
     if (rating >= 90) return 'bg-blue-900';
@@ -102,6 +103,16 @@ const PlayersPage = () => {
     return searchMatch && nationMatch && posMatch && ageMatch && overallMatch && potentialMatch;
   });
 
+  const toggleRow = (playerId) => {
+    const newExpandedRows = new Set(expandedRows);
+    if (newExpandedRows.has(playerId)) {
+      newExpandedRows.delete(playerId);
+    } else {
+      newExpandedRows.add(playerId);
+    }
+    setExpandedRows(newExpandedRows);
+  };
+
   return (
     <div className="w-full min-h-screen bg-black pt-8">
       {isLoading && (
@@ -111,7 +122,7 @@ const PlayersPage = () => {
       )}
       <div className="max-w-[90vw] mx-auto p-4">
         {/* Filters Section */}
-        <div className="mb-8 mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 bg-blue-950 p-4 rounded-lg">
+        <div className="mb-6 mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 bg-blue-950 p-4 rounded-lg">
           {/* Search Input */}
           <div>
             <label className="block text-blue-100 mb-2">Search Player</label>
@@ -226,30 +237,29 @@ const PlayersPage = () => {
 
         {/* Table Section */}
         <div className="overflow-hidden rounded-lg shadow-lg border border-blue-300">
-          <div className="table-container max-h-[380px] overflow-auto relative">
-            <table className="min-w-full table-auto">
-              <thead className="sticky top-0 z-10">
-                <tr className="bg-blue-950 shadow-md">
-                  <th className="p-2 text-center text-blue-100 font-semibold">#</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold"></th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Name</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Nation</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Pos</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Age</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Club</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Defense</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Passing</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Shooting</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Potential</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Overall</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredPlayers.map((player) => (
-                  <tr
-                    key={player._id}
-                    className="hover:bg-blue-700/25 transition-colors"
-                  >
+          <div className="table-container max-h-[415px] overflow-auto relative">
+          <table className="min-w-full table-auto">
+            <thead className="sticky top-0 z-10">
+              <tr className="bg-blue-950 shadow-md">
+                <th className="p-2 text-center text-blue-100 font-semibold">#</th>
+                <th className="p-2 text-center text-blue-100 font-semibold"></th>
+                <th className="p-2 text-center text-blue-100 font-semibold">Name</th>
+                <th className="p-2 text-center text-blue-100 font-semibold">Nation</th>
+                <th className="p-2 text-center text-blue-100 font-semibold">Pos</th>
+                <th className="p-2 text-center text-blue-100 font-semibold">Age</th>
+                <th className="p-2 text-center text-blue-100 font-semibold">Defense</th>
+                <th className="p-2 text-center text-blue-100 font-semibold">Passing</th>
+                <th className="p-2 text-center text-blue-100 font-semibold">Shooting</th>
+                <th className="p-2 text-center text-blue-100 font-semibold">Potential</th>
+                <th className="p-2 text-center text-blue-100 font-semibold">Overall</th>
+                <th className="p-2 text-center text-blue-100 font-semibold">Market Value</th>
+                <th className="p-2 text-center text-blue-100 font-semibold w-8"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredPlayers.map((player) => (
+                <React.Fragment key={player._id}>
+                  <tr className="hover:bg-blue-700/25 transition-colors">
                     <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">{player._id.substring(18,)}</td>
                     <td className="px-1 py-2 text-center border-b border-blue-300">
                       <img 
@@ -258,7 +268,9 @@ const PlayersPage = () => {
                         className="w-8 h-8 rounded-full object-cover border border-white mx-auto"
                       />
                     </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">{player.name}</td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">
+                      {player.name}
+                    </td>
                     <td className="px-1 py-2 text-center border-b border-blue-300">
                       <img
                         src={`https://flagcdn.com/w40/${nationFlags[player.nation]}.png`}
@@ -266,9 +278,12 @@ const PlayersPage = () => {
                         className="h-6 mx-auto"
                       />
                     </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">{player.pos}</td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">{player.age}</td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">{player.club}</td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">
+                      {player.pos}
+                    </td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">
+                      {player.age}
+                    </td>
                     <td className="px-1 py-2 border-b border-blue-300">
                       <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.defense_ratings)} bg-opacity-80`}>
                         {player.defense_ratings.toFixed(1)}
@@ -284,7 +299,7 @@ const PlayersPage = () => {
                         {player.shooting_ratings.toFixed(1)}
                       </div>
                     </td>
-                    <td className="px-1 py-2 border-b border-blue-300 last:border-r-0">
+                    <td className="px-1 py-2 border-b border-blue-300">
                       <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
                         {player.potential_ratings.toFixed(1)}
                       </div>
@@ -294,14 +309,40 @@ const PlayersPage = () => {
                         {player.overall_ratings.toFixed(1)}
                       </div>
                     </td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">
+                      {player.Market_Value}
+                    </td>
+                    <td className="px-1 py-2 text-center border-b border-blue-300">
+                      <button
+                        onClick={() => toggleRow(player._id)}
+                        className="p-1 hover:bg-blue-800 rounded-full transition-colors"
+                      >
+                        {expandedRows.has(player._id) ? (
+                          <Minus className="w-4 h-4 text-blue-200" />
+                        ) : (
+                          <Plus className="w-4 h-4 text-blue-200" />
+                        )}
+                      </button>
+                    </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                  {expandedRows.has(player._id) && (
+                    <tr>
+                      <td colSpan="13" className="bg-blue-900/30 px-4 py-3 border-b border-blue-700">
+                        <div className="text-blue-200">
+                          {/* Placeholder for PlayerDetails component */}
+                          Player Details will be rendered here
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
           </div>
 
           {/* Pagination Controls */}
-          <div className="bg-blue-950 p-4 border-t border-blue-300">
+          <div className="bg-blue-950 p-1.5 border-t border-blue-300">
             <div className="flex items-center justify-between">
               <div className="text-blue-100">
                 Page {currentPage} of {totalPages}
@@ -311,25 +352,25 @@ const PlayersPage = () => {
                   onClick={() => handlePageChange(1)}
                   disabled={currentPage === 1}
                 >
-                  <ChevronsLeft className="w-4 h-4" />
+                  <ChevronsLeft className="w-3 h-3" />
                 </PaginationButton>
                 <PaginationButton
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-3 h-3" />
                 </PaginationButton>
                 <PaginationButton
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3 h-3" />
                 </PaginationButton>
                 <PaginationButton
                   onClick={() => handlePageChange(totalPages)}
                   disabled={currentPage === totalPages}
                 >
-                  <ChevronsRight className="w-4 h-4" />
+                  <ChevronsRight className="w-3 h-3" />
                 </PaginationButton>
               </div>
             </div>
