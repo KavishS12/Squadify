@@ -1,86 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 const nationFlags = {
-  "Argentina": "ar",
-  "Australia": "au",
-  "Belgium": "be",
-  "Brazil": "br",
-  "Canada": "ca",
-  "Croatia": "hr",
-  "Denmark": "dk",
-  "Ecuador": "ec",
-  "England": "gb",
-  "France": "fr",
-  "Germany": "de",
-  "Georgia": "ge",
-  "Italy": "it",
-  "Japan": "jp",
-  "Mexico": "mx",
-  "Morocco": "ma",
-  "Netherlands": "nl",
-  "Nigeria": "ng",
-  "Norway": "no",
-  "Portugal": "pt",
-  "Senegal": "sn",
-  "South Korea": "kr",
-  "Spain": "es",
-  "Switzerland": "ch",
-  "United States": "us",
-  "Uruguay": "uy"
+  "ENG": "gb", "CZE": "cz", "POL": "pl", "USA": "us", "FRA": "fr", "ISR": "il", "ESP": "es", "NGA": "ng", "WAL": "gb-wls",
+  "IRL": "ie", "BEL": "be", "ISL": "is", "SCO": "gb-sct", "CAN": "ca", "DEN": "dk", "CUW": "cw", "GUA": "gt", "PHI": "ph",
+  "CIV": "ci", "MLI": "ml", "ARG": "ar", "SEN": "sn", "GER": "de", "TOG": "tg", "GUI": "gn", "SRB": "rs", "NED": "nl",
+  "NOR": "no", "COD": "cd", "KVX": "xk", "SVN": "si", "EGY": "eg", "POR": "pt", "ECU": "ec", "NIR": "gb-nir", "URU": "uy",
+  "BRA": "br", "TAN": "tz", "AUS": "au", "ITA": "it", "ROU": "ro", "CMR": "cm", "GHA": "gh", "KOR": "kr", "SUI": "ch",
+  "BIH": "ba", "CUB": "cu", "FIN": "fi", "JAM": "jm", "KEN": "ke", "GRE": "gr", "AUT": "at", "COL": "co", "MEX": "mx",
+  "IRN": "ir", "RSA": "za", "SWE": "se", "TUR": "tr", "MTN": "mr", "MKD": "mk", "ANG": "ao", "CRO": "hr", "SKN": "kn",
+  "UKR": "ua", "PAR": "py", "MAR": "ma", "ZAM": "zm", "VEN": "ve", "SVK": "sk", "DOM": "do", "ALG": "dz", "TUN": "tn",
+  "BFA": "bf", "GRN": "gd", "ALB": "al", "JPN": "jp", "ZIM": "zw", "CRC": "cr", "HUN": "hu", "MSR": "ms", "GAM": "gm",
+  "GNB": "gw", "IRQ": "iq", "UZB": "uz", "NZL": "nz", "CHI": "cl", "GAB": "ga", "IDN": "id", "PER": "pe", "PAN": "pa",
+  "RUS": "ru", "CHN": "cn", "MTQ": "mq", "EQG": "gq", "ARM": "am", "GEO": "ge", "MNE": "me", "HON": "hn", "MOZ": "mz",
+  "SYR": "sy", "CPV": "cv", "Unknown": "un", "SUR": "sr", "PUR": "pr", "SLE": "sl", "EST": "ee", "BEN": "bj", "SMN": "sm",
+  "GLP": "gp", "CGO": "cg", "HAI": "ht", "COM": "km", "CTA": "cf", "NIG": "ne", "GUF": "gf", "MAD": "mg", "TRI": "tt",
+  "CHA": "td", "NCL": "nc", "JOR": "jo", "BDI": "bi", "MLT": "mt", "LUX": "lu", "FRO": "fo", "BUL": "bg", "MDA": "md",
+  "LTU": "lt", "BOL": "bo", "LBY": "ly", "UGA": "ug", "LVA": "lv", "CYP": "cy", "KSA": "sa"
 };
 
 const PlayersPage = () => {
-   const data = [
-    { id: 1, name: "Kylian Mbappé", nation: "France", pos: "ST", age: 24, defense_ratings: 38, passing_ratings: 82, shooting_ratings: 91, potential_ratings: 95, overall_ratings: 91, market_value: 18000000 },
-    { id: 2, name: "Erling Haaland", nation: "Norway", pos: "ST", age: 22, defense_ratings: 45, passing_ratings: 75, shooting_ratings: 93, potential_ratings: 94, overall_ratings: 89, market_value: 17000000 },
-    { id: 3, name: "Jude Bellingham", nation: "England", pos: "CM", age: 20, defense_ratings: 78, passing_ratings: 85, shooting_ratings: 75, potential_ratings: 92, overall_ratings: 86, market_value: 12000000 },
-    { id: 4, name: "Vinícius Jr.", nation: "Brazil", pos: "LW", age: 23, defense_ratings: 42, passing_ratings: 79, shooting_ratings: 83, potential_ratings: 92, overall_ratings: 89, market_value: 15000000 },
-    { id: 5, name: "Phil Foden", nation: "England", pos: "CAM", age: 23, defense_ratings: 52, passing_ratings: 85, shooting_ratings: 81, potential_ratings: 90, overall_ratings: 85, market_value: 11000000 },
-    { id: 6, name: "Federico Valverde", nation: "Uruguay", pos: "CM", age: 24, defense_ratings: 81, passing_ratings: 86, shooting_ratings: 82, potential_ratings: 90, overall_ratings: 88, market_value: 13000000 },
-    { id: 7, name: "Gavi", nation: "Spain", pos: "CM", age: 19, defense_ratings: 72, passing_ratings: 83, shooting_ratings: 70, potential_ratings: 91, overall_ratings: 83, market_value: 9000000 },
-    { id: 8, name: "Rafael Leão", nation: "Portugal", pos: "LW", age: 23, defense_ratings: 35, passing_ratings: 78, shooting_ratings: 84, potential_ratings: 89, overall_ratings: 85, market_value: 9500000 },
-    { id: 9, name: "Bukayo Saka", nation: "England", pos: "RW", age: 22, defense_ratings: 62, passing_ratings: 82, shooting_ratings: 81, potential_ratings: 90, overall_ratings: 86, market_value: 12000000 },
-    { id: 10, name: "Pedri", nation: "Spain", pos: "CM", age: 21, defense_ratings: 68, passing_ratings: 87, shooting_ratings: 75, potential_ratings: 93, overall_ratings: 86, market_value: 13000000 },
-    { id: 11, name: "Jamal Musiala", nation: "Germany", pos: "CAM", age: 20, defense_ratings: 55, passing_ratings: 87, shooting_ratings: 79, potential_ratings: 92, overall_ratings: 86, market_value: 11500000 },
-    { id: 12, name: "João Félix", nation: "Portugal", pos: "CF", age: 24, defense_ratings: 50, passing_ratings: 84, shooting_ratings: 80, potential_ratings: 89, overall_ratings: 84, market_value: 8500000 },
-    { id: 13, name: "Rodrygo", nation: "Brazil", pos: "RW", age: 23, defense_ratings: 47, passing_ratings: 80, shooting_ratings: 82, potential_ratings: 90, overall_ratings: 85, market_value: 10000000 },
-    { id: 14, name: "Ansu Fati", nation: "Spain", pos: "LW", age: 21, defense_ratings: 45, passing_ratings: 78, shooting_ratings: 79, potential_ratings: 89, overall_ratings: 83, market_value: 8000000 },
-    { id: 15, name: "Eduardo Camavinga", nation: "France", pos: "CDM", age: 21, defense_ratings: 80, passing_ratings: 85, shooting_ratings: 74, potential_ratings: 90, overall_ratings: 86, market_value: 11000000 },
-    { id: 16, name: "Jules Koundé", nation: "France", pos: "CB", age: 25, defense_ratings: 85, passing_ratings: 78, shooting_ratings: 60, potential_ratings: 88, overall_ratings: 87, market_value: 9500000 },
-    { id: 17, name: "Alphonso Davies", nation: "Canada", pos: "LB", age: 23, defense_ratings: 82, passing_ratings: 80, shooting_ratings: 70, potential_ratings: 90, overall_ratings: 85, market_value: 10500000 },
-    { id: 18, name: "Declan Rice", nation: "England", pos: "CDM", age: 25, defense_ratings: 86, passing_ratings: 83, shooting_ratings: 72, potential_ratings: 89, overall_ratings: 87, market_value: 12000000 },
-    { id: 19, name: "Florian Wirtz", nation: "Germany", pos: "CAM", age: 21, defense_ratings: 58, passing_ratings: 86, shooting_ratings: 78, potential_ratings: 91, overall_ratings: 86, market_value: 10000000 },
-    { id: 20, name: "Gabriel Martinelli", nation: "Brazil", pos: "LW", age: 22, defense_ratings: 46, passing_ratings: 79, shooting_ratings: 81, potential_ratings: 88, overall_ratings: 85, market_value: 9000000 },
-    { id: 21, name: "Khvicha Kvaratskhelia", nation: "Georgia", pos: "LW", age: 23, defense_ratings: 50, passing_ratings: 82, shooting_ratings: 85, potential_ratings: 89, overall_ratings: 86, market_value: 9500000 },
-    { id: 22, name: "Victor Osimhen", nation: "Nigeria", pos: "ST", age: 25, defense_ratings: 42, passing_ratings: 75, shooting_ratings: 88, potential_ratings: 89, overall_ratings: 87, market_value: 12000000 },
-    { id: 23, name: "Rasmus Højlund", nation: "Denmark", pos: "ST", age: 21, defense_ratings: 40, passing_ratings: 73, shooting_ratings: 86, potential_ratings: 90, overall_ratings: 85, market_value: 8000000 },
-    { id: 24, name: "Moises Caicedo", nation: "Ecuador", pos: "CDM", age: 22, defense_ratings: 84, passing_ratings: 80, shooting_ratings: 70, potential_ratings: 88, overall_ratings: 85, market_value: 9500000 },
-    { id: 25, name: "Enzo Fernández", nation: "Argentina", pos: "CM", age: 23, defense_ratings: 80, passing_ratings: 86, shooting_ratings: 78, potential_ratings: 90, overall_ratings: 86, market_value: 10500000 },
-    { id: 26, name: "Josko Gvardiol", nation: "Croatia", pos: "CB", age: 22, defense_ratings: 88, passing_ratings: 78, shooting_ratings: 60, potential_ratings: 89, overall_ratings: 87, market_value: 11000000 },
-    { id: 27, name: "William Saliba", nation: "France", pos: "CB", age: 23, defense_ratings: 87, passing_ratings: 76, shooting_ratings: 62, potential_ratings: 89, overall_ratings: 86, market_value: 10000000 },
-  ];
-
+  const [players, setPlayers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedNation, setSelectedNation] = useState("all");
   const [selectedPosition, setSelectedPosition] = useState("all");
-  const [ageRange, setAgeRange] = useState([18, 35]);
-  const [minOverall, setMinOverall] = useState(80);
-  const [minPotential, setMinPotential] = useState(80);
-
-  const positions = [...new Set(data.map(player => player.pos))].sort();
-  const nations = [...new Set(data.map(player => player.nation))].sort();
-
-  const filteredData = data.filter(player => {
-    const searchMatch = searchTerm === "" || 
-      player.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const nationMatch = selectedNation === "all" || player.nation === selectedNation;
-    const posMatch = selectedPosition === "all" || player.pos === selectedPosition;
-    const ageMatch = player.age >= ageRange[0] && player.age <= ageRange[1];
-    const overallMatch = player.overall_ratings >= minOverall;
-    const potentialMatch = player.potential_ratings >= minPotential;
-    
-    return searchMatch && nationMatch && posMatch && ageMatch && overallMatch && potentialMatch;
-  });
+  const [ageRange, setAgeRange] = useState([18, 45]);
+  const [minOverall, setMinOverall] = useState(70);
+  const [minPotential, setMinPotential] = useState(70);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getRatingColor = (rating) => {
     if (rating >= 90) return 'bg-blue-900';
@@ -94,6 +43,65 @@ const PlayersPage = () => {
     return 'bg-blue-100';
   };
 
+  const limit = 50;
+
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`http://localhost:5000/players/pagination?page=${currentPage}&limit=${limit}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log('Fetched data:', data); // Debug log
+        setPlayers(data.players);
+        setTotalPages(data.totalPages);
+      } catch (error) {
+        console.error("Error fetching players:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPlayers();
+  }, [currentPage]);
+
+  const positions = [...new Set(players.map(player => player.pos))].sort();
+  const nations = [...new Set(players.map(player => player.nation))].sort();
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const PaginationButton = ({ onClick, disabled, children }) => (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`px-3 py-2 rounded-md ${
+        disabled
+          ? 'bg-blue-800/50 text-blue-300 cursor-not-allowed'
+          : 'bg-blue-800 text-blue-100 hover:bg-blue-700'
+      } transition-colors`}
+    >
+      {children}
+    </button>
+  );
+
+  const filteredPlayers = players.filter(player => {
+    const searchMatch = searchTerm === "" || 
+      player.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const nationMatch = selectedNation === "all" || player.nation === selectedNation;
+    const posMatch = selectedPosition === "all" || player.pos === selectedPosition;
+    const ageMatch = player.age >= ageRange[0] && player.age <= ageRange[1];
+    const overallMatch = player.overall_ratings >= minOverall;
+    const potentialMatch = player.potential_ratings >= minPotential;
+    
+    return searchMatch && nationMatch && posMatch && ageMatch && overallMatch && potentialMatch;
+  });
+
   return (
     <div className="w-full min-h-screen bg-black pt-8">
       <div className="max-w-[90vw] mx-auto p-4">
@@ -106,7 +114,10 @@ const PlayersPage = () => {
               type="text"
               placeholder="Search by name..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
               className="w-full p-2 rounded bg-blue-900 text-blue-100 border border-blue-700 placeholder-blue-400"
             />
           </div>
@@ -116,7 +127,10 @@ const PlayersPage = () => {
             <select 
               className="w-full p-2 rounded bg-blue-900 text-blue-100 border border-blue-700"
               value={selectedNation}
-              onChange={(e) => setSelectedNation(e.target.value)}
+              onChange={(e) => {
+                setSelectedNation(e.target.value);
+                setCurrentPage(1);
+              }}
             >
               <option value="all">All Nations</option>
               {nations.map(nation => (
@@ -132,7 +146,10 @@ const PlayersPage = () => {
             <select 
               className="w-full p-2 rounded bg-blue-900 text-blue-100 border border-blue-700"
               value={selectedPosition}
-              onChange={(e) => setSelectedPosition(e.target.value)}
+              onChange={(e) => {
+                setSelectedPosition(e.target.value);
+                setCurrentPage(1);
+              }}
             >
               <option value="all">All Positions</option>
               {positions.map(pos => (
@@ -149,17 +166,23 @@ const PlayersPage = () => {
               <input
                 type="range"
                 min="18"
-                max="35"
+                max="45"
                 value={ageRange[0]}
-                onChange={(e) => setAgeRange([parseInt(e.target.value), ageRange[1]])}
+                onChange={(e) => {
+                  setAgeRange([parseInt(e.target.value), ageRange[1]]);
+                  setCurrentPage(1);
+                }}
                 className="w-full"
               />
               <input
                 type="range"
                 min="18"
-                max="35"
+                max="45"
                 value={ageRange[1]}
-                onChange={(e) => setAgeRange([ageRange[0], parseInt(e.target.value)])}
+                onChange={(e) => {
+                  setAgeRange([ageRange[0], parseInt(e.target.value)]);
+                  setCurrentPage(1);
+                }}
                 className="w-full"
               />
             </div>
@@ -169,10 +192,13 @@ const PlayersPage = () => {
             <label className="block text-blue-100 mb-2">Min Overall: {minOverall}</label>
             <input
               type="range"
-              min="70"
+              min="60"
               max="99"
               value={minOverall}
-              onChange={(e) => setMinOverall(parseInt(e.target.value))}
+              onChange={(e) => {
+                setMinOverall(parseInt(e.target.value));
+                setCurrentPage(1);
+              }}
               className="w-full"
             />
           </div>
@@ -181,10 +207,13 @@ const PlayersPage = () => {
             <label className="block text-blue-100 mb-2">Min Potential: {minPotential}</label>
             <input
               type="range"
-              min="70"
+              min="60"
               max="99"
               value={minPotential}
-              onChange={(e) => setMinPotential(parseInt(e.target.value))}
+              onChange={(e) => {
+                setMinPotential(parseInt(e.target.value));
+                setCurrentPage(1);
+              }}
               className="w-full"
             />
           </div>
@@ -193,69 +222,117 @@ const PlayersPage = () => {
         {/* Table Section */}
         <div className="overflow-hidden rounded-lg shadow-lg border border-blue-300">
           <div className="table-container max-h-[590px] overflow-auto relative">
+            {isLoading ? (
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                <div className="text-blue-100">Loading...</div>
+              </div>
+            ) : null}
             <table className="min-w-full table-auto">
               <thead className="sticky top-0 z-10">
                 <tr className="bg-blue-950 shadow-md">
                   <th className="p-2 text-center text-blue-100 font-semibold">#</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold"></th>
                   <th className="p-2 text-center text-blue-100 font-semibold">Name</th>
                   <th className="p-2 text-center text-blue-100 font-semibold">Nation</th>
                   <th className="p-2 text-center text-blue-100 font-semibold">Pos</th>
                   <th className="p-2 text-center text-blue-100 font-semibold">Age</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Club</th>
                   <th className="p-2 text-center text-blue-100 font-semibold">Defense</th>
                   <th className="p-2 text-center text-blue-100 font-semibold">Passing</th>
                   <th className="p-2 text-center text-blue-100 font-semibold">Shooting</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Overall</th>
                   <th className="p-2 text-center text-blue-100 font-semibold">Potential</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Market Value</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Overall</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredData.map((row) => (
+                {filteredPlayers.map((player) => (
                   <tr
-                    key={row.id}
+                    key={player._id}
                     className="hover:bg-blue-700/25 transition-colors"
                   >
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 first:border-l-0">{row.id}</td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">{row.name}</td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">{player._id.substring(18,)}</td>
+                    <td className="px-1 py-2 text-center border-b border-blue-300">
+                      <img 
+                        src={player.Image_URL} 
+                        alt="img" 
+                        className="w-8 h-8 rounded-full object-cover border border-white mx-auto"
+                      />
+                    </td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">{player.name}</td>
                     <td className="px-1 py-2 text-center border-b border-blue-300">
                       <img
-                        src={`https://flagcdn.com/w40/${nationFlags[row.nation]}.png`}
-                        alt={row.nation}
+                        src={`https://flagcdn.com/w40/${nationFlags[player.nation]}.png`}
+                        alt={player.nation}
                         className="h-6 mx-auto"
                       />
                     </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">{row.pos}</td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">{row.age}</td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">{player.pos}</td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">{player.age}</td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">{player.club}</td>
                     <td className="px-1 py-2 border-b border-blue-300">
-                      <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(row.defense_ratings)} bg-opacity-80`}>
-                        {row.defense_ratings}
+                      <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.defense_ratings)} bg-opacity-80`}>
+                        {player.defense_ratings.toFixed(1)}
                       </div>
                     </td>
                     <td className="px-1 py-2 border-b border-blue-300">
-                      <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(row.passing_ratings)} bg-opacity-80`}>
-                        {row.passing_ratings}
+                      <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.passing_ratings)} bg-opacity-80`}>
+                        {player.passing_ratings.toFixed(1)}
                       </div>
                     </td>
                     <td className="px-1 py-2 border-b border-blue-300">
-                      <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(row.shooting_ratings)} bg-opacity-80`}>
-                        {row.shooting_ratings}
-                      </div>
-                    </td>
-                    <td className="px-1 py-2 border-b border-blue-300">
-                      <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
-                        {row.overall_ratings}
+                      <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.shooting_ratings)} bg-opacity-80`}>
+                        {player.shooting_ratings.toFixed(1)}
                       </div>
                     </td>
                     <td className="px-1 py-2 border-b border-blue-300 last:border-r-0">
                       <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
-                        {row.potential_ratings}
+                        {player.potential_ratings.toFixed(1)}
                       </div>
                     </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">{row.market_value}</td>
+                    <td className="px-1 py-2 border-b border-blue-300">
+                      <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
+                        {player.overall_ratings.toFixed(1)}
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="bg-blue-950 p-4 border-t border-blue-300">
+            <div className="flex items-center justify-between">
+              <div className="text-blue-100">
+                Page {currentPage} of {totalPages}
+              </div>
+              <div className="flex gap-2">
+                <PaginationButton
+                  onClick={() => handlePageChange(1)}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronsLeft className="w-4 h-4" />
+                </PaginationButton>
+                <PaginationButton
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </PaginationButton>
+                <PaginationButton
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </PaginationButton>
+                <PaginationButton
+                  onClick={() => handlePageChange(totalPages)}
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronsRight className="w-4 h-4" />
+                </PaginationButton>
+              </div>
+            </div>
           </div>
         </div>
       </div>
