@@ -104,6 +104,11 @@ const PlayersPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-black pt-8">
+      {isLoading && (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="text-white text-lg font-bold">Loading...</div>
+        </div>
+      )}
       <div className="max-w-[90vw] mx-auto p-4">
         {/* Filters Section */}
         <div className="mb-8 mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 bg-blue-950 p-4 rounded-lg">
@@ -221,12 +226,7 @@ const PlayersPage = () => {
 
         {/* Table Section */}
         <div className="overflow-hidden rounded-lg shadow-lg border border-blue-300">
-          <div className="table-container max-h-[590px] overflow-auto relative">
-            {isLoading ? (
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                <div className="text-blue-100">Loading...</div>
-              </div>
-            ) : null}
+          <div className="table-container max-h-[380px] overflow-auto relative">
             <table className="min-w-full table-auto">
               <thead className="sticky top-0 z-10">
                 <tr className="bg-blue-950 shadow-md">
