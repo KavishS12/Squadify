@@ -50,23 +50,32 @@ const PlayersPage = () => {
     const fetchPlayers = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`http://localhost:5000/players/pagination?page=${currentPage}&limit=${limit}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        console.log('Fetched data:', data); // Debug log
-        setPlayers(data.players);
-        setTotalPages(data.totalPages);
+          const queryParams = new URLSearchParams({
+              page: currentPage,
+              limit: limit,
+              search: searchTerm,
+              nation: selectedNation !== "all" ? selectedNation : "",
+              position: selectedPosition !== "all" ? selectedPosition : "",
+              minAge: ageRange[0],
+              maxAge: ageRange[1],
+              minOverall: minOverall,
+              minPotential: minPotential,
+          }).toString();
+
+          const response = await fetch(`http://localhost:5000/players/pagination?${queryParams}`);
+          if (!response.ok) throw new Error('Network response was not ok');
+
+          const data = await response.json();
+          setPlayers(data.players);
+          setTotalPages(data.totalPages);
       } catch (error) {
-        console.error("Error fetching players:", error);
+          console.error("Error fetching players:", error);
       } finally {
-        setIsLoading(false);
+          setIsLoading(false);
       }
     };
-
     fetchPlayers();
-  }, [currentPage]);
+  }, [currentPage, searchTerm, selectedNation, selectedPosition, ageRange, minOverall, minPotential]);
 
   const positions = [...new Set(players.map(player => player.pos))].sort();
   const nations = [...new Set(players.map(player => player.nation))].sort();
@@ -208,7 +217,7 @@ const PlayersPage = () => {
             <label className="block text-blue-100 mb-2">Min Overall: {minOverall}</label>
             <input
               type="range"
-              min="60"
+              min="50"
               max="99"
               value={minOverall}
               onChange={(e) => {
@@ -223,7 +232,7 @@ const PlayersPage = () => {
             <label className="block text-blue-100 mb-2">Min Potential: {minPotential}</label>
             <input
               type="range"
-              min="60"
+              min="50"
               max="99"
               value={minPotential}
               onChange={(e) => {

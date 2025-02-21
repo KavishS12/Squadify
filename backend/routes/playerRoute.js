@@ -103,13 +103,20 @@ router.get('/',async(req,res) => {
 // GET: Retrieve all players with pagination
 router.get('/pagination',async(req,res) => {
     try {
-        const {page = 1,limit = 50, author} = req.query; // Default to page 1, 5 players per page
+        const {page = 1,limit = 50, search = "",nation, pos, minAge, maxAge, minOverall, minPotential} = req.query;
         const skip = (page - 1) * limit; // Calculate the number of players to skip
         let query = {};
-        const players = await Player.find(query)
-            .skip(skip)
-            .limit(parseInt(limit));
-        const total = await Player.countDocuments(); // Get total count of posts
+
+        if (search) query.name = { $regex: search, $options: "i" }; // Case-insensitive search
+        if (nation) query.nation = nation;
+        if (pos) query.pos = position;
+        if (minAge && maxAge) query.age = { $gte: parseInt(minAge), $lte: parseInt(maxAge) };
+        if (minOverall) query.overall_ratings = { $gte: parseInt(minOverall) };
+        if (minPotential) query.potential_ratings = { $gte: parseInt(minPotential) };
+
+        const players = await Player.find(query).skip(skip).limit(parseInt(limit));
+
+        const total = await Player.countDocuments(query);
         res.status(200).json({
             total,
             page: parseInt(page),
