@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Plus, Minus } from 'lucide-react';
+import PropTypes from 'prop-types';
+import PlayerDashboard from './PlayerDashboard';
 
 const nationFlags = {
   "ENG": "gb", "CZE": "cz", "POL": "pl", "USA": "us", "FRA": "fr", "ISR": "il", "ESP": "es", "NGA": "ng", "WAL": "gb-wls",
@@ -99,6 +101,16 @@ const PlayersPage = () => {
       {children}
     </button>
   );
+
+  PaginationButton.propTypes = {
+    onClick: PropTypes.func.isRequired,
+    disabled: PropTypes.bool,
+    children: PropTypes.node.isRequired,
+  };
+  
+  PaginationButton.defaultProps = {
+    disabled: false,
+  };
 
   const filteredPlayers = players.filter(player => {
     const searchMatch = searchTerm === "" || 
@@ -245,7 +257,7 @@ const PlayersPage = () => {
         </div>
 
         {/* Table Section */}
-        <div className="overflow-hidden rounded-lg shadow-lg border border-blue-300">
+        <div className="overflow-hidden rounded-lg shadow-lg border border-blue-900">
           <div className="table-container max-h-[415px] overflow-auto relative">
           <table className="min-w-full table-auto">
             <thead className="sticky top-0 z-10">
@@ -269,57 +281,57 @@ const PlayersPage = () => {
               {filteredPlayers.map((player) => (
                 <React.Fragment key={player._id}>
                   <tr className="hover:bg-blue-700/25 transition-colors">
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">{player._id.substring(18,)}</td>
-                    <td className="px-1 py-2 text-center border-b border-blue-300">
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900 font-medium">{player._id.substring(18,)}</td>
+                    <td className="px-1 py-2 text-center border-b border-blue-900">
                       <img 
                         src={player.Image_URL} 
                         alt="img" 
                         className="w-8 h-8 rounded-full object-cover border border-white mx-auto"
                       />
                     </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300 font-medium">{player.name}</td>
-                    <td className="px-1 py-2 text-center border-b border-blue-300">
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900 font-medium">{player.name}</td>
+                    <td className="px-1 py-2 text-center border-b border-blue-900">
                       <img
                         src={`https://flagcdn.com/w40/${nationFlags[player.nation]}.png`}
                         alt={player.nation}
                         className="h-6 mx-auto"
                       />
                     </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
                       {player.pos}
                     </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
                       {player.age}
                     </td>
-                    <td className="px-1 py-2 border-b border-blue-300">
+                    <td className="px-1 py-2 border-b border-blue-900">
                       <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.defense_ratings)} bg-opacity-80`}>
                         {player.defense_ratings.toFixed(1)}
                       </div>
                     </td>
-                    <td className="px-1 py-2 border-b border-blue-300">
+                    <td className="px-1 py-2 border-b border-blue-900">
                       <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.passing_ratings)} bg-opacity-80`}>
                         {player.passing_ratings.toFixed(1)}
                       </div>
                     </td>
-                    <td className="px-1 py-2 border-b border-blue-300">
+                    <td className="px-1 py-2 border-b border-blue-900">
                       <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.shooting_ratings)} bg-opacity-80`}>
                         {player.shooting_ratings.toFixed(1)}
                       </div>
                     </td>
-                    <td className="px-1 py-2 border-b border-blue-300">
+                    <td className="px-1 py-2 border-b border-blue-900">
                       <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
                         {player.potential_ratings.toFixed(1)}
                       </div>
                     </td>
-                    <td className="px-1 py-2 border-b border-blue-300">
+                    <td className="px-1 py-2 border-b border-blue-900">
                       <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
                         {player.overall_ratings.toFixed(1)}
                       </div>
                     </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-300">
-                      {player.Market_Value}
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
+                      {player.Market_Value === -1 ? "Retired" : player.Market_Value === 0  ? "<25000" : player.Market_Value}
                     </td>
-                    <td className="px-1 py-2 text-center border-b border-blue-300">
+                    <td className="px-1 py-2 text-center border-b border-blue-900">
                       <button
                         onClick={() => toggleRow(player._id)}
                         className="p-1 hover:bg-blue-800 rounded-full transition-colors"
@@ -336,8 +348,7 @@ const PlayersPage = () => {
                     <tr>
                       <td colSpan="13" className="bg-blue-900/30 px-4 py-3 border-b border-blue-700">
                         <div className="text-blue-200">
-                          {/* Placeholder for PlayerDetails component */}
-                          Player Details will be rendered here
+                          <PlayerDashboard player={player}/>
                         </div>
                       </td>
                     </tr>
@@ -349,7 +360,7 @@ const PlayersPage = () => {
           </div>
 
           {/* Pagination Controls */}
-          <div className="bg-blue-950 p-1.5 border-t border-blue-300">
+          <div className="bg-blue-950 p-1.5 border-t border-blue-900">
             <div className="flex items-center justify-between">
               <div className="text-blue-100">
                 Page {currentPage} of {totalPages}
