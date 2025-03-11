@@ -9,7 +9,7 @@ const Navbar = ({ page, setPage }) => {
     { title: 'Home', page: 'landing' },
     { title: 'Players', page: 'players' },
     { title: 'Features', page: 'landing', href: '#features' },
-    { title: 'Technology', page: 'landing', href: '#technology' },
+    { title: 'Squad', page: 'squad'},
   ];
 
   const handleNavigation = (page, href) => {
