@@ -150,36 +150,39 @@ const SquadPage = () => {
   ];
 
   // Calculate total market value
+  const formations = [
+    { value: '4-3-3', label: '4-3-3' },
+    { value: '4-4-2', label: '4-4-2' },
+    { value: '3-4-3', label: '3-4-3' },
+    { value: '4-5-1', label: '4-5-1' },
+    { value: '4-3-2-1', label: '4-3-2-1' }
+  ];
+
+  // State management
+  const [selectedFormation, setSelectedFormation] = useState(formations[0].value);
+  const [minOverall, setMinOverall] = useState(70);
+  const [minPotential, setMinPotential] = useState(70);
   const totalMarketValue = players.reduce((total, player) => {
     const value = parseInt(player.marketValue.replace('€', '').replace('m', ''));
     return total + value;
   }, 0);
-
   const averageRating = (players.reduce((total, player) => total + player.rating, 0) / players.length).toFixed(1);
   const [selectedPlayer, setSelectedPlayer] = useState(players.find(p => p.isCaptain) || players[5]);
   
-  // Functions remain unchanged
+  // Event handlers
   const handlePlayerClick = (player) => {
     setSelectedPlayer(player);
   };
 
-  const getRatingColor = (rating) => {
-    if (rating >= 90) return 'bg-blue-900 ';
-    if (rating >= 80) return 'bg-blue-800';
-    if (rating >= 70) return 'bg-blue-700';
-    if (rating >= 60) return 'bg-blue-600';
-    if (rating >= 50) return 'bg-blue-500';
-    if (rating >= 40) return 'bg-blue-400';
-    if (rating >= 30) return 'bg-blue-300';
-    if (rating >= 20) return 'bg-blue-200';
-    return 'bg-blue-100';
+  const handleFormationChange = (e) => {
+    setSelectedFormation(e.target.value);
   };
 
-  // Player position functions remain unchanged
   const getPlayerByPosition = (pos) => {
     return players.find(player => player.position === pos);
   };
 
+  // Get players by position
   const goalkeeper = getPlayerByPosition('GK');
   const leftBack = getPlayerByPosition('LB');
   const rightBack = getPlayerByPosition('RB');
@@ -214,14 +217,12 @@ const SquadPage = () => {
     );
   };
 
-  return (
-    <div className="min-h-screen bg-black text-white p-4 w-full">
-      <div className="max-w-7xl mx-auto grid grid-cols-12 gap-12 mt-20">
-        {/* Formation display */}
-        <div className="col-span-8 bg-blue-950 rounded-lg p-4 relative h-[550px]">
-          {/* Pitch layout with 4-3-3 formation */}
+  // Render formation based on selection
+  const renderFormation = () => {
+    switch(selectedFormation) {
+      case '4-3-3':
+        return (
           <div className="w-full h-full flex flex-col justify-between py-2">
-            {/* Rows remain unchanged */}
             <div className="flex justify-between">
               <div className="flex-1 flex justify-center">
                 <PlayerCard player={leftWing} onClick={handlePlayerClick} />
@@ -265,13 +266,254 @@ const SquadPage = () => {
               <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
             </div>
           </div>
+        );
+      
+        case '4-4-2':
+            return (
+              <div className="w-full h-full flex flex-col justify-between py-2">
+                <div className="flex justify-center gap-20">
+                  <PlayerCard player={striker} onClick={handlePlayerClick} />
+                  <PlayerCard player={getPlayerByPosition('ST') || rightWing} onClick={handlePlayerClick} />
+                </div>
+                
+                <div className="flex justify-between">
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={leftWing} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={rightWing} onClick={handlePlayerClick} />
+                  </div>
+                </div>
+                
+                <div className="flex justify-between">
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={leftBack} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerBacks[0]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerBacks[1]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={rightBack} onClick={handlePlayerClick} />
+                  </div>
+                </div>
+                
+                <div className="flex justify-center">
+                  <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
+                </div>
+              </div>
+            );
+          
+          case '3-4-3':
+            return (
+              <div className="w-full h-full flex flex-col justify-between py-2">
+                <div className="flex justify-between">
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={leftWing} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={striker} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={rightWing} onClick={handlePlayerClick} />
+                  </div>
+                </div>
+                
+                <div className="flex justify-between">
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={leftBack} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={rightBack} onClick={handlePlayerClick} />
+                  </div>
+                </div>
+                
+                <div className="flex justify-center gap-16">
+                  <PlayerCard player={centerBacks[0]} onClick={handlePlayerClick} />
+                  <PlayerCard player={defensiveMid} onClick={handlePlayerClick} />
+                  <PlayerCard player={centerBacks[1]} onClick={handlePlayerClick} />
+                </div>
+                
+                <div className="flex justify-center">
+                  <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
+                </div>
+              </div>
+            );
+          
+          case '4-5-1':
+            return (
+              <div className="w-full h-full flex flex-col justify-between py-2">
+                <div className="flex justify-center">
+                  <PlayerCard player={striker} onClick={handlePlayerClick} />
+                </div>
+                
+                <div className="flex justify-between">
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={leftWing} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={defensiveMid} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={rightWing} onClick={handlePlayerClick} />
+                  </div>
+                </div>
+                
+                <div className="flex justify-between">
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={leftBack} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerBacks[0]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerBacks[1]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={rightBack} onClick={handlePlayerClick} />
+                  </div>
+                </div>
+                
+                <div className="flex justify-center">
+                  <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
+                </div>
+              </div>
+            );
+          
+          case '4-3-2-1':
+            return (
+              <div className="w-full h-full flex flex-col justify-between py-2">
+                <div className="flex justify-center">
+                  <PlayerCard player={striker} onClick={handlePlayerClick} />
+                </div>
+                
+                <div className="flex justify-center gap-20">
+                  <PlayerCard player={leftWing} onClick={handlePlayerClick} />
+                  <PlayerCard player={rightWing} onClick={handlePlayerClick} />
+                </div>
+                
+                <div className="flex justify-between">
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={defensiveMid} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
+                  </div>
+                </div>
+                
+                <div className="flex justify-between">
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={leftBack} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerBacks[0]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={centerBacks[1]} onClick={handlePlayerClick} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={rightBack} onClick={handlePlayerClick} />
+                  </div>
+                </div>
+                
+                <div className="flex justify-center">
+                  <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
+                </div>
+              </div>
+            );
+      
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white p-4 pt-24 w-full overflow-hidden">
+      {/* Filter section */}
+      <div className="max-w-4xl mx-auto bg-blue-950 rounded-lg p-2 mb-6">
+        <div className="flex justify-center items-center gap-8">
+            <div className="w-1/3">
+            <div className="font-semibold mb-1">Formation</div>
+            <select
+                className="w-full bg-blue-900 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
+                value={selectedFormation}
+                onChange={handleFormationChange}
+            >
+                {formations.map((formation) => (
+                <option key={formation.value} value={formation.value}>
+                    {formation.label}
+                </option>
+                ))}
+            </select>
+            </div> 
+            
+            <div className="w-1/3">
+            <label className="block text-blue-100 mb-2">Min Team Overall: {minOverall}</label>
+            <input
+                type="range"
+                min="50"
+                max="99"
+                value={minOverall}
+                onChange={(e) => {
+                setMinOverall(parseInt(e.target.value));
+                setCurrentPage(1);
+                }}
+                className="w-full"
+            />
+            </div>
+
+            <div className="w-1/3">
+            <label className="block text-blue-100 mb-2">Min Team Potential: {minPotential}</label>
+            <input
+                type="range"
+                min="50"
+                max="99"
+                value={minPotential}
+                onChange={(e) => {
+                setMinPotential(parseInt(e.target.value));
+                setCurrentPage(1);
+                }}
+                className="w-full"
+            />
+            </div>
+        </div>
+      </div>
+
+
+      <div className="max-w-7xl  max-h-50px mx-auto grid grid-cols-12 gap-12">
+        {/* Formation display */}
+        <div className="col-span-8 bg-blue-950 rounded-lg p-4 relative h-[550px]">
+          {renderFormation()}
         </div>
         
         {/* Team and player info */}
-        <div className="col-span-4 flex flex-col gap-8 mt-4">
+        <div className="col-span-4 flex flex-col gap-8 mt-2">
           {/* Team info */}
           <div className="bg-blue-950 rounded-lg p-3">
-            <div className="text-base font-semibold">Formation: 4-3-3</div>
+            <div className="text-base font-semibold">Formation: {selectedFormation}</div>
             <div className="text-base font-semibold">Overall Team Rating: {averageRating}</div>
             
             <div className="grid grid-cols-2 gap-3 mt-3">
