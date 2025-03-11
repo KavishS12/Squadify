@@ -32,7 +32,7 @@ const Navbar = ({ page, setPage }) => {
   return (
     <nav 
       className={`fixed w-full z-50 border-b-2 border-blue-600/50 backdrop-blur-sm transition-colors duration-300 ${
-        page === "landing" ? "bg-black/80" : "bg-blue-700/20"
+        page === "players" ? "bg-blue-700/20" : "bg-black/80"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
