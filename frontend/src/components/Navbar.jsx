@@ -9,7 +9,6 @@ const Navbar = () => {
   const navItems = [
     { title: 'Home', path: '/' },
     { title: 'Players', path: '/players' },
-    { title: 'Features', path: '/', href: '#features' },
     { title: 'Squad', path: '/squad' },
   ];
 
@@ -26,9 +25,7 @@ const Navbar = () => {
 
   return (
     <nav 
-      className={`fixed w-full z-50 border-b-2 border-blue-600/50 backdrop-blur-sm transition-colors duration-300 ${
-        location.pathname === "/players" ? "bg-blue-700/20" : "bg-black/80"
-      }`}
+      className="fixed w-full z-50 border-b-2 border-blue-600/50 backdrop-blur-sm transition-colors duration-300 bg-black/80"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -41,24 +38,16 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-center space-x-8">
-              {navItems.map(({ title, path, href }) => (
-                href ? (
-                  <button
-                    key={title}
-                    onClick={() => handleNavigation(href)}
-                    className="text-gray-300 hover:text-white transition-colors duration-200 text-xl"
-                  >
-                    {title}
-                  </button>
-                ) : (
+              {navItems.map(({ title, path }) => (
                   <Link 
                     key={title} 
                     to={path} 
-                    className="text-gray-300 hover:text-white transition-colors duration-200 text-xl"
+                    className={`transition-colors duration-200 text-xl ${
+                      location.pathname === path ? "text-blue-800 font-bold" : "text-gray-200 hover:text-white"
+                    }`}
                   >
                     {title}
                   </Link>
-                )
               ))}
             </div>
           </div>
@@ -76,28 +65,17 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 bg-black/80 backdrop-blur-sm border-t border-blue-600/30">
-            {navItems.map(({ title, path, href }) => (
-              href ? (
-                <button
-                  key={title}
-                  onClick={() => {
-                    handleNavigation(href);
-                    setIsOpen(false);
-                  }}
-                  className="block w-full text-left px-3 py-2 text-gray-300 hover:text-white transition-colors duration-200"
-                >
-                  {title}
-                </button>
-              ) : (
+            {navItems.map(({ title, path}) => (
                 <Link 
                   key={title} 
                   to={path} 
                   onClick={() => setIsOpen(false)}
-                  className="block w-full text-left px-3 py-2 text-gray-300 hover:text-white transition-colors duration-200"
+                  className={`block w-full text-left px-3 py-2 hover:text-white transition-colors duration-200  ${
+                    location.pathname === path ? "text-blue-800 font-bold" : "text-gray-300"
+                  }`}
                 >
                   {title}
                 </Link>
-              )
             ))}
           </div>
         </div>
