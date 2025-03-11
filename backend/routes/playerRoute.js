@@ -103,13 +103,13 @@ router.get('/',async(req,res) => {
 // GET: Retrieve all players with pagination
 router.get('/pagination',async(req,res) => {
     try {
-        const {page = 1,limit = 50, search = "",nation, pos, minAge, maxAge, minOverall, minPotential} = req.query;
+        const {page = 1,limit = 50, search = "",nation, position, minAge, maxAge, minOverall, minPotential} = req.query;
         const skip = (page - 1) * limit; // Calculate the number of players to skip
         let query = {};
 
         if (search) query.name = { $regex: search, $options: "i" }; // Case-insensitive search
         if (nation) query.nation = nation;
-        if (pos) query.pos = position;
+        if (position) query.pos = position;
         if (minAge && maxAge) query.age = { $gte: parseInt(minAge), $lte: parseInt(maxAge) };
         if (minOverall) query.overall_ratings = { $gte: parseInt(minOverall) };
         if (minPotential) query.potential_ratings = { $gte: parseInt(minPotential) };
@@ -126,6 +126,24 @@ router.get('/pagination',async(req,res) => {
     } 
     catch (error) {
         res.status(500).json({ message: 'Error fetching posts', error: error.message });
+    }
+});
+
+router.get('/nations', async (req, res) => {
+    try {
+      const nations = await Player.distinct('nation');
+      res.json(nations);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+});
+  
+router.get('/positions', async (req, res) => {
+    try {
+      const positions = await Player.distinct('pos');
+      res.json(positions);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
 });
 

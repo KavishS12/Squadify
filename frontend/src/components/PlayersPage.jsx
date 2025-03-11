@@ -22,6 +22,8 @@ const nationFlags = {
 
 const PlayersPage = () => {
   const [players, setPlayers] = useState([]);
+  const [allPositions, setAllPositions] = useState([]);
+  const [allNations,setAllNations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,6 +50,28 @@ const PlayersPage = () => {
   const limit = 50;
 
   useEffect(() => {
+    const fetchAllNations = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/players/nations');
+        if (!response.ok) throw new Error('Failed to fetch nations');
+        const data = await response.json();
+        setAllNations(data.sort());
+      } catch (error) {
+        console.error("Error fetching nations:", error);
+      }
+    };
+
+    const fetchAllPositions = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/players/positions');
+        if (!response.ok) throw new Error('Failed to fetch nations');
+        const data = await response.json();
+        setAllPositions(data.sort());
+      } catch (error) {
+        console.error("Error fetching nations:", error);
+      }
+    };
+
     const fetchPlayers = async () => {
       setIsLoading(true);
       try {
@@ -75,11 +99,22 @@ const PlayersPage = () => {
           setIsLoading(false);
       }
     };
+    fetchAllNations();
+    fetchAllPositions();
     fetchPlayers();
   }, [currentPage, searchTerm, selectedNation, selectedPosition, ageRange, minOverall, minPotential]);
 
-  const positions = [...new Set(players.map(player => player.pos))].sort();
-  const nations = [...new Set(players.map(player => player.nation))].sort();
+  {allNations.map(nation => (
+    <option key={nation} value={nation}>
+      {nation}
+    </option>
+  ))}
+
+  {allPositions.map(pos => (
+    <option key={pos} value={pos}>
+      {pos}
+    </option>
+  ))}
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -110,18 +145,6 @@ const PlayersPage = () => {
   PaginationButton.defaultProps = {
     disabled: false,
   };
-
-  const filteredPlayers = players.filter(player => {
-    const searchMatch = searchTerm === "" || 
-      player.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const nationMatch = selectedNation === "all" || player.nation === selectedNation;
-    const posMatch = selectedPosition === "all" || player.pos === selectedPosition;
-    const ageMatch = player.age >= ageRange[0] && player.age <= ageRange[1];
-    const overallMatch = player.overall_ratings >= minOverall;
-    const potentialMatch = player.potential_ratings >= minPotential;
-    
-    return searchMatch && nationMatch && posMatch && ageMatch && overallMatch && potentialMatch;
-  });
 
   const toggleRow = (playerId) => {
     const newExpandedRows = new Set(expandedRows);
@@ -169,7 +192,7 @@ const PlayersPage = () => {
               }}
             >
               <option value="all">All Nations</option>
-              {nations.map(nation => (
+              {allNations.map(nation => (
                 <option key={nation} value={nation}>
                   {nation}
                 </option>
@@ -188,7 +211,7 @@ const PlayersPage = () => {
               }}
             >
               <option value="all">All Positions</option>
-              {positions.map(pos => (
+              {allPositions.map(pos => (
                 <option key={pos} value={pos}>
                   {pos}
                 </option>
@@ -277,7 +300,7 @@ const PlayersPage = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredPlayers.map((player) => (
+              {players.map((player) => (
                 <React.Fragment key={player._id}>
                   <tr className="hover:bg-blue-700/25 transition-colors">
                     <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900 font-medium">{player._id.substring(18,)}</td>
