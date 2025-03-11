@@ -22,7 +22,6 @@ const nationFlags = {
 
 const PlayersPage = () => {
   const [players, setPlayers] = useState([]);
-  const [allPositions, setAllPositions] = useState([]);
   const [allNations,setAllNations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -61,17 +60,6 @@ const PlayersPage = () => {
       }
     };
 
-    const fetchAllPositions = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/players/positions');
-        if (!response.ok) throw new Error('Failed to fetch nations');
-        const data = await response.json();
-        setAllPositions(data.sort());
-      } catch (error) {
-        console.error("Error fetching nations:", error);
-      }
-    };
-
     const fetchPlayers = async () => {
       setIsLoading(true);
       try {
@@ -100,7 +88,6 @@ const PlayersPage = () => {
       }
     };
     fetchAllNations();
-    fetchAllPositions();
     fetchPlayers();
   }, [currentPage, searchTerm, selectedNation, selectedPosition, ageRange, minOverall, minPotential]);
 
@@ -110,11 +97,7 @@ const PlayersPage = () => {
     </option>
   ))}
 
-  {allPositions.map(pos => (
-    <option key={pos} value={pos}>
-      {pos}
-    </option>
-  ))}
+  const allPositions = ["GK", "DF", "MF", "FW"];
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {

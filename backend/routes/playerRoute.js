@@ -109,7 +109,10 @@ router.get('/pagination',async(req,res) => {
 
         if (search) query.name = { $regex: search, $options: "i" }; // Case-insensitive search
         if (nation) query.nation = nation;
-        if (position) query.pos = position;
+        if (position) {
+            // This will match if position field contains the selected position either as a standalone value or as part of a combination
+            query.pos = { $regex: position, $options: "i" };
+        }
         if (minAge && maxAge) query.age = { $gte: parseInt(minAge), $lte: parseInt(maxAge) };
         if (minOverall) query.overall_ratings = { $gte: parseInt(minOverall) };
         if (minPotential) query.potential_ratings = { $gte: parseInt(minPotential) };
