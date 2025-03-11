@@ -479,7 +479,6 @@ const SquadPage = () => {
                 value={minOverall}
                 onChange={(e) => {
                 setMinOverall(parseInt(e.target.value));
-                setCurrentPage(1);
                 }}
                 className="w-full"
             />
@@ -494,7 +493,6 @@ const SquadPage = () => {
                 value={minPotential}
                 onChange={(e) => {
                 setMinPotential(parseInt(e.target.value));
-                setCurrentPage(1);
                 }}
                 className="w-full"
             />
