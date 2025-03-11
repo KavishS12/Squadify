@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import jerseyImage from "../assets/jersey.png";
 
 const SquadPage = () => {
   // Sample player data
@@ -201,21 +202,25 @@ const SquadPage = () => {
     
     return (
       <div 
-        className="flex flex-col items-center cursor-pointer" 
+        className="flex flex-col items-center cursor-pointer relative"
         onClick={() => onClick(player)}
+        style={{ width: "80px", height: "90px" }}
       >
-        <div className={`bg-blue-800 text-white px-3 py-0.5 rounded-md mb-1 text-sm ${isSelected ? 'ring-2 ring-yellow-400' : ''}`}>
+        <div className={`w-14 h-18 flex items-center justify-center}`}>
+          <img src={jerseyImage} alt="Jersey" className="w-16 h-14" />
+        </div>
+        
+        <div className={`absolute top-[-14px] left-10 -translate-x-1/2 bg-purple-200 text-black px-3 py-0.5 rounded-md text-sm min-w-[90px] text-center ${isSelected ? 'ring-[2.5px] ring-black' : ''}`}>
           {player.name} {player.isCaptain && '(c)'}
         </div>
-        <div className={`w-12 h-16 bg-blue-900 flex items-center justify-center mb-1 ${isSelected ? 'ring-2 ring-yellow-400' : ''}`}>
-          <img src="/jersey.png" alt="Jersey" className="w-10 h-12" />
-        </div>
-        <div className={`bg-blue-700 text-white px-2 py-0.5 rounded-md text-xs ${isSelected ? 'ring-2 ring-yellow-400' : ''}`}>
+        
+        <div className={`absolute bottom-3 left-10 -translate-x-1/2 bg-violet-800 text-white px-2 py-0.5 rounded-md text-xs ${isSelected ? 'ring-[2.5px] ring-black' : ''}`}>
           {player.position}
         </div>
       </div>
     );
   };
+  
 
   // Render formation based on selection
   const renderFormation = () => {
@@ -501,14 +506,14 @@ const SquadPage = () => {
       </div>
 
 
-      <div className="max-w-7xl  max-h-50px mx-auto grid grid-cols-12 gap-12">
+      <div className="max-w-6xl  max-h-50px mx-auto grid grid-cols-12 gap-8">
         {/* Formation display */}
-        <div className="col-span-8 bg-blue-950 rounded-lg p-4 relative h-[550px]">
+        <div className="col-span-8 bg-emerald-900 rounded-lg p-2 pt-8 relative h-[550px] max-w-3xl">
           {renderFormation()}
         </div>
         
         {/* Team and player info */}
-        <div className="col-span-4 flex flex-col gap-8 mt-2">
+        <div className="col-span-4 flex flex-col gap-6 mt-2">
           {/* Team info */}
           <div className="bg-blue-950 rounded-lg p-3">
             <div className="text-base font-semibold">Formation: {selectedFormation}</div>
