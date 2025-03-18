@@ -11,7 +11,7 @@ const router = express.Router();
 router.post("/add-single-player", async (req, res) => {
     try {
         const {
-            name, nation, pos, born, club, league, Last_played, Tackles_defense,
+            id,name, nation, pos, born, club, league, Last_played, Tackles_defense,
             Challenges_defense, Blocks_defense, Total_passing, Short_passing, 
             Medium_passing, Long_passing, Expected_passing, Standard_shooting, 
             Expected_shooting, Playing_Time_stats, Performance_stats, Expected_stats,
@@ -20,13 +20,13 @@ router.post("/add-single-player", async (req, res) => {
             Market_Value, Image_URL
         } = req.body;
 
-        if (!name || !pos || !born || !age || !potential_ratings || !overall_ratings) {
+        if (!id || !name || !pos || !born || !age || !potential_ratings || !overall_ratings) {
             return res.status(400).json({ error: "Missing required fields" });
         }
 
         // Create new player
         const newPlayer = new Player({
-            name, nation, pos, born, club, league, Last_played, Tackles_defense,
+            id,name, nation, pos, born, club, league, Last_played, Tackles_defense,
             Challenges_defense, Blocks_defense, Total_passing, Short_passing, 
             Medium_passing, Long_passing, Expected_passing, Standard_shooting, 
             Expected_shooting, Playing_Time_stats, Performance_stats, Expected_stats,
@@ -58,7 +58,7 @@ router.post("/add-players", async (req, res) => {
 
         // Validate required fields for each player
         for (let player of players) {
-            if (!player.name || !player.pos || !player.born || !player.age || 
+            if (!player.id || !player.name || !player.pos || !player.born || !player.age || 
                 !player.potential_ratings || !player.overall_ratings) {
                 return res.status(400).json({ error: "Missing required fields in one or more players" });
             }

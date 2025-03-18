@@ -150,19 +150,20 @@ const SquadPage = () => {
     },
   ];
 
-  // Calculate total market value
-  const formations = [
-    { value: '4-3-3', label: '4-3-3' },
-    { value: '4-4-2', label: '4-4-2' },
-    { value: '3-4-3', label: '3-4-3' },
-    { value: '4-5-1', label: '4-5-1' },
-    { value: '4-3-2-1', label: '4-3-2-1' }
-  ];
+const formations = [
+  { value: '4-3-3', label: '4-3-3' },
+  { value: '4-4-2', label: '4-4-2' },
+  { value: '3-5-2', label: '3-5-2' }, 
+  { value: '5-3-2', label: '5-3-2' }, 
+  { value: '4-3-2-1', label: '4-3-2-1' }
+];
+
 
   // State management
   const [selectedFormation, setSelectedFormation] = useState(formations[0].value);
-  const [minOverall, setMinOverall] = useState(70);
-  const [minPotential, setMinPotential] = useState(70);
+  const [budgetRange, setBudgetRange] = useState([20000000,1500000000 ]);
+  const [nationBoost, setNationBoost] = useState(false);
+  const [clubBoost, setClubBoost] = useState(false);
   const totalMarketValue = players.reduce((total, player) => {
     const value = parseInt(player.marketValue.replace('€', '').replace('m', ''));
     return total + value;
@@ -317,93 +318,88 @@ const SquadPage = () => {
               </div>
             );
           
-          case '3-4-3':
-            return (
-              <div className="w-full h-full flex flex-col justify-between py-2">
-                <div className="flex justify-between">
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={leftWing} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
+            case '3-5-2':
+              return (
+                <div className="w-full h-full flex flex-col justify-between py-2">
+                  <div className="flex justify-center gap-20">
                     <PlayerCard player={striker} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
                     <PlayerCard player={rightWing} onClick={handlePlayerClick} />
                   </div>
-                </div>
-                
-                <div className="flex justify-between">
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={leftBack} onClick={handlePlayerClick} />
+                  
+                  <div className="flex justify-between">
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={leftWing} onClick={handlePlayerClick} />
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={defensiveMid} onClick={handlePlayerClick} />
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={rightBack} onClick={handlePlayerClick} />
+                    </div>
                   </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={rightBack} onClick={handlePlayerClick} />
-                  </div>
-                </div>
-                
-                <div className="flex justify-center gap-16">
-                  <PlayerCard player={centerBacks[0]} onClick={handlePlayerClick} />
-                  <PlayerCard player={defensiveMid} onClick={handlePlayerClick} />
-                  <PlayerCard player={centerBacks[1]} onClick={handlePlayerClick} />
-                </div>
-                
-                <div className="flex justify-center">
-                  <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
-                </div>
-              </div>
-            );
-          
-          case '4-5-1':
-            return (
-              <div className="w-full h-full flex flex-col justify-between py-2">
-                <div className="flex justify-center">
-                  <PlayerCard player={striker} onClick={handlePlayerClick} />
-                </div>
-                
-                <div className="flex justify-between">
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={leftWing} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={defensiveMid} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={rightWing} onClick={handlePlayerClick} />
-                  </div>
-                </div>
-                
-                <div className="flex justify-between">
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={leftBack} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
+                  
+                  <div className="flex justify-center gap-16">
                     <PlayerCard player={centerBacks[0]} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
+                    <PlayerCard player={leftBack} onClick={handlePlayerClick} />
                     <PlayerCard player={centerBacks[1]} onClick={handlePlayerClick} />
                   </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={rightBack} onClick={handlePlayerClick} />
+                  
+                  <div className="flex justify-center">
+                    <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
                   </div>
-                </div>
-                
-                <div className="flex justify-center">
-                  <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
-                </div>
               </div>
             );
+            
+            case '5-3-2':
+              return (
+                <div className="w-full h-full flex flex-col justify-between py-2">
+                  <div className="flex justify-center gap-20">
+                    <PlayerCard player={striker} onClick={handlePlayerClick} />
+                    <PlayerCard player={rightWing} onClick={handlePlayerClick} />
+                  </div>
+                  
+                  <div className="flex justify-between">
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={defensiveMid} onClick={handlePlayerClick} />
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between">
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={leftWing} onClick={handlePlayerClick} />
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={centerBacks[0]} onClick={handlePlayerClick} />
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={leftBack} onClick={handlePlayerClick} />
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={centerBacks[1]} onClick={handlePlayerClick} />
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <PlayerCard player={rightBack} onClick={handlePlayerClick} />
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-center">
+                    <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
+                  </div>
+                </div>
+              );
+            
           
           case '4-3-2-1':
             return (
@@ -458,50 +454,99 @@ const SquadPage = () => {
   return (
     <div className="min-h-screen bg-black text-white p-4 pt-24 w-full overflow-hidden">
       {/* Filter section */}
-      <div className="max-w-4xl mx-auto bg-blue-950 rounded-lg p-2 mb-6">
+      <div className="max-w-4xl mx-auto bg-blue-950 rounded-lg p-2 mb-10">
         <div className="flex justify-center items-center gap-8">
-            <div className="w-1/3">
+          <div className="w-1/3">
             <div className="font-semibold mb-1">Formation</div>
             <select
-                className="w-full bg-blue-900 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
-                value={selectedFormation}
-                onChange={handleFormationChange}
+              className="w-44 bg-blue-900 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
+              value={selectedFormation}
+              onChange={handleFormationChange}
             >
-                {formations.map((formation) => (
+              {formations.map((formation) => (
                 <option key={formation.value} value={formation.value}>
-                    {formation.label}
+                  {formation.label}
                 </option>
-                ))}
+              ))}
             </select>
-            </div> 
-            
-            <div className="w-1/3">
-            <label className="block text-blue-100 mb-2">Min Team Overall: {minOverall}</label>
-            <input
-                type="range"
-                min="50"
-                max="99"
-                value={minOverall}
-                onChange={(e) => {
-                setMinOverall(parseInt(e.target.value));
-                }}
-                className="w-full"
-            />
-            </div>
+          </div>
+          
+          <div>
+            <label className="block text-blue-100 mb-2">
+              Budget Range: ${budgetRange[0].toLocaleString()} - ${budgetRange[1].toLocaleString()}
+            </label>
 
-            <div className="w-1/3">
-            <label className="block text-blue-100 mb-2">Min Team Potential: {minPotential}</label>
-            <input
+            <div className="relative w-full flex items-center gap-4">
+              {/* Minimum Budget Slider */}
+              <input
                 type="range"
-                min="50"
-                max="99"
-                value={minPotential}
+                min="20000000"
+                max="1500000000"
+                step="1000000"  // Move only in multiples of 1M
+                value={budgetRange[0]}
                 onChange={(e) => {
-                setMinPotential(parseInt(e.target.value));
+                  const newMin = parseInt(e.target.value);
+                  if (newMin <= budgetRange[1]) {
+                    setBudgetRange([newMin, budgetRange[1]]);
+                  }
                 }}
                 className="w-full"
-            />
+              />
+
+              {/* Maximum Budget Slider */}
+              <input
+                type="range"
+                min="20000000"
+                max="1500000000"
+                step="1000000"  // Move only in multiples of 1M
+                value={budgetRange[1]}
+                onChange={(e) => {
+                  const newMax = parseInt(e.target.value);
+                  if (newMax >= budgetRange[0]) {
+                    setBudgetRange([budgetRange[0], newMax]);
+                  }
+                }}
+                className="w-full"
+              />
             </div>
+          </div>
+          
+          <div>
+            <label className="block text-blue-100 mb-2">
+              Nation Boost
+            </label>
+            <div
+              onClick={() => setNationBoost((prev) => !prev)}
+              className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ml-5 ${
+                nationBoost ? "bg-green-500" : "bg-gray-500"
+              }`}
+            >
+              <div
+                className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
+                  nationBoost ? "translate-x-6" : "translate-x-0"
+                }`}
+              ></div>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-blue-100 mb-2">
+              Club Boost
+            </label>
+            <div
+              onClick={() => setClubBoost((prev) => !prev)}
+              className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ml-4 ${
+                clubBoost ? "bg-green-500" : "bg-gray-500"
+              }`}
+            >
+              <div
+                className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
+                  clubBoost ? "translate-x-6" : "translate-x-0"
+                }`}
+              ></div>
+            </div>
+          </div>
+
         </div>
       </div>
 

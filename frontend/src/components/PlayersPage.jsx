@@ -204,32 +204,47 @@ const PlayersPage = () => {
           </div>
 
           <div>
-            <label className="block text-blue-100 mb-2">Age Range: {ageRange[0]} - {ageRange[1]}</label>
+            <label className="block text-blue-100 mb-2">
+              Age Range: {ageRange[0]} - {ageRange[1]}
+            </label>
+
             <div className="flex gap-4">
+              {/* Minimum Age Slider */}
               <input
                 type="range"
                 min="18"
                 max="45"
+                step="1"
                 value={ageRange[0]}
                 onChange={(e) => {
-                  setAgeRange([parseInt(e.target.value), ageRange[1]]);
-                  setCurrentPage(1);
+                  const newMin = parseInt(e.target.value);
+                  if (newMin <= ageRange[1]) {
+                    setAgeRange([newMin, ageRange[1]]);
+                    setCurrentPage(1);
+                  }
                 }}
                 className="w-full"
               />
+
+              {/* Maximum Age Slider */}
               <input
                 type="range"
                 min="18"
                 max="45"
+                step="1"
                 value={ageRange[1]}
                 onChange={(e) => {
-                  setAgeRange([ageRange[0], parseInt(e.target.value)]);
-                  setCurrentPage(1);
+                  const newMax = parseInt(e.target.value);
+                  if (newMax >= ageRange[0]) {
+                    setAgeRange([ageRange[0], newMax]);
+                    setCurrentPage(1);
+                  }
                 }}
                 className="w-full"
               />
             </div>
           </div>
+
 
           <div>
             <label className="block text-blue-100 mb-2">Min Overall: {minOverall}</label>
@@ -285,9 +300,9 @@ const PlayersPage = () => {
             </thead>
             <tbody>
               {players.map((player) => (
-                <React.Fragment key={player._id}>
+                <React.Fragment key={player.id}>
                   <tr className="hover:bg-blue-700/25 transition-colors">
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900 font-medium">{player._id.substring(18,)}</td>
+                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900 font-medium">{player.id}</td>
                     <td className="px-1 py-2 text-center border-b border-blue-900">
                       <img 
                         src={player.Image_URL} 
@@ -335,8 +350,17 @@ const PlayersPage = () => {
                       </div>
                     </td>
                     <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
-                      {player.Market_Value === -1 ? "Retired" : player.Market_Value === 0  ? "<25000" : player.Market_Value}
+                      {player.Market_Value === -1
+                        ? "Retired"
+                        : player.Market_Value === 0
+                        ? "<25K"
+                        : player.Market_Value >= 1_000_000
+                        ? `${(player.Market_Value / 1_000_000).toFixed(1)}M`
+                        : player.Market_Value >= 1_000
+                        ? `${(player.Market_Value / 1_000).toFixed(1)}K`
+                        : player.Market_Value}
                     </td>
+
                     <td className="px-1 py-2 text-center border-b border-blue-900">
                       <button
                         onClick={() => toggleRow(player._id)}
