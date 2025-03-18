@@ -283,10 +283,10 @@ const PlayersPage = () => {
           <table className="min-w-full table-auto">
             <thead className="sticky top-0 z-10">
               <tr className="bg-blue-950 shadow-md">
-                <th className="p-2 text-center text-blue-100 font-semibold">#</th>
                 <th className="p-2 text-center text-blue-100 font-semibold"></th>
                 <th className="p-2 text-center text-blue-100 font-semibold">Name</th>
                 <th className="p-2 text-center text-blue-100 font-semibold">Nation</th>
+                <th className="p-2 text-center text-blue-100 font-semibold">Club</th>
                 <th className="p-2 text-center text-blue-100 font-semibold">Pos</th>
                 <th className="p-2 text-center text-blue-100 font-semibold">Age</th>
                 <th className="p-2 text-center text-blue-100 font-semibold">Defense</th>
@@ -302,7 +302,6 @@ const PlayersPage = () => {
               {players.map((player) => (
                 <React.Fragment key={player.id}>
                   <tr className="hover:bg-blue-700/25 transition-colors">
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900 font-medium">{player.id}</td>
                     <td className="px-1 py-2 text-center border-b border-blue-900">
                       <img 
                         src={player.Image_URL} 
@@ -316,6 +315,13 @@ const PlayersPage = () => {
                         src={`https://flagcdn.com/w40/${nationFlags[player.nation]}.png`}
                         alt={player.nation}
                         className="h-6 mx-auto"
+                      />
+                    </td>
+                    <td className="px-1 py-2 text-center border-b border-blue-900">
+                      <img 
+                        src={`/badges/${player.club}.png`}
+                        alt="img" 
+                        className="w-10 h-10 rounded-full object-cover border-none mx-auto"
                       />
                     </td>
                     <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
