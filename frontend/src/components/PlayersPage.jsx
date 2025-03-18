@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Plus, Minus } from 'lucide-react';
 import PropTypes from 'prop-types';
+import PlayerDashboard from './PlayerDashboard';
 
 const nationFlags = {
   "ENG": "gb", "CZE": "cz", "POL": "pl", "USA": "us", "FRA": "fr", "ISR": "il", "ESP": "es", "NGA": "ng", "WAL": "gb-wls",
@@ -353,8 +354,7 @@ const PlayersPage = () => {
                     <tr>
                       <td colSpan="13" className="bg-blue-900/30 px-4 py-3 border-b border-blue-700">
                         <div className="text-blue-200">
-                          {/* Placeholder for PlayerDetails component */}
-                          Player Details will be rendered here
+                          <PlayerDashboard player={player} />
                         </div>
                       </td>
                     </tr>
