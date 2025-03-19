@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  html::-webkit-scrollbar-track {
+    background: #000000; /* Black track */
+  }
+
+  html::-webkit-scrollbar-thumb {
+    background: #1e3a8a; /* Dark blue thumb (tailwind blue-900) */
+    border-radius: 0; /* Square corners */
+  }
+
+  html::-webkit-scrollbar-thumb:hover {
+    background: #1e40af; /* Slightly lighter blue on hover */
+  }
+
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: #1e3a8a #000000; /* Dark blue thumb with black track for Firefox */
+  }
+}
+
 /* Reset and full-screen configuration */
 html, body, #root {
   box-sizing: border-box;

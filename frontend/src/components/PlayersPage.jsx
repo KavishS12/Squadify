@@ -279,7 +279,7 @@ const PlayersPage = () => {
 
         {/* Table Section */}
         <div className="overflow-hidden rounded-lg shadow-lg border border-blue-900">
-          <div className="table-container max-h-[415px] overflow-auto relative">
+          <div className="table-container max-h-[600px] overflow-auto relative">
           <table className="min-w-full table-auto">
             <thead className="sticky top-0 z-10">
               <tr className="bg-blue-950 shadow-md">
