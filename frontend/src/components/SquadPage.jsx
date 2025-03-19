@@ -1,199 +1,110 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import jerseyImage from "../assets/jersey.png";
 
 const SquadPage = () => {
-  // Sample player data
-  const players = [
-    { 
-      id: 1, 
-      name: 'Ansu Fati', 
-      position: 'LW', 
-      marketValue: '€35m', 
-      rating: 82.5, 
-      age: 22, 
-      stats: { 
-        passesPerGame: 24.12, 
-        passCompletionRate: 78.32, 
-        keyPassesPerGame: 0.85 
-      } 
-    },
-    { 
-      id: 2, 
-      name: 'Evan Ferg.', 
-      position: 'ST', 
-      marketValue: '€42m', 
-      rating: 84.7, 
-      age: 26, 
-      stats: { 
-        passesPerGame: 18.45, 
-        passCompletionRate: 72.18, 
-        keyPassesPerGame: 0.62 
-      } 
-    },
-    { 
-      id: 3, 
-      name: 'Yeremy P.', 
-      position: 'RW', 
-      marketValue: '€38m', 
-      rating: 83.2, 
-      age: 23, 
-      stats: { 
-        passesPerGame: 27.34, 
-        passCompletionRate: 75.91, 
-        keyPassesPerGame: 0.93 
-      } 
-    },
-    { 
-      id: 4, 
-      name: 'Kobbie M.', 
-      position: 'CM', 
-      marketValue: '€45m', 
-      rating: 85.4, 
-      age: 21, 
-      stats: { 
-        passesPerGame: 58.76, 
-        passCompletionRate: 89.22, 
-        keyPassesPerGame: 1.28 
-      } 
-    },
-    { 
-      id: 5, 
-      name: 'Romeo L.', 
-      position: 'CDM', 
-      marketValue: '€32m', 
-      rating: 84.9, 
-      age: 24, 
-      stats: { 
-        passesPerGame: 62.35, 
-        passCompletionRate: 91.48, 
-        keyPassesPerGame: 0.74 
-      } 
-    },
-    { 
-      id: 6, 
-      name: 'Gavi', 
-      position: 'CM', 
-      marketValue: '€25m', 
-      rating: 89.1, 
-      age: 20, 
-      stats: { 
-        passesPerGame: 52.36, 
-        passCompletionRate: 84.86, 
-        keyPassesPerGame: 1.42 
-      }, 
-      isCaptain: true 
-    },
-    { 
-      id: 7, 
-      name: 'Patrick', 
-      position: 'RB', 
-      marketValue: '€28m', 
-      rating: 83.8, 
-      age: 25, 
-      stats: { 
-        passesPerGame: 42.18, 
-        passCompletionRate: 82.75, 
-        keyPassesPerGame: 0.67 
-      } 
-    },
-    { 
-      id: 8, 
-      name: 'Antonio S.', 
-      position: 'CB', 
-      marketValue: '€35m', 
-      rating: 86.2, 
-      age: 27, 
-      stats: { 
-        passesPerGame: 48.32, 
-        passCompletionRate: 87.63, 
-        keyPassesPerGame: 0.23 
-      } 
-    },
-    { 
-      id: 9, 
-      name: 'Castello L.', 
-      position: 'CB', 
-      marketValue: '€32m', 
-      rating: 85.7, 
-      age: 26, 
-      stats: { 
-        passesPerGame: 46.89, 
-        passCompletionRate: 86.92, 
-        keyPassesPerGame: 0.18 
-      } 
-    },
-    { 
-      id: 10, 
-      name: 'Malo G.', 
-      position: 'LB', 
-      marketValue: '€27m', 
-      rating: 82.9, 
-      age: 24, 
-      stats: { 
-        passesPerGame: 44.56, 
-        passCompletionRate: 81.28, 
-        keyPassesPerGame: 0.58 
-      } 
-    },
-    { 
-      id: 11, 
-      name: 'Giorgi M.', 
-      position: 'GK', 
-      marketValue: '€38m', 
-      rating: 87.3, 
-      age: 28, 
-      stats: { 
-        passesPerGame: 22.43, 
-        passCompletionRate: 79.64, 
-        keyPassesPerGame: 0.05 
-      } 
-    },
+
+  const [players, setPlayers] = useState([]);
+  const [totalMarketValue, setTotalMarketValue] = useState(0);
+  const [average_overall, setAverageOverall] = useState(0);
+  const [average_potential, setAveragePotential] = useState(0);
+  const [squadGenerated, setSquadGenerated] = useState(false);
+
+  const generateSquad = async () => {
+      setLoading(true);
+      try {
+          // Call FastAPI endpoint with the parameters
+          const response = await axios.post('http://localhost:5001/select_squad', {
+              min_budget: budgetRange[0],
+              max_budget: budgetRange[1],
+              formation: formation,
+              scoring_strategy: experienceLevel,
+              clubboost: clubBoost,
+              nationboost: nationBoost,
+              currently: currentTopFive
+          });
+
+          // Extract player IDs from the response
+          const playerIds = response.data.selected_player_ids;
+          const fetchedPlayers = await fetchPlayersByIds(playerIds);
+          
+          // Set state
+          setPlayers(fetchedPlayers);
+          setTotalMarketValue(response.data.total_market_value);
+          setAverageOverall(response.data.average_overall);
+          setAveragePotential(response.data.average_potential);
+          setSquadGenerated(true); 
+      } catch (error) {
+          console.error('Error generating squad:', error);
+      } finally {
+          setLoading(false);
+      }
+  };
+
+  // Fetch a single player
+  async function fetchPlayer(playerId) {
+      try {
+          const response = await fetch(`http://localhost:5000/players/player_id/${playerId}`);
+          if (!response.ok) {
+              throw new Error(`Player not found (Status: ${response.status})`);
+          }
+          return await response.json();
+      } catch (error) {
+          console.error(`Error fetching player with ID ${playerId}:`, error.message);
+          return null;
+      }
+  }
+
+  // Fetch multiple players and maintain order
+  async function fetchPlayersByIds(playerIds) {
+      try {
+          const playerPromises = playerIds.map(id => fetchPlayer(id));
+          const players = await Promise.all(playerPromises);
+          return players.filter(player => player !== null); // Remove null values
+      } catch (error) {
+          console.error("Error fetching players:", error.message);
+          return [];
+      }
+  }
+
+  const formations = [
+    { value: '4-3-3', label: '4-3-3' },
+    { value: '4-4-2', label: '4-4-2' },
+    { value: '3-5-2', label: '3-5-2' }, 
+    { value: '5-3-2', label: '5-3-2' }, 
+    { value: '4-3-2-1', label: '4-3-2-1' }
   ];
 
-const formations = [
-  { value: '4-3-3', label: '4-3-3' },
-  { value: '4-4-2', label: '4-4-2' },
-  { value: '3-5-2', label: '3-5-2' }, 
-  { value: '5-3-2', label: '5-3-2' }, 
-  { value: '4-3-2-1', label: '4-3-2-1' }
-];
+  const experienceLevels = [
+    { value: 'onlypotential', label: 'Rising stars' },
+    { value: 'futurestars', label: 'Future XI' },
+    { value: 'peakplayers', label: 'Balanced Squad' }, 
+    { value: 'veterans', label: 'Peak Performers' }, 
+    { value: 'onlyoverall', label: 'Experienced Core' }
+  ];
 
-
-  // State management
-  const [selectedFormation, setSelectedFormation] = useState(formations[0].value);
+  const [loading, setLoading] = useState(false);
+  const [formation, setformation] = useState(formations[0].value);
   const [budgetRange, setBudgetRange] = useState([20000000,1500000000 ]);
   const [nationBoost, setNationBoost] = useState(false);
   const [clubBoost, setClubBoost] = useState(false);
-  const totalMarketValue = players.reduce((total, player) => {
-    const value = parseInt(player.marketValue.replace('€', '').replace('m', ''));
-    return total + value;
-  }, 0);
-  const averageRating = (players.reduce((total, player) => total + player.rating, 0) / players.length).toFixed(1);
-  const [selectedPlayer, setSelectedPlayer] = useState(players.find(p => p.isCaptain) || players[5]);
-  
+  const [currentTopFive, setCurrentTopFive] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState(players[5]);
+  const [experienceLevel, setExperienceLevel] = useState('peakplayers');
+
   // Event handlers
   const handlePlayerClick = (player) => {
     setSelectedPlayer(player);
   };
 
   const handleFormationChange = (e) => {
-    setSelectedFormation(e.target.value);
+    setformation(e.target.value);
   };
 
-  const getPlayerByPosition = (pos) => {
-    return players.find(player => player.position === pos);
+  const handleExperienceLevelChange = (e) => {
+    setExperienceLevel(e.target.value);
+    console.log(e.target.value);
   };
-
-  // Get players by position
-  const goalkeeper = getPlayerByPosition('GK');
-  const leftBack = getPlayerByPosition('LB');
-  const rightBack = getPlayerByPosition('RB');
-  const centerBacks = players.filter(player => player.position === 'CB');
-  const defensiveMid = getPlayerByPosition('CDM');
-  const centerMids = players.filter(player => player.position === 'CM');
-  const leftWing = getPlayerByPosition('LW');
-  const rightWing = getPlayerByPosition('RW');
-  const striker = getPlayerByPosition('ST');
 
   // Player card component
   const PlayerCard = ({ player, onClick }) => {
@@ -212,7 +123,7 @@ const formations = [
         </div>
         
         <div className={`absolute top-[-14px] left-10 -translate-x-1/2 bg-purple-200 text-black px-3 py-0.5 rounded-md text-sm min-w-[90px] text-center ${isSelected ? 'ring-[2.5px] ring-black' : ''}`}>
-          {player.name} {player.isCaptain && '(c)'}
+          {player.name}
         </div>
         
         <div className={`absolute bottom-3 left-10 -translate-x-1/2 bg-violet-800 text-white px-2 py-0.5 rounded-md text-xs ${isSelected ? 'ring-[2.5px] ring-black' : ''}`}>
@@ -221,406 +132,436 @@ const formations = [
       </div>
     );
   };
-  
 
   // Render formation based on selection
   const renderFormation = () => {
-    switch(selectedFormation) {
+    switch(formation) {
       case '4-3-3':
         return (
           <div className="w-full h-full flex flex-col justify-between py-2">
             <div className="flex justify-between">
               <div className="flex-1 flex justify-center">
-                <PlayerCard player={leftWing} onClick={handlePlayerClick} />
+                <PlayerCard player={players[9]} onClick={handlePlayerClick} />
               </div>
               <div className="flex-1 flex justify-center">
-                <PlayerCard player={striker} onClick={handlePlayerClick} />
+                <PlayerCard player={players[10]} onClick={handlePlayerClick} />
               </div>
               <div className="flex-1 flex justify-center">
-                <PlayerCard player={rightWing} onClick={handlePlayerClick} />
-              </div>
-            </div>
-            
-            <div className="flex justify-between">
-              <div className="flex-1 flex justify-center">
-                <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
-              </div>
-              <div className="flex-1 flex justify-center">
-                <PlayerCard player={defensiveMid} onClick={handlePlayerClick} />
-              </div>
-              <div className="flex-1 flex justify-center">
-                <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[8]} onClick={handlePlayerClick} />
               </div>
             </div>
             
             <div className="flex justify-between">
               <div className="flex-1 flex justify-center">
-                <PlayerCard player={leftBack} onClick={handlePlayerClick} />
+                <PlayerCard player={players[5]} onClick={handlePlayerClick} />
               </div>
               <div className="flex-1 flex justify-center">
-                <PlayerCard player={centerBacks[0]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[6]} onClick={handlePlayerClick} />
               </div>
               <div className="flex-1 flex justify-center">
-                <PlayerCard player={centerBacks[1]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[7]} onClick={handlePlayerClick} />
+              </div>
+            </div>
+            
+            <div className="flex justify-between">
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[1]} onClick={handlePlayerClick} />
               </div>
               <div className="flex-1 flex justify-center">
-                <PlayerCard player={rightBack} onClick={handlePlayerClick} />
+                <PlayerCard player={players[2]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[3]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[4]} onClick={handlePlayerClick} />
               </div>
             </div>
             
             <div className="flex justify-center">
-              <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
+              <PlayerCard player={players[0]} onClick={handlePlayerClick} />
             </div>
           </div>
         );
       
-        case '4-4-2':
-            return (
-              <div className="w-full h-full flex flex-col justify-between py-2">
-                <div className="flex justify-center gap-20">
-                  <PlayerCard player={striker} onClick={handlePlayerClick} />
-                  <PlayerCard player={getPlayerByPosition('ST') || rightWing} onClick={handlePlayerClick} />
-                </div>
-                
-                <div className="flex justify-between">
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={leftWing} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={rightWing} onClick={handlePlayerClick} />
-                  </div>
-                </div>
-                
-                <div className="flex justify-between">
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={leftBack} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={centerBacks[0]} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={centerBacks[1]} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={rightBack} onClick={handlePlayerClick} />
-                  </div>
-                </div>
-                
-                <div className="flex justify-center">
-                  <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
-                </div>
-              </div>
-            );
-          
-            case '3-5-2':
-              return (
-                <div className="w-full h-full flex flex-col justify-between py-2">
-                  <div className="flex justify-center gap-20">
-                    <PlayerCard player={striker} onClick={handlePlayerClick} />
-                    <PlayerCard player={rightWing} onClick={handlePlayerClick} />
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={leftWing} onClick={handlePlayerClick} />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={defensiveMid} onClick={handlePlayerClick} />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={rightBack} onClick={handlePlayerClick} />
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-center gap-16">
-                    <PlayerCard player={centerBacks[0]} onClick={handlePlayerClick} />
-                    <PlayerCard player={leftBack} onClick={handlePlayerClick} />
-                    <PlayerCard player={centerBacks[1]} onClick={handlePlayerClick} />
-                  </div>
-                  
-                  <div className="flex justify-center">
-                    <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
-                  </div>
-              </div>
-            );
+      case '4-4-2':
+        return (
+          <div className="w-full h-full flex flex-col justify-between py-2">
+            <div className="flex justify-center gap-20">
+              <PlayerCard player={players[10]} onClick={handlePlayerClick} />
+              <PlayerCard player={players[11]} onClick={handlePlayerClick} />
+            </div>
             
-            case '5-3-2':
-              return (
-                <div className="w-full h-full flex flex-col justify-between py-2">
-                  <div className="flex justify-center gap-20">
-                    <PlayerCard player={striker} onClick={handlePlayerClick} />
-                    <PlayerCard player={rightWing} onClick={handlePlayerClick} />
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={defensiveMid} onClick={handlePlayerClick} />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={leftWing} onClick={handlePlayerClick} />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={centerBacks[0]} onClick={handlePlayerClick} />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={leftBack} onClick={handlePlayerClick} />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={centerBacks[1]} onClick={handlePlayerClick} />
-                    </div>
-                    <div className="flex-1 flex justify-center">
-                      <PlayerCard player={rightBack} onClick={handlePlayerClick} />
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-center">
-                    <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
-                  </div>
-                </div>
-              );
-            
-          
-          case '4-3-2-1':
-            return (
-              <div className="w-full h-full flex flex-col justify-between py-2">
-                <div className="flex justify-center">
-                  <PlayerCard player={striker} onClick={handlePlayerClick} />
-                </div>
-                
-                <div className="flex justify-center gap-20">
-                  <PlayerCard player={leftWing} onClick={handlePlayerClick} />
-                  <PlayerCard player={rightWing} onClick={handlePlayerClick} />
-                </div>
-                
-                <div className="flex justify-between">
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={centerMids[0]} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={defensiveMid} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={centerMids[1]} onClick={handlePlayerClick} />
-                  </div>
-                </div>
-                
-                <div className="flex justify-between">
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={leftBack} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={centerBacks[0]} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={centerBacks[1]} onClick={handlePlayerClick} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <PlayerCard player={rightBack} onClick={handlePlayerClick} />
-                  </div>
-                </div>
-                
-                <div className="flex justify-center">
-                  <PlayerCard player={goalkeeper} onClick={handlePlayerClick} />
-                </div>
+            <div className="flex justify-between">
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[6]} onClick={handlePlayerClick} />
               </div>
-            );
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[7]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[8]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[9]} onClick={handlePlayerClick} />
+              </div>
+            </div>
+            
+            <div className="flex justify-between">
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[1]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[2]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[3]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[4]} onClick={handlePlayerClick} />
+              </div>
+            </div>
+            
+            <div className="flex justify-center">
+              <PlayerCard player={players[0]} onClick={handlePlayerClick} />
+            </div>
+          </div>
+        );
       
+      case '3-5-2':
+        return (
+          <div className="w-full h-full flex flex-col justify-between py-2">
+            <div className="flex justify-center gap-20">
+              <PlayerCard player={players[10]} onClick={handlePlayerClick} />
+              <PlayerCard player={players[11]} onClick={handlePlayerClick} />
+            </div>
+            
+            <div className="flex justify-between">
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[4]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[5]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[6]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[7]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[8]} onClick={handlePlayerClick} />
+              </div>
+            </div>
+            
+            <div className="flex justify-center gap-16">
+              <PlayerCard player={players[1]} onClick={handlePlayerClick} />
+              <PlayerCard player={players[2]} onClick={handlePlayerClick} />
+              <PlayerCard player={players[3]} onClick={handlePlayerClick} />
+            </div>
+            
+            <div className="flex justify-center">
+              <PlayerCard player={players[0]} onClick={handlePlayerClick} />
+            </div>
+          </div>
+        );
+        
+      case '5-3-2':
+        return (
+          <div className="w-full h-full flex flex-col justify-between py-2">
+            <div className="flex justify-center gap-20">
+              <PlayerCard player={players[10]} onClick={handlePlayerClick} />
+              <PlayerCard player={players[11]} onClick={handlePlayerClick} />
+            </div>
+            
+            <div className="flex justify-between">
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[6]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[7]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[8]} onClick={handlePlayerClick} />
+              </div>
+            </div>
+            
+            <div className="flex justify-between">
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[1]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[2]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[3]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[4]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[5]} onClick={handlePlayerClick} />
+              </div>
+            </div>
+            
+            <div className="flex justify-center">
+              <PlayerCard player={players[0]} onClick={handlePlayerClick} />
+            </div>
+          </div>
+        );
+      
+      case '4-3-2-1':
+        return (
+          <div className="w-full h-full flex flex-col justify-between py-2">
+            <div className="flex justify-center">
+              <PlayerCard player={players[10]} onClick={handlePlayerClick} />
+            </div>
+            
+            <div className="flex justify-center gap-20">
+              <PlayerCard player={players[8]} onClick={handlePlayerClick} />
+              <PlayerCard player={players[9]} onClick={handlePlayerClick} />
+            </div>
+            
+            <div className="flex justify-between">
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[5]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[6]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[7]} onClick={handlePlayerClick} />
+              </div>
+            </div>
+            
+            <div className="flex justify-between">
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[1]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[2]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[3]} onClick={handlePlayerClick} />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <PlayerCard player={players[4]} onClick={handlePlayerClick} />
+              </div>
+            </div>
+            
+            <div className="flex justify-center">
+              <PlayerCard player={players[0]} onClick={handlePlayerClick} />
+            </div>
+          </div>
+        );
+    
       default:
         return null;
     }
   };
 
-  return (
-    <div className="min-h-screen bg-black text-white p-4 pt-24 w-full overflow-hidden">
-      {/* Filter section */}
-      <div className="max-w-4xl mx-auto bg-blue-950 rounded-lg p-2 mb-10">
-        <div className="flex justify-center items-center gap-8">
-          <div className="w-1/3">
-            <div className="font-semibold mb-1">Formation</div>
-            <select
-              className="w-44 bg-blue-900 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
-              value={selectedFormation}
-              onChange={handleFormationChange}
-            >
-              {formations.map((formation) => (
-                <option key={formation.value} value={formation.value}>
-                  {formation.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          <div>
-            <label className="block text-blue-100 mb-2">
-              Budget Range: ${budgetRange[0].toLocaleString()} - ${budgetRange[1].toLocaleString()}
-            </label>
-
-            <div className="relative w-full flex items-center gap-4">
-              {/* Minimum Budget Slider */}
-              <input
-                type="range"
-                min="20000000"
-                max="1500000000"
-                step="1000000"  // Move only in multiples of 1M
-                value={budgetRange[0]}
-                onChange={(e) => {
-                  const newMin = parseInt(e.target.value);
-                  if (newMin <= budgetRange[1]) {
-                    setBudgetRange([newMin, budgetRange[1]]);
-                  }
-                }}
-                className="w-full"
-              />
-
-              {/* Maximum Budget Slider */}
-              <input
-                type="range"
-                min="20000000"
-                max="1500000000"
-                step="1000000"  // Move only in multiples of 1M
-                value={budgetRange[1]}
-                onChange={(e) => {
-                  const newMax = parseInt(e.target.value);
-                  if (newMax >= budgetRange[0]) {
-                    setBudgetRange([budgetRange[0], newMax]);
-                  }
-                }}
-                className="w-full"
-              />
+    return (
+      <div className="min-h-screen bg-black text-white p-4 pt-24 w-full overflow-hidden">
+        {/* Filter section */}
+        <div className="max-w-7xl mx-auto bg-blue-950 rounded-lg p-2 mb-10">
+          <div className="flex justify-center items-center gap-8">
+            <div className="w-1/3">
+              <div className="font-semibold mb-1">Formation</div>
+              <select
+                className="w-44 bg-blue-900 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
+                value={formation}
+                onChange={handleFormationChange}
+              >
+                {formations.map((formation) => (
+                  <option key={formation.value} value={formation.value}>
+                    {formation.label}
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
-          
-          <div>
-            <label className="block text-blue-100 mb-2">
-              Nation Boost
-            </label>
-            <div
-              onClick={() => setNationBoost((prev) => !prev)}
-              className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ml-5 ${
-                nationBoost ? "bg-green-500" : "bg-gray-500"
-              }`}
-            >
-              <div
-                className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
-                  nationBoost ? "translate-x-6" : "translate-x-0"
-                }`}
-              ></div>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-blue-100 mb-2">
-              Club Boost
-            </label>
-            <div
-              onClick={() => setClubBoost((prev) => !prev)}
-              className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ml-4 ${
-                clubBoost ? "bg-green-500" : "bg-gray-500"
-              }`}
-            >
-              <div
-                className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
-                  clubBoost ? "translate-x-6" : "translate-x-0"
-                }`}
-              ></div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-
-      <div className="max-w-6xl  max-h-50px mx-auto grid grid-cols-12 gap-8">
-        {/* Formation display */}
-        <div className="col-span-8 bg-emerald-900 rounded-lg p-2 pt-8 relative h-[550px] max-w-3xl">
-          {renderFormation()}
-        </div>
-        
-        {/* Team and player info */}
-        <div className="col-span-4 flex flex-col gap-6 mt-2">
-          {/* Team info */}
-          <div className="bg-blue-950 rounded-lg p-3">
-            <div className="text-base font-semibold">Formation: {selectedFormation}</div>
-            <div className="text-base font-semibold">Overall Team Rating: {averageRating}</div>
             
-            <div className="grid grid-cols-2 gap-3 mt-3">
-              <div className="bg-blue-900 p-2 rounded-md">
-                <h3 className="font-semibold text-sm mb-1">Combined Market Value:</h3>
-                <p className="text-lg">€{totalMarketValue}m</p>
-              </div>
-              
-              <div className="bg-blue-900 p-2 rounded-md">
-                <h3 className="font-semibold text-sm mb-1">Detailed Player Stats:</h3>
-                <p className="text-xs">Select a player to view details</p>
+            <div>
+              <label className="block text-blue-100 mb-2">
+                Budget Range: ${budgetRange[0].toLocaleString()} - ${budgetRange[1].toLocaleString()}
+              </label>
+
+              <div className="relative w-full flex items-center gap-4">
+                {/* Minimum Budget Slider */}
+                <input
+                  type="range"
+                  min="20000000"
+                  max="1500000000"
+                  step="1000000"  // Move only in multiples of 1M
+                  value={budgetRange[0]}
+                  onChange={(e) => {
+                    const newMin = parseInt(e.target.value);
+                    if (newMin <= budgetRange[1]) {
+                      setBudgetRange([newMin, budgetRange[1]]);
+                    }
+                  }}
+                  className="w-full"
+                />
+
+                {/* Maximum Budget Slider */}
+                <input
+                  type="range"
+                  min="20000000"
+                  max="1500000000"
+                  step="1000000"  // Move only in multiples of 1M
+                  value={budgetRange[1]}
+                  onChange={(e) => {
+                    const newMax = parseInt(e.target.value);
+                    if (newMax >= budgetRange[0]) {
+                      setBudgetRange([budgetRange[0], newMax]);
+                    }
+                  }}
+                  className="w-full"
+                />
               </div>
             </div>
+
+            <div className="w-1/3">
+              <div className="font-semibold mb-1">Experience Level</div>
+              <select
+                className="w-44 bg-blue-900 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
+                value={experienceLevel}
+                onChange={handleExperienceLevelChange}
+              >
+                {experienceLevels.map((experienceLevel) => (
+                  <option key={experienceLevel.value} value={experienceLevel.value}>
+                    {experienceLevel.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-blue-100 mb-2">
+                Nation Boost
+              </label>
+              <div
+                onClick={() => setNationBoost((prev) => !prev)}
+                className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ml-5 ${
+                  nationBoost ? "bg-green-500" : "bg-gray-500"
+                }`}
+              >
+                <div
+                  className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
+                    nationBoost ? "translate-x-6" : "translate-x-0"
+                  }`}
+                ></div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-blue-100 mb-2">
+                Club Boost
+              </label>
+              <div
+                onClick={() => setClubBoost((prev) => !prev)}
+                className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ml-4 ${
+                  clubBoost ? "bg-green-500" : "bg-gray-500"
+                }`}
+              >
+                <div
+                  className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
+                    clubBoost ? "translate-x-6" : "translate-x-0"
+                  }`}
+                ></div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-blue-100 mb-2">
+                Currently in top-5 leagues
+              </label>
+              <div
+                onClick={() => setCurrentTopFive((prev) => !prev)}
+                className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ml-12 ${
+                  currentTopFive ? "bg-green-500" : "bg-gray-500"
+                }`}
+              >
+                <div
+                  className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
+                    currentTopFive ? "translate-x-6" : "translate-x-0"
+                  }`}
+                ></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div className="max-w-6xl  max-h-50px mx-auto grid grid-cols-12 gap-8">
+          {/* Formation display */}
+          <div className="col-span-8 bg-emerald-900 rounded-lg p-2 pt-8 relative h-[550px] max-w-3xl">
+            {renderFormation()}
           </div>
           
-          {/* Selected player details */}
-          {selectedPlayer && (
+          {/* Team and player info */}
+          <div className="col-span-4 flex flex-col gap-6 mt-2">
+            {/* Team info */}
             <div className="bg-blue-950 rounded-lg p-3">
-              <h2 className="text-base font-semibold mb-2">Detailed Player Stats:</h2>
-              <h3 className="text-lg font-bold mb-2">
-                {selectedPlayer.name} {selectedPlayer.isCaptain ? '(c)' : ''}
-              </h3>
+              <div className="text-base font-semibold">Formation: {formation}</div>
+              <div className="text-base font-semibold">Overall Team Rating: </div>
               
-              <div className="grid grid-cols-2 gap-3 mb-3">
+              <div className="grid grid-cols-2 gap-3 mt-3">
                 <div className="bg-blue-900 p-2 rounded-md">
-                  <h4 className="text-xs text-gray-300">Overall Rating:</h4>
-                  <p className="text-xl font-bold">{selectedPlayer.rating.toFixed(1)}</p>
+                  <h3 className="font-semibold text-sm mb-1">Combined Market Value:</h3>
+                  <p className="text-lg">€M</p>
                 </div>
                 
                 <div className="bg-blue-900 p-2 rounded-md">
-                  <h4 className="text-xs text-gray-300">Market Value:</h4>
-                  <p className="text-xl font-bold">{selectedPlayer.marketValue}</p>
+                  <h3 className="font-semibold text-sm mb-1">Detailed Player Stats:</h3>
+                  <p className="text-xs">Select a player to view details</p>
                 </div>
-                
-                <div className="bg-blue-900 p-2 rounded-md">
-                  <h4 className="text-xs text-gray-300">Age:</h4>
-                  <p className="text-xl font-bold">{selectedPlayer.age}yrs</p>
-                </div>
-                
-                <div className="bg-blue-900 p-2 rounded-md">
-                  <h4 className="text-xs text-gray-300">Preferred Pos:</h4>
-                  <p className="text-xl font-bold">{selectedPlayer.position}</p>
-                </div>
-              </div>
-              
-              <div className="bg-blue-900 p-2 rounded-md">
-                <h4 className="font-semibold text-sm mb-1">Key Stats:</h4>
-                <ul className="space-y-1 text-sm">
-                  <li>• Passes per Game: {selectedPlayer.stats.passesPerGame.toFixed(2)}</li>
-                  <li>• Pass Completion Rate: {selectedPlayer.stats.passCompletionRate.toFixed(2)}%</li>
-                  <li>• Key Passes per Game: {selectedPlayer.stats.keyPassesPerGame.toFixed(2)}</li>
-                </ul>
               </div>
             </div>
-          )}
+            
+            {/* Selected player details */}
+            {selectedPlayer && (
+              <div className="bg-blue-950 rounded-lg p-3">
+                <h2 className="text-base font-semibold mb-2">Detailed Player Stats:</h2>
+                <h3 className="text-lg font-bold mb-2">
+                  {selectedPlayer.name}
+                </h3>
+                
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  <div className="bg-blue-900 p-2 rounded-md">
+                    <h4 className="text-xs text-gray-300">Overall Rating:</h4>
+                    <p className="text-xl font-bold">{selectedPlayer.rating.toFixed(1)}</p>
+                  </div>
+                  
+                  <div className="bg-blue-900 p-2 rounded-md">
+                    <h4 className="text-xs text-gray-300">Market Value:</h4>
+                    <p className="text-xl font-bold">{selectedPlayer.marketValue}</p>
+                  </div>
+                  
+                  <div className="bg-blue-900 p-2 rounded-md">
+                    <h4 className="text-xs text-gray-300">Age:</h4>
+                    <p className="text-xl font-bold">{selectedPlayer.age}yrs</p>
+                  </div>
+                  
+                  <div className="bg-blue-900 p-2 rounded-md">
+                    <h4 className="text-xs text-gray-300">Preferred Pos:</h4>
+                    <p className="text-xl font-bold">{selectedPlayer.position}</p>
+                  </div>
+                </div>
+                
+                <div className="bg-blue-900 p-2 rounded-md">
+                  <h4 className="font-semibold text-sm mb-1">Key Stats:</h4>
+                  <ul className="space-y-1 text-sm">
+                    <li>• Passes per Game: {selectedPlayer.stats.passesPerGame.toFixed(2)}</li>
+                    <li>• Pass Completion Rate: {selectedPlayer.stats.passCompletionRate.toFixed(2)}%</li>
+                    <li>• Key Passes per Game: {selectedPlayer.stats.keyPassesPerGame.toFixed(2)}</li>
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default SquadPage;

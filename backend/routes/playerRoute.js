@@ -88,6 +88,21 @@ router.delete("/delete-all", async (req, res) => {
     }
 });
 
+// GET : Retrieve a player by ID
+router.get('/player_id/:id', async (req, res) => {
+    try {
+        const player = await Player.findOne({ id: req.params.id });
+
+        if (!player) {
+            return res.status(404).json({ error: "Player not found" });
+        }
+
+        res.status(200).json(player);
+    } catch (error) {
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
 // GET : Retrieve all players
 router.get('/',async(req,res) => {
     try{

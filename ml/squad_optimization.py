@@ -1,12 +1,15 @@
 import random
+import numpy as np
 import pandas as pd
 from deap import base, creator, tools, algorithms
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import json
 
 def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubboost, nationboost,currently, nogens=300,popul=1000,csv_path="final_krazi.csv"):
     SEED = 1
     random.seed(SEED)
+    np.random.seed(SEED)
     
     df = pd.read_csv(csv_path)
     df["Market_Value"] = pd.to_numeric(df["Market_Value"], errors="coerce")
@@ -82,8 +85,11 @@ def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubb
         
         return (total_score,)
     
-    creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-    creator.create("Individual", list, fitness=creator.FitnessMax)
+    if not hasattr(creator, "FitnessMax"):
+        creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+    if not hasattr(creator, "Individual"):
+        creator.create("Individual", list, fitness=creator.FitnessMax)
+
     
     toolbox = base.Toolbox()
     def create_valid_individual():
@@ -178,7 +184,25 @@ def select_squad():
     squad_result = select_best_squad(
         min_budget, max_budget, formation, scoring_strategy, clubboost, nationboost, currently
     )
+    
+
+    def convert_to_python_types(obj):
+        if isinstance(obj, np.integer):  # Convert np.int64 to Python int
+            return int(obj)
+        elif isinstance(obj, np.floating):  # Convert np.float64 to Python float
+            return float(obj)
+        elif isinstance(obj, list):  # Convert lists recursively
+            return [convert_to_python_types(i) for i in obj]
+        elif isinstance(obj, dict):  # Convert dict values recursively
+            return {key: convert_to_python_types(value) for key, value in obj.items()}
+        return obj  # Return as-is if no conversion needed
+
+    # Convert the response data
+    squad_result = convert_to_python_types(squad_result)
+
     return jsonify(squad_result)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True,port=5001)
