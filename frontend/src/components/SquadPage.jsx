@@ -648,7 +648,8 @@ const SquadPage = () => {
             <select
               className="w-full bg-blue-950 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
               value={formation}
-              onChange={handleFormationChange}
+              onChange={!squadGenerated ? handleFormationChange : undefined}
+              disabled={squadGenerated}
             >
               {formations.map((formation) => (
                 <option key={formation.value} value={formation.value}>
