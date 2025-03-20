@@ -318,7 +318,7 @@ const AboutPage = () => {
             {teamMembers.map((member, index) => (
             <div 
                 key={index} 
-                className="w-60 h-80 rounded-xl bg-gradient-to-b from-indigo-900 to-purple-600 transition-transform duration-700 hover:scale-105"
+                className="w-60 h-80 rounded-xl bg-gradient-to-b from-indigo-300 to-indigo-900 transition-transform duration-700 hover:scale-105"
             >
                 <div className="relative top-[1.5%] left-[1.5%] w-[97%] h-[97%] bg-gray-900 rounded-xl flex flex-col items-center">
                 <div className="text-white text-2xl mt-5">{member.name}</div>
