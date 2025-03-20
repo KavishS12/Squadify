@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
 
-def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubboost, nationboost,currently,nations=[],clubs=[], nogens=200,popul=800,csv_path="final_krazi.csv"):
+def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubboost, nationboost,currently,nations=[],clubs=[], nogens=200,popul=800,csv_path="final_krazi_adjusted.csv"):
     SEED = 1
     random.seed(SEED)
     np.random.seed(SEED)
