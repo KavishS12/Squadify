@@ -149,7 +149,7 @@ const PlayersPage = () => {
       )} */}
       <div className="max-w-[90vw] mx-auto p-4">
         {/* Filters Section */}
-        <div className="mb-6 mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 bg-blue-950 p-4 rounded-lg">
+        <div className="mb-6 mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 bg-black border border-gray-600 p-4 rounded-lg">
           {/* Search Input */}
           <div>
             <label className="block text-blue-100 mb-2">Search Player</label>
@@ -161,14 +161,14 @@ const PlayersPage = () => {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full p-2 rounded bg-blue-900 text-blue-100 border border-blue-700 placeholder-blue-400"
+              className="w-full p-2 rounded bg-blue-950 text-blue-100 border border-blue-700 placeholder-blue-400"
             />
           </div>
 
           <div>
             <label className="block text-blue-100 mb-2">Nation</label>
             <select 
-              className="w-full p-2 rounded bg-blue-900 text-blue-100 border border-blue-700"
+              className="w-full p-2 rounded bg-blue-950 text-blue-100 border border-blue-700"
               value={selectedNation}
               onChange={(e) => {
                 setSelectedNation(e.target.value);
@@ -187,7 +187,7 @@ const PlayersPage = () => {
           <div>
             <label className="block text-blue-100 mb-2">Position</label>
             <select 
-              className="w-full p-2 rounded bg-blue-900 text-blue-100 border border-blue-700"
+              className="w-full p-2 rounded bg-blue-950 text-blue-100 border border-blue-700"
               value={selectedPosition}
               onChange={(e) => {
                 setSelectedPosition(e.target.value);
@@ -223,7 +223,7 @@ const PlayersPage = () => {
                     setCurrentPage(1);
                   }
                 }}
-                className="w-full"
+                className="w-full accent-blue-900"
               />
 
               {/* Maximum Age Slider */}
@@ -240,7 +240,7 @@ const PlayersPage = () => {
                     setCurrentPage(1);
                   }
                 }}
-                className="w-full"
+                className="w-full accent-blue-900"
               />
             </div>
           </div>
@@ -257,7 +257,7 @@ const PlayersPage = () => {
                 setMinOverall(parseInt(e.target.value));
                 setCurrentPage(1);
               }}
-              className="w-full"
+              className="w-full accent-blue-900"
             />
           </div>
 
@@ -272,7 +272,7 @@ const PlayersPage = () => {
                 setMinPotential(parseInt(e.target.value));
                 setCurrentPage(1);
               }}
-              className="w-full"
+              className="w-full accent-blue-900"
             />
           </div>
         </div>
@@ -359,13 +359,14 @@ const PlayersPage = () => {
                       {player.Market_Value === -1
                         ? "Retired"
                         : player.Market_Value === 0
-                        ? "<25K"
+                        ? "<€25K"
                         : player.Market_Value >= 1_000_000
-                        ? `${(player.Market_Value / 1_000_000).toFixed(1)}M`
+                        ? `€${(player.Market_Value / 1_000_000).toFixed(1)}M`
                         : player.Market_Value >= 1_000
-                        ? `${(player.Market_Value / 1_000).toFixed(1)}K`
-                        : player.Market_Value}
+                        ? `€${(player.Market_Value / 1_000).toFixed(1)}K`
+                        : `€${player.Market_Value}`}
                     </td>
+
 
                     <td className="px-1 py-2 text-center border-b border-blue-900">
                       <button

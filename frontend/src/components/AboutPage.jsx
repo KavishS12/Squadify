@@ -69,8 +69,9 @@ const AboutPage = () => {
             <h1 className="text-5xl md:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500">
               Redefining Football Squad Selection
             </h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-              In the high-stakes world of football, squad selection remains one of the most critical yet subjective decisions. Our algorithm changes the game by analyzing comprehensive performance data from Europe's top five leagues to identify player combinations that maximize team potential.
+            <p className="text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed">
+            In the high-stakes world of football, squad selection remains one of the most critical yet subjective decisions. Our algorithm changes the game by analyzing comprehensive performance data from Europe's top five leagues to identify player combinations that maximize team potential.
+            <br /><br />For clubs seeking competitive edge, analysts requiring deeper insights, or enthusiasts managing fantasy teams—our platform delivers sophisticated recommendations through an intuitive dashboard that transforms complex data into clear strategic advantage.
             </p>
           </motion.div>
         </div>
@@ -370,9 +371,6 @@ const AboutPage = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-300">
               Ready to Revolutionize Your Squad Selection?
             </h2>
-            <p className="text-xl text-blue-100 mb-8">
-              Join the teams already leveraging data science for competitive advantage
-            </p>
             <div className="flex flex-wrap justify-center gap-4">
                 <Link to="/squad">
                 <button className="bg-blue-900/50 backdrop-blur-sm border border-blue-400/30 px-8 py-4 rounded-full font-semibold text-lg transition transform hover:scale-105 hover:shadow-lg shadow-md">

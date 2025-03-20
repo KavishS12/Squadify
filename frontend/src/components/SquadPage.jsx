@@ -85,7 +85,7 @@ const SearchableDropdown = ({ options, placeholder, onSelect, selectedValues = [
     <div className="relative w-full" ref={dropdownRef}>
       <label className="block text-blue-100 mb-2">{label}</label>
       <div className="relative">
-        <div className="flex items-center bg-blue-900 text-white border border-blue-800 rounded-md p-1 pl-2">
+        <div className="flex items-center bg-blue-950 text-white border border-blue-800 rounded-md p-1 pl-2">
           <Search size={16} className="text-blue-300 mr-2" />
           <input
             type="text"
@@ -102,7 +102,7 @@ const SearchableDropdown = ({ options, placeholder, onSelect, selectedValues = [
             {selectedValues.map((value) => (
               <div 
                 key={value} 
-                className="bg-blue-700 text-white text-xs rounded-full px-3 py-1 flex items-center"
+                className="bg-blue-950 text-white text-xs rounded-full px-3 py-1 flex items-center"
               >
                 {typeof options[0] === 'object' ? 
                   options.find(o => o.code === value)?.name || value :
@@ -117,7 +117,7 @@ const SearchableDropdown = ({ options, placeholder, onSelect, selectedValues = [
         )}
         
         {isOpen && (
-          <div className="absolute z-50 w-full mt-1 bg-blue-800 border border-blue-700 rounded-md shadow-lg max-h-60 overflow-y-auto">
+          <div className="absolute z-50 w-full mt-1 bg-black border border-blue-700 rounded-md shadow-lg max-h-60 overflow-y-auto">
             <div className="flex justify-end p-2">
               <button onClick={() => setIsOpen(false)} className="text-white hover:text-gray-300">
                 <X size={16} />
@@ -130,7 +130,7 @@ const SearchableDropdown = ({ options, placeholder, onSelect, selectedValues = [
                 return (
                   <div
                     key={index}
-                    className={`p-2 hover:bg-blue-700 cursor-pointer ${isSelected ? 'bg-blue-600' : ''}`}
+                    className={`p-2 hover:bg-blue-900 cursor-pointer ${isSelected ? 'bg-blue-600' : ''}`}
                     onClick={() => {
                       if (isSelected) {
                         removeValue(value);
@@ -640,13 +640,13 @@ const SquadPage = () => {
       <h4 className="text-xl font-medium text-center mb-8 max-w-[60%] mx-auto text-blue-100 ">Select your filters, hit 'Generate,' and watch your perfect team come to life! </h4>
       
       {/* Filter section */}
-      <div className="max-w-7xl mx-auto bg-blue-950 rounded-lg py-4 px-4 mb-10">
+      <div className="max-w-7xl mx-auto bg-black border border-gray-600 rounded-lg py-4 px-4 mb-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* First row */}
           <div>
             <div className="font-semibold mb-1">Formation</div>
             <select
-              className="w-full bg-blue-900 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
+              className="w-full bg-blue-950 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
               value={formation}
               onChange={handleFormationChange}
             >
@@ -661,7 +661,7 @@ const SquadPage = () => {
           <div>
             <div className="font-semibold mb-1">Experience Level</div>
             <select
-              className="w-full bg-blue-900 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
+              className="w-full bg-blue-950 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
               value={experienceLevel}
               onChange={handleExperienceLevelChange}
             >
@@ -691,7 +691,7 @@ const SquadPage = () => {
                     setBudgetRange([newMin, budgetRange[1]]);
                   }
                 }}
-                className="w-full"
+                className="w-full accent-blue-900"
               />
 
               <input
@@ -706,7 +706,7 @@ const SquadPage = () => {
                     setBudgetRange([budgetRange[0], newMax]);
                   }
                 }}
-                className="w-full"
+                className="w-full accent-blue-900"
               />
             </div>
           </div>
@@ -741,7 +741,7 @@ const SquadPage = () => {
                 <div
                   onClick={() => setNationBoost((prev) => !prev)}
                   className={`w-12 h-6 ml-10 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ${
-                    nationBoost ? "bg-green-500" : "bg-gray-500"
+                    nationBoost ? "bg-blue-900" : "bg-gray-500"
                   }`}
                 >
                   <div
@@ -759,7 +759,7 @@ const SquadPage = () => {
                 <div
                   onClick={() => setClubBoost((prev) => !prev)}
                   className={`w-12 h-6 ml-10 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ${
-                    clubBoost ? "bg-green-500" : "bg-gray-500"
+                    clubBoost ? "bg-blue-900" : "bg-gray-500"
                   }`}
                 >
                   <div
@@ -777,7 +777,7 @@ const SquadPage = () => {
                 <div
                   onClick={() => setCurrentTopFive((prev) => !prev)}
                   className={`w-12 h-6 ml-10 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ${
-                    currentTopFive ? "bg-green-500" : "bg-gray-500"
+                    currentTopFive ? "bg-blue-900" : "bg-gray-500"
                   }`}
                 >
                   <div
@@ -848,12 +848,12 @@ const SquadPage = () => {
           {!squadGenerated ? (
             <div className="absolute inset-0 flex items-center justify-center z-10">
               {/* Dark overlay with blur effect */}
-              <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm rounded-lg"></div>
+              <div className="absolute inset-0 bg-black bg-opacity-70 backdrop-blur-xs rounded-lg"></div>
               <button 
                 onClick={generateSquad}
                 disabled={loading}
                 className={`flex items-center gap-2 text-lg font-semibold py-3 px-6 rounded-lg shadow-lg transition-all z-20 ${
-                  loading ? "bg-black text-teal-800" : "bg-teal-100 text-black hover:bg-black hover:text-teal-800"
+                  loading ? "bg-black text-teal-100" : "bg-teal-100 text-black hover:bg-black hover:text-teal-100"
                 }`}
               >
                 {loading ? (
@@ -876,7 +876,7 @@ const SquadPage = () => {
                   setSquadGenerated(false);
                   setPlayers([]);
                 }}
-                className="flex items-center gap-2 bg-teal-100 text-black hover:bg-black hover:text-teal-800 py-2 px-4 rounded-lg shadow-lg transition-all"
+                className="flex items-center gap-2 bg-teal-100 text-black hover:bg-black hover:text-teal-100 py-2 px-4 rounded-lg shadow-lg transition-all"
               >
                 <RefreshCw size={24} />
                 <span className="font-medium">Reset</span>

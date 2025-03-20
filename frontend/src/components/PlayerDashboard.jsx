@@ -105,7 +105,7 @@
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-2">
         {/* Player Info Section */}
-        <div className="bg-blue-950 rounded-lg p-4 shadow-md col-span-1">
+        <div className="bg-black rounded-lg p-4 shadow-md col-span-1">
             <div className="flex items-center mb-4">
             <img 
                 src={player.Image_URL} 
@@ -171,7 +171,7 @@
         </div>
         
         {/* Radar Chart for Overall Abilities */}
-        <div className="bg-blue-950 rounded-lg p-4 shadow-md col-span-1">
+        <div className="bg-black rounded-lg p-4 shadow-md col-span-1">
             <h3 className="text-lg font-semibold text-blue-100 mb-2">Player Ratings</h3>
             <ResponsiveContainer width="100%" height={250}>
             <RadarChart outerRadius={90} data={getRadarStats()}>
@@ -191,7 +191,7 @@
         </div>
         
         {/* Bar Chart comparing all ratings */}
-        <div className="bg-blue-950 rounded-lg p-4 shadow-md col-span-1">
+        <div className="bg-black rounded-lg p-4 shadow-md col-span-1">
             <h3 className="text-lg font-semibold text-blue-100 mb-2">Ratings Comparison</h3>
             <ResponsiveContainer width="100%" height={250}>
             <BarChart data={getRatingsComparisonStats()} margin={{ top: 20, right: 30, left: 20, bottom: 30 }}>
@@ -217,7 +217,7 @@
         
         {/* Position-specific statistics */}
         {shouldShowDefensiveStats && (
-            <div className="bg-blue-950 rounded-lg p-4 shadow-md col-span-1 md:col-span-3 lg:col-span-1">
+            <div className="bg-black rounded-lg p-4 shadow-md col-span-1 md:col-span-3 lg:col-span-1">
             <h3 className="text-lg font-semibold text-blue-100 mb-2">Defensive Stats</h3>
             <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={getDefensiveStats()} margin={{ top: 20, right: 30, left: 20, bottom: 30 }}>
@@ -231,7 +231,7 @@
         )}
         
         {shouldShowPassingStats && (
-            <div className="bg-blue-950 rounded-lg p-4 shadow-md col-span-1 md:col-span-3 lg:col-span-1">
+            <div className="bg-black rounded-lg p-4 shadow-md col-span-1 md:col-span-3 lg:col-span-1">
             <h3 className="text-lg font-semibold text-blue-100 mb-2">Passing Stats</h3>
             <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={getPassingStats()} margin={{ top: 20, right: 30, left: 20, bottom: 30 }}>

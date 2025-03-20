@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronRight, Database, TrendingUp, Shield, Users } from 'lucide-react';
 import heroImage from '../assets/hero-main.png';
+import {Link} from 'react-router-dom';
 
 const LandingPage = () => {
   const [activeFeature, setActiveFeature] = useState(1);
@@ -9,7 +10,7 @@ const LandingPage = () => {
     {
       icon: <TrendingUp className="w-12 h-12 text-blue-600" />,
       title: "AI-Powered Squad Selection",
-      description: "Leverage advanced machine learning models to predict player performance, market trends, and injury risks with unprecedented accuracy."
+      description: "Leverage advanced machine learning models to predict and analyzes player performance, team dynamics, and tactical strategies to optimize football squad selection. "
     },
     {
       icon: <Shield className="w-12 h-12 text-green-600" />,
@@ -37,7 +38,7 @@ const LandingPage = () => {
       </div>
 
       {/* Features Section */}
-      <div id="features" className="py-16 bg-black text-white">
+      <div id="features" className="py-16 bg-gradient-to-b from-black to-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
             <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">
@@ -58,7 +59,7 @@ const LandingPage = () => {
                 className={`flex flex-col p-6 rounded-lg transition-all duration-300 transform ${
                   activeFeature === index 
                     ? 'bg-gray-300 shadow-lg scale-105' 
-                    : 'hover:bg-gray-100'
+                    : 'border border-gray-800 hover:bg-gray-100'
                 }`}
                 onMouseEnter={() => setActiveFeature(index)}
                 style={{ transformOrigin: 'center' }}
@@ -80,41 +81,55 @@ const LandingPage = () => {
         </div>
       </div>
 
-      {/* Rest of the sections remain the same but with proper container constraints */}
       {/* Key Technologies Section */}
-      <div id="technology" className="bg-gray-100 py-16">
+      <div id="technology" className="bg-gray-300 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
-            <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">
+            <h2 className="text-base text-blue-500 font-semibold tracking-wide uppercase">
               Cutting-Edge Technology
             </h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-black sm:text-4xl">
               Powered by Advanced Machine Learning
             </p>
           </div>
           <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+            <div className="bg-gradient-to-br from-gray-800 to-black p-6 rounded-lg shadow-xl border border-gray-800 hover:border-blue-900 transition-all duration-300 hover:shadow-blue-900/20 hover:shadow-2xl">
+              <div className="flex items-center justify-center mb-4">
+                <div className="bg-black p-3 rounded-full">
+                  <Database className="w-8 h-8 text-blue-500" />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4 text-center">
                 Predictive Modeling
               </h3>
-              <p className="text-gray-600">
-                Utilize XGBoost, LSTM, and SARIMA to predict player performance, market trends, and skill development.
+              <p className="text-gray-400">
+                Build a hybrid model using multiple ML techniques like XGBoost, Linear Regression, SVMs, Decision Trees and choose the best performing one for each type of stat based on validation loss
               </p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+            <div className="bg-gradient-to-br from-gray-800 to-black p-6 rounded-lg shadow-xl border border-gray-800 hover:border-blue-900 transition-all duration-300 hover:shadow-blue-900/20 hover:shadow-2xl">
+              <div className="flex items-center justify-center mb-4">
+                <div className="bg-black p-3 rounded-full">
+                  <TrendingUp className="w-8 h-8 text-blue-500" />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4 text-center">
                 Optimization Algorithms
               </h3>
-              <p className="text-gray-600">
-                Genetic Algorithms and Graph-Based Search techniques to find the optimal squad within budget constraints.
+              <p className="text-gray-400">
+                Genetic Algorithm, enhanced with elitism preservation, formation balance enforcement, and nation/club-based chemistry boost calculations to discover optimal squads within budget constraints.
               </p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+            <div className="bg-gradient-to-br from-gray-800 to-black p-6 rounded-lg shadow-xl border border-gray-800 hover:border-blue-900 transition-all duration-300 hover:shadow-blue-900/20 hover:shadow-2xl">
+              <div className="flex items-center justify-center mb-4">
+                <div className="bg-black p-3 rounded-full">
+                  <Shield className="w-8 h-8 text-blue-500" />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4 text-center">
                 Interactive Dashboard
               </h3>
-              <p className="text-gray-600">
-                Powered by React.js and Power BI, providing real-time insights and customizable squad selection.
+              <p className="text-gray-400">
+                Powered by React.js, with a MongoDB database, Express.js backend and Flask API to ensure smooth communication between the UI, Backend and ML models for real-time squad optimization.
               </p>
             </div>
           </div>
@@ -122,33 +137,32 @@ const LandingPage = () => {
       </div>
 
       {/* Call to Action */}
-      <div className="bg-blue-700">
+      <div className="bg-gradient-to-b from-black to-blue-800">
         <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 lg:flex lg:items-center lg:justify-between">
-          <div>
+          <div className="relative z-10">
             <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              Ready to Optimize Your Football Squad?
+              Ready to Revolutionize Your Squad Selection?
             </h2>
-            <p className="mt-4 text-lg text-blue-200">
+            <p className="mt-4 text-lg text-gray-400">
               Start building data-driven, high-performance teams today with Squadify.
             </p>
           </div>
-          <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
-            <a
-              href="#"
-              className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50"
-            >
-              Get Started <ChevronRight className="ml-2 h-5 w-5" />
-            </a>
+          <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0 relative z-10">
+            <Link to='/squad'>
+              <div className="inline-flex items-center justify-center px-8 py-4 border border-blue-500 text-base font-medium rounded-md text-white bg-black shadow-lg transition-all duration-300 hover:border-blue-400">
+                Get Started <ChevronRight className="ml-2 h-5 w-5" />
+              </div>
+              </Link>
           </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <footer id="footer" className="bg-gray-800 text-white py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Footer - UPDATED */}
+      <footer id="footer" className="bg-gradient-to-br from-black to-blue-950 text-white py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">   
           <div className="text-center">
-            <p>Copyright &copy; 2025 All rights reserved.</p>
-            <p className="mt-2 text-sm text-gray-400">
+            <p className="text-gray-300">Copyright &copy; 2025 All rights reserved.</p>
+            <p className="mt-2 text-sm text-gray-300">
               Developed by Team Haxophone - Hacksplosion Project
             </p>
           </div>
