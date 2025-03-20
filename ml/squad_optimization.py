@@ -20,7 +20,7 @@ def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubb
     elif scoring_strategy=='futurestars':
         df=df[df["age"]<30].reset_index(drop=True)
     elif scoring_strategy=='veterans':
-        df=df[30>=df["age"]>=25].reset_index(drop=True)
+        df = df[(25 <= df["age"]) & (df["age"] <= 30)].reset_index(drop=True)
     elif scoring_strategy=='onlyoverall':
         df=df[df["age"]>30].reset_index(drop=True)
     if nations:  # Only filter if nations list is not empty

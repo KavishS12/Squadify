@@ -536,103 +536,103 @@ const SquadPage = () => {
         );
 
         case '4-5-1':
-    return (
-      <div className="w-full h-full flex flex-col justify-between py-2">
-        <div className="flex justify-center">
-          <PlayerCard player={players[10]} onClick={handlePlayerClick} />
-        </div>
+          return (
+            <div className="w-full h-full flex flex-col justify-between py-2">
+              <div className="flex justify-center">
+                <PlayerCard player={players[10]} onClick={handlePlayerClick} />
+              </div>
 
-        <div className="flex justify-between">
-          <div className="flex-1 flex justify-center">
-            <PlayerCard player={players[6]} onClick={handlePlayerClick} />
-          </div>
-          <div className="flex-1 flex justify-center">
-            <PlayerCard player={players[7]} onClick={handlePlayerClick} />
-          </div>
-          <div className="flex-1 flex justify-center">
-            <PlayerCard player={players[8]} onClick={handlePlayerClick} />
-          </div>
-          <div className="flex-1 flex justify-center">
-            <PlayerCard player={players[9]} onClick={handlePlayerClick} />
-          </div>
-          <div className="flex-1 flex justify-center">
-            <PlayerCard player={players[5]} onClick={handlePlayerClick} />
-          </div>
-        </div>
+              <div className="flex justify-between">
+                <div className="flex-1 flex justify-center">
+                  <PlayerCard player={players[6]} onClick={handlePlayerClick} />
+                </div>
+                <div className="flex-1 flex justify-center">
+                  <PlayerCard player={players[7]} onClick={handlePlayerClick} />
+                </div>
+                <div className="flex-1 flex justify-center">
+                  <PlayerCard player={players[8]} onClick={handlePlayerClick} />
+                </div>
+                <div className="flex-1 flex justify-center">
+                  <PlayerCard player={players[9]} onClick={handlePlayerClick} />
+                </div>
+                <div className="flex-1 flex justify-center">
+                  <PlayerCard player={players[5]} onClick={handlePlayerClick} />
+                </div>
+              </div>
 
-        <div className="flex justify-between">
-          <PlayerCard player={players[1]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[2]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[3]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[4]} onClick={handlePlayerClick} />
-        </div>
+              <div className="flex justify-between">
+                <PlayerCard player={players[1]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[2]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[3]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[4]} onClick={handlePlayerClick} />
+              </div>
 
-        <div className="flex justify-center">
-          <PlayerCard player={players[0]} onClick={handlePlayerClick} />
-        </div>
-      </div>
-    );
+              <div className="flex justify-center">
+                <PlayerCard player={players[0]} onClick={handlePlayerClick} />
+              </div>
+            </div>
+          );
 
-  case '3-4-3':
-    return (
-      <div className="w-full h-full flex flex-col justify-between py-2">
-        <div className="flex justify-between">
-          <PlayerCard player={players[9]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[10]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[8]} onClick={handlePlayerClick} />
-        </div>
+        case '3-4-3':
+          return (
+            <div className="w-full h-full flex flex-col justify-between py-2">
+              <div className="flex justify-between">
+                <PlayerCard player={players[9]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[10]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[8]} onClick={handlePlayerClick} />
+              </div>
 
-        <div className="flex justify-between">
-          <PlayerCard player={players[5]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[6]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[7]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[4]} onClick={handlePlayerClick} />
-        </div>
+              <div className="flex justify-between">
+                <PlayerCard player={players[5]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[6]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[7]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[4]} onClick={handlePlayerClick} />
+              </div>
 
-        <div className="flex justify-between">
-          <PlayerCard player={players[1]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[2]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[3]} onClick={handlePlayerClick} />
-        </div>
+              <div className="flex justify-between">
+                <PlayerCard player={players[1]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[2]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[3]} onClick={handlePlayerClick} />
+              </div>
 
-        <div className="flex justify-center">
-          <PlayerCard player={players[0]} onClick={handlePlayerClick} />
-        </div>
-      </div>
-    );
+              <div className="flex justify-center">
+                <PlayerCard player={players[0]} onClick={handlePlayerClick} />
+              </div>
+            </div>
+          );
 
-  case '5-4-1':
-    return (
-      <div className="w-full h-full flex flex-col justify-between py-2">
-        <div className="flex justify-center">
-          <PlayerCard player={players[10]} onClick={handlePlayerClick} />
-        </div>
+        case '5-4-1':
+          return (
+            <div className="w-full h-full flex flex-col justify-between py-2">
+              <div className="flex justify-center">
+                <PlayerCard player={players[10]} onClick={handlePlayerClick} />
+              </div>
 
-        <div className="flex justify-between">
-          <PlayerCard player={players[6]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[7]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[8]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[5]} onClick={handlePlayerClick} />
-        </div>
+              <div className="flex justify-between">
+                <PlayerCard player={players[6]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[7]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[8]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[9]} onClick={handlePlayerClick} />
+              </div>
 
-        <div className="flex justify-between">
-          <PlayerCard player={players[1]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[2]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[3]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[4]} onClick={handlePlayerClick} />
-          <PlayerCard player={players[9]} onClick={handlePlayerClick} />
-        </div>
+              <div className="flex justify-between">
+                <PlayerCard player={players[1]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[2]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[3]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[4]} onClick={handlePlayerClick} />
+                <PlayerCard player={players[5]} onClick={handlePlayerClick} />
+              </div>
 
-        <div className="flex justify-center">
-          <PlayerCard player={players[0]} onClick={handlePlayerClick} />
-        </div>
-      </div>
-    );
+              <div className="flex justify-center">
+                <PlayerCard player={players[0]} onClick={handlePlayerClick} />
+              </div>
+            </div>
+          );
 
-      default:
-        return null;
-    }
-  };
+            default:
+              return null;
+          }
+        };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black to-blue-950 text-white p-4 pt-24 w-full overflow-hidden">
