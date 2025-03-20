@@ -6,17 +6,30 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
 
-def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubboost, nationboost,currently, nogens=300,popul=1000,csv_path="final_krazi.csv"):
+def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubboost, nationboost,currently,nations=[],clubs=[], nogens=200,popul=800,csv_path="final_krazi.csv"):
     SEED = 1
     random.seed(SEED)
     np.random.seed(SEED)
-    
     df = pd.read_csv(csv_path)
     df["Market_Value"] = pd.to_numeric(df["Market_Value"], errors="coerce")
     df = df[df["Market_Value"] > 0].reset_index(drop=True)
     if currently:
         df = df[df["Last_played"] == 2425].reset_index(drop=True)
-    
+    if scoring_strategy=='onlypotential':
+        df=df[df["age"]<25].reset_index(drop=True)
+    elif scoring_strategy=='futurestars':
+        df=df[df["age"]<30].reset_index(drop=True)
+    elif scoring_strategy=='veterans':
+        df=df[30>=df["age"]>=25].reset_index(drop=True)
+    elif scoring_strategy=='onlyoverall':
+        df=df[df["age"]>30].reset_index(drop=True)
+    if nations:  # Only filter if nations list is not empty
+        df = df[df["nation"].isin(nations)].reset_index(drop=True)
+
+    if clubs:  # Only filter if clubs list is not empty
+        df = df[df["club"].isin(clubs)].reset_index(drop=True)
+
+            
     players = df.index.tolist()
     nation = df["nation"].tolist()
     club = df["club"].tolist()
@@ -46,11 +59,13 @@ def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubb
     }
     
     formations = {
-        "4-3-3": [1, 4, 3, 3],
-        "4-4-2": [1, 4, 4, 2],
-        "3-5-2": [1, 3, 5, 2],
-        "5-3-2": [1, 5, 3, 2],
-        "4-2-3-1": [1, 4, 2, 3, 1]
+    "4-3-3": [1, 4, 3, 3],   # 4 Defenders, 3 Midfielders, 3 Forwards
+    "4-4-2": [1, 4, 4, 2],   # 4 Defenders, 4 Midfielders, 2 Forwards
+    "3-5-2": [1, 3, 5, 2],   # 3 Defenders, 5 Midfielders, 2 Forwards
+    "5-3-2": [1, 5, 3, 2],   # 5 Defenders, 3 Midfielders, 2 Forwards
+    "4-5-1": [1, 4, 5, 1],   # 4 Defenders, 5 Midfielders, 1 Forward
+    "3-4-3": [1, 3, 4, 3],   # 3 Defenders, 4 Midfielders, 3 Forwards
+    "5-4-1": [1, 5, 4, 1],   # 5 Defenders, 4 Midfielders, 1 Forward
     }
     
     scoring_weights = {
@@ -130,7 +145,7 @@ def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubb
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     toolbox.register("mate", tools.cxTwoPoint)
     toolbox.register("mutate", custom_mutate)
-    toolbox.register("select", tools.selTournament, tournsize=4)
+    toolbox.register("select", tools.selTournament, tournsize=8)
     toolbox.register("evaluate", fitness)
     
     population = toolbox.population(n=popul)
@@ -180,9 +195,11 @@ def select_squad():
     clubboost = data.get("clubboost", False)
     nationboost = data.get("nationboost", False)
     currently = data.get("currently", False)
+    nations = data.get("nations", [])
+    clubs = data.get("clubs", [])
 
     squad_result = select_best_squad(
-        min_budget, max_budget, formation, scoring_strategy, clubboost, nationboost, currently
+        min_budget, max_budget, formation, scoring_strategy, clubboost, nationboost, currently, nations, clubs
     )
     
 

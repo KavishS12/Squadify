@@ -1,7 +1,8 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import jerseyImage from "../assets/jersey.png";
-import { PlayCircle, RefreshCw , Star, DollarSign, Medal, TrendingUp} from 'lucide-react';
+import { PlayCircle, RefreshCw, Star, DollarSign, Medal, TrendingUp, Search, X } from 'lucide-react';
+import squadBg from "../assets/squad_bg.png";
 
 const nationFlags = {
   "ENG": "gb", "CZE": "cz", "POL": "pl", "USA": "us", "FRA": "fr", "ISR": "il", "ESP": "es", "NGA": "ng", "WAL": "gb-wls",
@@ -21,13 +22,162 @@ const nationFlags = {
   "LTU": "lt", "BOL": "bo", "LBY": "ly", "UGA": "ug", "LVA": "lv", "CYP": "cy", "KSA": "sa"
 };
 
-const SquadPage = () => {
+const availableClubs = [
+  "Manchester City", "Real Madrid", "Barcelona", "Arsenal",
+  "Leverkusen", "Bayern Munich", "Chelsea", "Leeds United", "Inter",
+  "Paris S-G", "Liverpool", "Newcastle Utd", "Atlético Madrid",
+  "Bordeaux", "RB Leipzig", "Leganés", "Spezia", "Milan", "Espanyol",
+  "Genoa", "Napoli", "Athletic Club", "Schalke 04", "Tottenham",
+  "Everton", "Bochum", "Juventus", "Valladolid", "Real Sociedad",
+  "Manchester Utd", "Atalanta", "Aston Villa", "Crystal Palace",
+  "Lecce", "Las Palmas", "Villarreal", "Brentford", "Dortmund",
+  "Wolves", "West Ham", "Nott'ham Forest", "Alavés", "Nantes",
+  "Lille", "Brighton", "Stuttgart", "Valencia", "Eint Frankfurt",
+  "Monaco", "Eibar", "Bournemouth", "Wolfsburg", "Fiorentina",
+  "Marseille", "Fulham", "Bologna", "Cádiz", "Lazio", "Roma",
+  "Leicester City", "Lyon", "Torino", "Nice", "Strasbourg", "Lens",
+  "Mainz 05", "Ipswich Town", "Southampton", "Sevilla", "Girona",
+  "Levante", "Celta Vigo", "Betis", "Freiburg", "Parma", "Rennes",
+  "Osasuna", "Rayo Vallecano", "Elche", "Como", "Granada",
+  "Hoffenheim", "Sheffield Utd", "Getafe", "Toulouse", "Auxerre",
+  "Udinese", "Burnley", "Heidenheim", "Augsburg", "Union Berlin",
+  "Gladbach", "Werder Bremen", "Mallorca", "Hertha BSC", "Nîmes",
+  "Reims", "Saint-Étienne", "Monza", "Brest", "Luton Town",
+  "Sassuolo", "Le Havre", "Angers", "Lorient", "West Brom",
+  "Hellas Verona", "Montpellier", "Cagliari", "Köln", "Empoli",
+  "Almería", "Venezia", "Salernitana", "Cremonese", "Düsseldorf",
+  "Paderborn 07", "Clermont Foot", "Norwich City", "St. Pauli",
+  "Metz", "Watford", "Frosinone", "Arminia", "Crotone",
+  "Holstein Kiel", "Huddersfield", "Ajaccio", "Darmstadt 98",
+  "Sampdoria", "Benevento", "Dijon", "Troyes", "Chievo", "Huesca",
+  "Amiens", "Brescia", "Caen", "Nürnberg", "SPAL", "Cardiff City",
+  "Guingamp", "Hannover 96"
+];
 
+
+// Searchable Dropdown Component
+const SearchableDropdown = ({ options, placeholder, onSelect, selectedValues = [], label }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const dropdownRef = useRef(null);
+
+  const filteredOptions = options.filter(option => 
+    typeof option === 'string' 
+      ? option.toLowerCase().includes(searchTerm.toLowerCase())
+      : option.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleOptionSelect = (option) => {
+    const value = typeof option === 'string' ? option : option.code;
+    const label = typeof option === 'string' ? option : option.name;
+    
+    onSelect(value);
+    setSearchTerm('');
+    setIsOpen(false);
+  };
+
+  const removeValue = (value) => {
+    const newValues = selectedValues.filter(v => v !== value);
+    onSelect(newValues);
+  };
+
+  return (
+    <div className="relative w-full" ref={dropdownRef}>
+      <label className="block text-blue-100 mb-2">{label}</label>
+      <div className="relative">
+        <div className="flex items-center bg-blue-900 text-white border border-blue-800 rounded-md p-1 pl-2">
+          <Search size={16} className="text-blue-300 mr-2" />
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onClick={() => setIsOpen(true)}
+            placeholder={selectedValues.length === 0 ? placeholder : ''}
+            className="flex-1 bg-transparent outline-none py-1 text-sm"
+          />
+        </div>
+        
+        {selectedValues.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-2">
+            {selectedValues.map((value) => (
+              <div 
+                key={value} 
+                className="bg-blue-700 text-white text-xs rounded-full px-3 py-1 flex items-center"
+              >
+                {typeof options[0] === 'object' ? 
+                  options.find(o => o.code === value)?.name || value :
+                  value
+                }
+                <button onClick={() => removeValue(value)} className="ml-1">
+                  <X size={14} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {isOpen && (
+          <div className="absolute z-50 w-full mt-1 bg-blue-800 border border-blue-700 rounded-md shadow-lg max-h-60 overflow-y-auto">
+            <div className="flex justify-end p-2">
+              <button onClick={() => setIsOpen(false)} className="text-white hover:text-gray-300">
+                <X size={16} />
+              </button>
+            </div>
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option, index) => {
+                const value = typeof option === 'string' ? option : option.code;
+                const isSelected = selectedValues.includes(value);
+                return (
+                  <div
+                    key={index}
+                    className={`p-2 hover:bg-blue-700 cursor-pointer ${isSelected ? 'bg-blue-600' : ''}`}
+                    onClick={() => {
+                      if (isSelected) {
+                        removeValue(value);
+                      } else {
+                        handleOptionSelect(option);
+                      }
+                    }}
+                  >
+                    {typeof option === 'string' ? option : option.name}
+                  </div>
+                );
+              })
+            ) : (
+              <div className="p-2 text-gray-300">No results found</div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const SquadPage = () => {
+  const [availableNations, setAvailableNations] = useState([]);
   const [players, setPlayers] = useState([]);
   const [totalMarketValue, setTotalMarketValue] = useState(0);
   const [average_overall, setAverageOverall] = useState(0);
   const [average_potential, setAveragePotential] = useState(0);
   const [squadGenerated, setSquadGenerated] = useState(false);
+
+  useEffect(() => {
+      const fetchAllNations = async () => {
+        try {
+          const response = await fetch('http://localhost:5000/players/nations');
+          if (!response.ok) throw new Error('Failed to fetch nations');
+          const data = await response.json();
+          setAvailableNations(data.sort());
+        } catch (error) {
+          console.error("Error fetching nations:", error);
+        }
+      };
+      fetchAllNations();
+  }, []);
+
+  // New state for filters
+  const [selectedNations, setSelectedNations] = useState([]);
+  const [selectedClubs, setSelectedClubs] = useState([]);
 
   // Format market value function
   const formatMarketValue = (value) => {
@@ -53,7 +203,9 @@ const SquadPage = () => {
               scoring_strategy: experienceLevel,
               clubboost: clubBoost,
               nationboost: nationBoost,
-              currently: currentTopFive
+              currently: currentTopFive,
+              nations: selectedNations,
+              clubs: selectedClubs
           });
 
           // Extract player IDs from the response
@@ -103,8 +255,10 @@ const SquadPage = () => {
     { value: '4-3-3', label: '4-3-3' },
     { value: '4-4-2', label: '4-4-2' },
     { value: '3-5-2', label: '3-5-2' }, 
-    { value: '5-3-2', label: '5-3-2' }, 
-    { value: '4-2-3-1', label: '4-2-3-1' }
+    { value: '5-3-2', label: '5-3-2' },
+    { value: '4-5-1', label: '4-5-1' },
+    { value: '3-4-3', label: '3-4-3' },
+    { value: '5-4-1', label: '5-4-1' },
   ];
 
   const experienceLevels = [
@@ -112,16 +266,16 @@ const SquadPage = () => {
     { value: 'futurestars', label: 'Future XI' },
     { value: 'peakplayers', label: 'Balanced Squad' }, 
     { value: 'veterans', label: 'Peak Performers' }, 
-    { value: 'onlyoverall', label: 'Experienced Core' }
+    { value: 'onlyoverall', label: 'Veterans' }
   ];
 
   const [loading, setLoading] = useState(false);
-  const [formation, setformation] = useState(formations[0].value);
-  const [budgetRange, setBudgetRange] = useState([20000000,1500000000 ]);
+  const [formation, setFormation] = useState(formations[0].value);
+  const [budgetRange, setBudgetRange] = useState([20000000, 1500000000]);
   const [nationBoost, setNationBoost] = useState(false);
   const [clubBoost, setClubBoost] = useState(false);
   const [currentTopFive, setCurrentTopFive] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState(players[5]);
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [experienceLevel, setExperienceLevel] = useState('peakplayers');
 
   // Reset selected player when squad is reset
@@ -134,18 +288,47 @@ const SquadPage = () => {
     }
   }, [squadGenerated, players, selectedPlayer]);
 
+  // Handle nation selection
+  const handleNationSelection = (nations) => {
+    // If nations is a single value, add/remove it from the array
+    if (typeof nations === 'string') {
+      if (selectedNations.includes(nations)) {
+        setSelectedNations(selectedNations.filter(n => n !== nations));
+      } else {
+        setSelectedNations([...selectedNations, nations]);
+      }
+    } else {
+      // Otherwise, nations is already the new array
+      setSelectedNations(nations);
+    }
+  };
+
+  // Handle club selection
+  const handleClubSelection = (clubs) => {
+    // If clubs is a single value, add/remove it from the array
+    if (typeof clubs === 'string') {
+      if (selectedClubs.includes(clubs)) {
+        setSelectedClubs(selectedClubs.filter(c => c !== clubs));
+      } else {
+        setSelectedClubs([...selectedClubs, clubs]);
+      }
+    } else {
+      // Otherwise, clubs is already the new array
+      setSelectedClubs(clubs);
+    }
+  };
+
   // Event handlers
   const handlePlayerClick = (player) => {
     setSelectedPlayer(player);
   };
 
   const handleFormationChange = (e) => {
-    setformation(e.target.value);
+    setFormation(e.target.value);
   };
 
   const handleExperienceLevelChange = (e) => {
     setExperienceLevel(e.target.value);
-    console.log(e.target.value);
   };
 
   // Player card component
@@ -351,68 +534,119 @@ const SquadPage = () => {
             </div>
           </div>
         );
-      
-      case '4-2-3-1':
-        return (
-          <div className="w-full h-full flex flex-col justify-between py-2">
-            <div className="flex justify-center">
-              <PlayerCard player={players[10]} onClick={handlePlayerClick} />
-            </div>
 
-            <div className="flex justify-between">
-              <div className="flex-1 flex justify-center">
-                <PlayerCard player={players[7]} onClick={handlePlayerClick} />
-              </div>
-              <div className="flex-1 flex justify-center">
-                <PlayerCard player={players[8]} onClick={handlePlayerClick} />
-              </div>
-              <div className="flex-1 flex justify-center">
-                <PlayerCard player={players[9]} onClick={handlePlayerClick} />
-              </div>
-            </div>
-            
-            <div className="flex justify-center gap-20">
-              <PlayerCard player={players[5]} onClick={handlePlayerClick} />
-              <PlayerCard player={players[6]} onClick={handlePlayerClick} />
-            </div>
-            
-            <div className="flex justify-between">
-              <div className="flex-1 flex justify-center">
-                <PlayerCard player={players[1]} onClick={handlePlayerClick} />
-              </div>
-              <div className="flex-1 flex justify-center">
-                <PlayerCard player={players[2]} onClick={handlePlayerClick} />
-              </div>
-              <div className="flex-1 flex justify-center">
-                <PlayerCard player={players[3]} onClick={handlePlayerClick} />
-              </div>
-              <div className="flex-1 flex justify-center">
-                <PlayerCard player={players[4]} onClick={handlePlayerClick} />
-              </div>
-            </div>
-            
-            <div className="flex justify-center">
-              <PlayerCard player={players[0]} onClick={handlePlayerClick} />
-            </div>
+        case '4-5-1':
+    return (
+      <div className="w-full h-full flex flex-col justify-between py-2">
+        <div className="flex justify-center">
+          <PlayerCard player={players[10]} onClick={handlePlayerClick} />
+        </div>
+
+        <div className="flex justify-between">
+          <div className="flex-1 flex justify-center">
+            <PlayerCard player={players[6]} onClick={handlePlayerClick} />
           </div>
-        );
-    
+          <div className="flex-1 flex justify-center">
+            <PlayerCard player={players[7]} onClick={handlePlayerClick} />
+          </div>
+          <div className="flex-1 flex justify-center">
+            <PlayerCard player={players[8]} onClick={handlePlayerClick} />
+          </div>
+          <div className="flex-1 flex justify-center">
+            <PlayerCard player={players[9]} onClick={handlePlayerClick} />
+          </div>
+          <div className="flex-1 flex justify-center">
+            <PlayerCard player={players[5]} onClick={handlePlayerClick} />
+          </div>
+        </div>
+
+        <div className="flex justify-between">
+          <PlayerCard player={players[1]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[2]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[3]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[4]} onClick={handlePlayerClick} />
+        </div>
+
+        <div className="flex justify-center">
+          <PlayerCard player={players[0]} onClick={handlePlayerClick} />
+        </div>
+      </div>
+    );
+
+  case '3-4-3':
+    return (
+      <div className="w-full h-full flex flex-col justify-between py-2">
+        <div className="flex justify-between">
+          <PlayerCard player={players[9]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[10]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[8]} onClick={handlePlayerClick} />
+        </div>
+
+        <div className="flex justify-between">
+          <PlayerCard player={players[5]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[6]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[7]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[4]} onClick={handlePlayerClick} />
+        </div>
+
+        <div className="flex justify-between">
+          <PlayerCard player={players[1]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[2]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[3]} onClick={handlePlayerClick} />
+        </div>
+
+        <div className="flex justify-center">
+          <PlayerCard player={players[0]} onClick={handlePlayerClick} />
+        </div>
+      </div>
+    );
+
+  case '5-4-1':
+    return (
+      <div className="w-full h-full flex flex-col justify-between py-2">
+        <div className="flex justify-center">
+          <PlayerCard player={players[10]} onClick={handlePlayerClick} />
+        </div>
+
+        <div className="flex justify-between">
+          <PlayerCard player={players[6]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[7]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[8]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[5]} onClick={handlePlayerClick} />
+        </div>
+
+        <div className="flex justify-between">
+          <PlayerCard player={players[1]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[2]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[3]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[4]} onClick={handlePlayerClick} />
+          <PlayerCard player={players[9]} onClick={handlePlayerClick} />
+        </div>
+
+        <div className="flex justify-center">
+          <PlayerCard player={players[0]} onClick={handlePlayerClick} />
+        </div>
+      </div>
+    );
+
       default:
         return null;
     }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 pt-24 w-full overflow-hidden">
-      <h2 className="text-3xl font-semibold text-center mb-2 max-w-[60%] mx-auto text-blue-100 uppercase font-mono">Build your ultimate dream squad! ⚽</h2>
-      <h4 className="text-xl font-medium text-center mb-8 max-w-[60%] mx-auto text-blue-100 font-[cursive]">Select your filters, hit 'Generate,' and watch your perfect team come to life! </h4>
+    <div className="min-h-screen bg-gradient-to-b from-black to-blue-950 text-white p-4 pt-24 w-full overflow-hidden">
+      <h1 className="text-4xl md:text-5xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500">Build your ultimate dream squad ! </h1>
+      <h4 className="text-xl font-medium text-center mb-8 max-w-[60%] mx-auto text-blue-100 ">Select your filters, hit 'Generate,' and watch your perfect team come to life! </h4>
+      
       {/* Filter section */}
-      <div className="max-w-7xl mx-auto bg-blue-950 rounded-lg py-2 mb-10">
-        <div className="flex justify-center items-center gap-8">
-          <div className="w-[20%]">
+      <div className="max-w-7xl mx-auto bg-blue-950 rounded-lg py-4 px-4 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* First row */}
+          <div>
             <div className="font-semibold mb-1">Formation</div>
             <select
-              className="w-44 bg-blue-900 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
+              className="w-full bg-blue-900 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
               value={formation}
               onChange={handleFormationChange}
             >
@@ -425,17 +659,31 @@ const SquadPage = () => {
           </div>
           
           <div>
-            <label className="block text-blue-100 mb-2">
-              Budget Range: ${budgetRange[0].toLocaleString()} - ${budgetRange[1].toLocaleString()}
-            </label>
-
+            <div className="font-semibold mb-1">Experience Level</div>
+            <select
+              className="w-full bg-blue-900 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
+              value={experienceLevel}
+              onChange={handleExperienceLevelChange}
+            >
+              {experienceLevels.map((level) => (
+                <option key={level.value} value={level.value}>
+                  {level.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          <div>
+            <label className="block text-blue-100 mb-1">Budget Range</label>
+            <div className="text-sm mb-2 text-blue-200">
+              ${(budgetRange[0]/1000000).toFixed(0)}M - ${(budgetRange[1]/1000000).toFixed(0)}M
+            </div>
             <div className="relative w-full flex items-center gap-4">
-              {/* Minimum Budget Slider */}
               <input
                 type="range"
                 min="20000000"
                 max="1500000000"
-                step="1000000"  // Move only in multiples of 1M
+                step="10000000"
                 value={budgetRange[0]}
                 onChange={(e) => {
                   const newMin = parseInt(e.target.value);
@@ -446,12 +694,11 @@ const SquadPage = () => {
                 className="w-full"
               />
 
-              {/* Maximum Budget Slider */}
               <input
                 type="range"
                 min="20000000"
                 max="1500000000"
-                step="1000000"  // Move only in multiples of 1M
+                step="10000000"
                 value={budgetRange[1]}
                 onChange={(e) => {
                   const newMax = parseInt(e.target.value);
@@ -464,75 +711,84 @@ const SquadPage = () => {
             </div>
           </div>
 
-          <div className="w-[20%]">
-            <div className="font-semibold mb-1">Experience Level</div>
-            <select
-              className="w-44 bg-blue-900 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
-              value={experienceLevel}
-              onChange={handleExperienceLevelChange}
-            >
-              {experienceLevels.map((experienceLevel) => (
-                <option key={experienceLevel.value} value={experienceLevel.value}>
-                  {experienceLevel.label}
-                </option>
-              ))}
-            </select>
+          {/* Second row */}
+          <div>
+            <SearchableDropdown 
+              options={availableNations}
+              placeholder="Search for nations..."
+              onSelect={handleNationSelection}
+              selectedValues={selectedNations}
+              label="Nation Filter"
+            />
           </div>
           
           <div>
-            <label className="block text-blue-100 mb-2">
-              Nation Boost
-            </label>
-            <div
-              onClick={() => setNationBoost((prev) => !prev)}
-              className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ml-5 ${
-                nationBoost ? "bg-green-500" : "bg-gray-500"
-              }`}
-            >
-              <div
-                className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
-                  nationBoost ? "translate-x-6" : "translate-x-0"
-                }`}
-              ></div>
+            <SearchableDropdown 
+              options={availableClubs}
+              placeholder="Search for clubs..."
+              onSelect={handleClubSelection}
+              selectedValues={selectedClubs}
+              label="Club Filter"
+            />
+          </div>
+          
+          <div className="flex flex-col justify-between h-full">
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <label className="block text-blue-100 mb-2 text-sm">
+                  Nation Boost
+                </label>
+                <div
+                  onClick={() => setNationBoost((prev) => !prev)}
+                  className={`w-12 h-6 ml-10 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ${
+                    nationBoost ? "bg-green-500" : "bg-gray-500"
+                  }`}
+                >
+                  <div
+                    className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
+                      nationBoost ? "translate-x-6" : "translate-x-0"
+                    }`}
+                  ></div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-blue-100 mb-2 text-sm">
+                  Club Boost
+                </label>
+                <div
+                  onClick={() => setClubBoost((prev) => !prev)}
+                  className={`w-12 h-6 ml-10 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ${
+                    clubBoost ? "bg-green-500" : "bg-gray-500"
+                  }`}
+                >
+                  <div
+                    className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
+                      clubBoost ? "translate-x-6" : "translate-x-0"
+                    }`}
+                  ></div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-blue-100 mb-2 text-xs">
+                  Top-5 Leagues
+                </label>
+                <div
+                  onClick={() => setCurrentTopFive((prev) => !prev)}
+                  className={`w-12 h-6 ml-10 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ${
+                    currentTopFive ? "bg-green-500" : "bg-gray-500"
+                  }`}
+                >
+                  <div
+                    className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
+                      currentTopFive ? "translate-x-6" : "translate-x-0"
+                    }`}
+                  ></div>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div>
-            <label className="block text-blue-100 mb-2">
-              Club Boost
-            </label>
-            <div
-              onClick={() => setClubBoost((prev) => !prev)}
-              className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ml-4 ${
-                clubBoost ? "bg-green-500" : "bg-gray-500"
-              }`}
-            >
-              <div
-                className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
-                  clubBoost ? "translate-x-6" : "translate-x-0"
-                }`}
-              ></div>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-blue-100 mb-2">
-              Currently in top-5 leagues
-            </label>
-            <div
-              onClick={() => setCurrentTopFive((prev) => !prev)}
-              className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ml-16 ${
-                currentTopFive ? "bg-green-500" : "bg-gray-500"
-              }`}
-            >
-              <div
-                className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
-                  currentTopFive ? "translate-x-6" : "translate-x-0"
-                }`}
-              ></div>
-            </div>
-          </div>
-
         </div>
       </div>
 
@@ -580,11 +836,19 @@ const SquadPage = () => {
         )}
         
         {/* Formation display - centered */}
-        <div className={`${squadGenerated ? 'w-2/4' : 'w-3/4'} flex-shrink-0 bg-emerald-900 rounded-lg p-2 pt-8 relative h-[550px] mt-8 mx-auto`}>
+        <div 
+          className={`${squadGenerated ? 'w-2/4' : 'w-3/4'} flex-shrink-0 rounded-2xl p-2 pt-8 relative h-[550px] mt-8 mx-auto`} 
+          style={{ 
+            backgroundImage: `url(${squadBg})`, 
+            backgroundSize: 'cover', 
+            backgroundPosition: 'center' 
+          }}
+        >
           {/* Generate button when squad is not generated */}
           {!squadGenerated ? (
             <div className="absolute inset-0 flex items-center justify-center z-10">
-              <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm rounded-lg"></div>
+              {/* Dark overlay with blur effect */}
+              <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm rounded-lg"></div>
               <button 
                 onClick={generateSquad}
                 disabled={loading}

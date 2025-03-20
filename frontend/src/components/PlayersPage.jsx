@@ -141,7 +141,7 @@ const PlayersPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-black pt-8">
+    <div className="w-full min-h-screen bg-gradient-to-b from-black to-blue-950 pt-8">
       {/* {isLoading && (
         <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="text-white text-lg font-bold">Loading...</div>
