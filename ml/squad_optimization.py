@@ -183,7 +183,7 @@ def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubb
     }
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 @app.route("/select_squad", methods=["POST"])
 def select_squad():
@@ -222,4 +222,4 @@ def select_squad():
 
 
 if __name__ == "__main__":
-    app.run(debug=True,port=5001)
+    app.run(host='0.0.0.0',debug=True,port=5001)

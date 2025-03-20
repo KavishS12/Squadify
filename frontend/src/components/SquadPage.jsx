@@ -160,6 +160,7 @@ const SquadPage = () => {
   const [average_overall, setAverageOverall] = useState(0);
   const [average_potential, setAveragePotential] = useState(0);
   const [squadGenerated, setSquadGenerated] = useState(false);
+  const [notEnoughPlayers, setNotEnoughPlayers] = useState(false);
 
   useEffect(() => {
       const fetchAllNations = async () => {
@@ -195,7 +196,7 @@ const SquadPage = () => {
   const generateSquad = async () => {
       setLoading(true);
       try {
-          // Call FastAPI endpoint with the parameters
+          // Call Flask endpoint with the parameters
           const response = await axios.post('http://localhost:5001/select_squad', {
               min_budget: budgetRange[0],
               max_budget: budgetRange[1],
@@ -208,8 +209,24 @@ const SquadPage = () => {
               clubs: selectedClubs
           });
 
-          // Extract player IDs from the response
+          // Check if we have a valid response with player IDs
+          if(!response || !response.data || !response.data.selected_player_ids) {
+              setNotEnoughPlayers(true);
+              setSquadGenerated(false);
+              return; 
+          }
+          
           const playerIds = response.data.selected_player_ids;
+          
+          // Check if we have enough players
+          if (playerIds.length < 11) {
+              setNotEnoughPlayers(true);
+              setSquadGenerated(false);
+              return; 
+          } else {
+              setNotEnoughPlayers(false);
+          }
+          
           const fetchedPlayers = await fetchPlayersByIds(playerIds);
           
           // Set state
@@ -220,6 +237,9 @@ const SquadPage = () => {
           setSquadGenerated(true); 
       } catch (error) {
           console.error('Error generating squad:', error);
+          // Set not enough players state to true when there's an error
+          setNotEnoughPlayers(true);
+          setSquadGenerated(false);
       } finally {
           setLoading(false);
       }
@@ -850,25 +870,36 @@ const SquadPage = () => {
             <div className="absolute inset-0 flex items-center justify-center z-10">
               {/* Dark overlay with blur effect */}
               <div className="absolute inset-0 bg-black bg-opacity-70 backdrop-blur-xs rounded-lg"></div>
-              <button 
-                onClick={generateSquad}
-                disabled={loading}
-                className={`flex items-center gap-2 text-lg font-semibold py-3 px-6 rounded-lg shadow-lg transition-all z-20 ${
-                  loading ? "bg-black text-teal-100" : "bg-teal-100 text-black hover:bg-black hover:text-teal-100"
-                }`}
-              >
-                {loading ? (
-                  <>
-                    <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
-                    <span>Generating...</span>
-                  </>
-                ) : (
-                  <>
-                    <PlayCircle size={24} />
-                    <span className="font-medium">Generate Squad</span>
-                  </>
+              
+              <div className="flex flex-col items-center gap-4 z-20">
+                {/* Error message when not enough players */}
+                {notEnoughPlayers && (
+                  <div className="bg-red-500/50 text-white px-6 py-3 rounded-lg text-center mb-2 max-w-md">
+                    <p className="font-medium">Not enough players to form a squad!</p>
+                    <p className="text-sm mt-1">Try adjusting your filters to include more players.</p>
+                  </div>
                 )}
-              </button>
+                
+                <button 
+                  onClick={generateSquad}
+                  disabled={loading}
+                  className={`flex items-center gap-2 text-lg font-semibold py-3 px-6 rounded-lg shadow-lg transition-all ${
+                    loading ? "bg-black text-teal-100" : "bg-teal-100 text-black hover:bg-black hover:text-teal-100"
+                  }`}
+                >
+                  {loading ? (
+                    <>
+                      <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+                      <span>Generating...</span>
+                    </>
+                  ) : (
+                    <>
+                      <PlayCircle size={24} />
+                      <span className="font-medium">Generate Squad</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           ) : (
             <div className="absolute bottom-2 right-2 z-10">
@@ -876,6 +907,7 @@ const SquadPage = () => {
                 onClick={() => {
                   setSquadGenerated(false);
                   setPlayers([]);
+                  setNotEnoughPlayers(false); // Reset the error state when resetting
                 }}
                 className="flex items-center gap-2 bg-teal-100 text-black hover:bg-black hover:text-teal-100 py-2 px-4 rounded-lg shadow-lg transition-all"
               >
