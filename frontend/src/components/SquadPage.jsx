@@ -931,7 +931,11 @@ const SquadPage = () => {
                     <h3 className="text-xl font-bold mr-2">{selectedPlayer.name}</h3>
                     {nationFlags[selectedPlayer.nation] && (
                       <span className="text-lg">
-                        <i className={`fi fi-${nationFlags[selectedPlayer.nation]}`}></i>
+                        <img
+                        src={`https://flagcdn.com/w40/${nationFlags[selectedPlayer.nation]}.png`}
+                        alt={selectedPlayer.nation}
+                        className="h-6 mx-auto"
+                      />
                       </span>
                     )}
                   </div>
