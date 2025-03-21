@@ -142,11 +142,11 @@ const PlayersPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-black to-blue-950 pt-8">
-      {/* {isLoading && (
+      {isLoading && (
         <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="text-white text-lg font-bold">Loading...</div>
         </div>
-      )} */}
+      )}
       <div className="max-w-[90vw] mx-auto p-4">
         {/* Filters Section */}
         <div className="mb-6 mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 bg-black border border-gray-600 p-4 rounded-lg">

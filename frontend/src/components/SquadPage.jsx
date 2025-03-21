@@ -197,7 +197,7 @@ const SquadPage = () => {
       setLoading(true);
       try {
           // Call Flask endpoint with the parameters
-          const response = await axios.post('http://localhost:5001/select_squad', {
+          const response = await axios.post('https://squadify.onrender.com/select_squad', {
               min_budget: budgetRange[0],
               max_budget: budgetRange[1],
               formation: formation,
