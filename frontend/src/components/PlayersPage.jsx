@@ -52,7 +52,7 @@ const PlayersPage = () => {
   useEffect(() => {
     const fetchAllNations = async () => {
       try {
-        const response = await fetch('http://localhost:5000/players/nations');
+        const response = await fetch('https://squadify-backend.onrender.com/players/nations');
         if (!response.ok) throw new Error('Failed to fetch nations');
         const data = await response.json();
         setAllNations(data.sort());
@@ -76,7 +76,7 @@ const PlayersPage = () => {
               minPotential: minPotential,
           }).toString();
 
-          const response = await fetch(`http://localhost:5000/players/pagination?${queryParams}`);
+          const response = await fetch(`https://squadify-backend.onrender.com/players/pagination?${queryParams}`);
           if (!response.ok) throw new Error('Network response was not ok');
 
           const data = await response.json();

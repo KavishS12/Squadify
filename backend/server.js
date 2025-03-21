@@ -12,10 +12,16 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 
-app.use(cors({
-    origin: "http://localhost:5173", // frontend URL
-    credentials: true,
-  }));
+app.use(
+    cors({
+      origin: [
+        "http://localhost:5173",
+        "https://squadify-haxophone.netlify.app",
+      ],
+      credentials: true,
+    })
+  );
+  
 
 //Test route
 app.get('/',(req,res) => {

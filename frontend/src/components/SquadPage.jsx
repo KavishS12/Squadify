@@ -165,7 +165,7 @@ const SquadPage = () => {
   useEffect(() => {
       const fetchAllNations = async () => {
         try {
-          const response = await fetch('http://localhost:5000/players/nations');
+          const response = await fetch('https://squadify-backend.onrender.com/players/nations');
           if (!response.ok) throw new Error('Failed to fetch nations');
           const data = await response.json();
           setAvailableNations(data.sort());
@@ -248,7 +248,7 @@ const SquadPage = () => {
   // Fetch a single player
   async function fetchPlayer(playerId) {
       try {
-          const response = await fetch(`http://localhost:5000/players/player_id/${playerId}`);
+          const response = await fetch(`https://squadify-backend.onrender.com/players/player_id/${playerId}`);
           if (!response.ok) {
               throw new Error(`Player not found (Status: ${response.status})`);
           }
