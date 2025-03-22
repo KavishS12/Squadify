@@ -273,121 +273,125 @@ const PlayersPage = () => {
               <div className="text-white text-lg font-bold">Loading...</div>
             </div>
           )}
-          <div className="table-container max-h-[600px] overflow-auto">
-            <table className="min-w-full table-auto">
-              <thead className="sticky top-0 z-10">
-                <tr className="bg-blue-950 shadow-md">
-                  <th className="p-2 text-center text-blue-100 font-semibold"></th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Name</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Nation</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Club</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Pos</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Age</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Defense</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Passing</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Shooting</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Potential</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Overall</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold">Market Value</th>
-                  <th className="p-2 text-center text-blue-100 font-semibold w-8"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {players.map((player) => (
-                  <React.Fragment key={player.id}>
-                    <tr className="hover:bg-blue-700/25 transition-colors">
-                      <td className="px-1 py-2 text-center border-b border-blue-900">
-                        <img 
-                          src={player.Image_URL} 
-                          alt="img" 
-                          className="w-8 h-8 rounded-full object-cover border border-white mx-auto"
-                        />
-                      </td>
-                      <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900 font-medium">{player.name}</td>
-                      <td className="px-1 py-2 text-center border-b border-blue-900">
-                        <img
-                          src={`https://flagcdn.com/w40/${nationFlags[player.nation]}.png`}
-                          alt={player.nation}
-                          className="h-6 mx-auto"
-                        />
-                      </td>
-                      <td className="px-1 py-2 text-center border-b border-blue-900">
-                        <img 
-                          src={`/badges/${player.club}.png`}
-                          alt="img" 
-                          className="w-10 h-10 rounded-full object-cover border-none mx-auto"
-                        />
-                      </td>
-                      <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
-                        {player.pos}
-                      </td>
-                      <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
-                        {player.age}
-                      </td>
-                      <td className="px-1 py-2 border-b border-blue-900">
-                        <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.defense_ratings)} bg-opacity-80`}>
-                          {player.defense_ratings.toFixed(1)}
-                        </div>
-                      </td>
-                      <td className="px-1 py-2 border-b border-blue-900">
-                        <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.passing_ratings)} bg-opacity-80`}>
-                          {player.passing_ratings.toFixed(1)}
-                        </div>
-                      </td>
-                      <td className="px-1 py-2 border-b border-blue-900">
-                        <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.shooting_ratings)} bg-opacity-80`}>
-                          {player.shooting_ratings.toFixed(1)}
-                        </div>
-                      </td>
-                      <td className="px-1 py-2 border-b border-blue-900">
-                        <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
-                          {player.potential_ratings.toFixed(1)}
-                        </div>
-                      </td>
-                      <td className="px-1 py-2 border-b border-blue-900">
-                        <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
-                          {player.overall_ratings.toFixed(1)}
-                        </div>
-                      </td>
-                      <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
-                        {player.Market_Value === -1
-                          ? "Retired"
-                          : player.Market_Value === 0
-                          ? "<€25K"
-                          : player.Market_Value >= 1_000_000
-                          ? `€${(player.Market_Value / 1_000_000).toFixed(1)}M`
-                          : player.Market_Value >= 1_000
-                          ? `€${(player.Market_Value / 1_000).toFixed(1)}K`
-                          : `€${player.Market_Value}`}
-                      </td>
-
-
-                      <td className="px-1 py-2 text-center border-b border-blue-900">
-                        <button
-                          onClick={() => toggleRow(player._id)}
-                          className="p-1 hover:bg-blue-800 rounded-full transition-colors"
-                        >
-                          {expandedRows.has(player._id) ? (
-                            <Minus className="w-4 h-4 text-blue-200" />
-                          ) : (
-                            <Plus className="w-4 h-4 text-blue-200" />
-                          )}
-                        </button>
-                      </td>
-                    </tr>
-                    {expandedRows.has(player._id) && (
-                      <tr>
-                        <td colSpan="13" className="bg-blue-900/30 px-4 py-3 border-b border-blue-700">
-                          <div className="text-blue-200">
-                            <PlayerDashboard player={player} />
+          <div className="overflow-x-auto max-h-[600px]">
+            <div className="min-w-[1200px]">
+              <table className="w-full table-auto">
+                <thead className="sticky top-0 z-10">
+                  <tr className="bg-blue-950 shadow-md">
+                    <th className="p-2 text-center text-blue-100 font-semibold"></th>
+                    <th className="p-2 text-center text-blue-100 font-semibold">Name</th>
+                    <th className="p-2 text-center text-blue-100 font-semibold">Nation</th>
+                    <th className="p-2 text-center text-blue-100 font-semibold">Club</th>
+                    <th className="p-2 text-center text-blue-100 font-semibold">Pos</th>
+                    <th className="p-2 text-center text-blue-100 font-semibold">Age</th>
+                    <th className="p-2 text-center text-blue-100 font-semibold">Defense</th>
+                    <th className="p-2 text-center text-blue-100 font-semibold">Passing</th>
+                    <th className="p-2 text-center text-blue-100 font-semibold">Shooting</th>
+                    <th className="p-2 text-center text-blue-100 font-semibold">Potential</th>
+                    <th className="p-2 text-center text-blue-100 font-semibold">Overall</th>
+                    <th className="p-2 text-center text-blue-100 font-semibold">Market Value</th>
+                    <th className="p-2 text-center text-blue-100 font-semibold sticky right-0 bg-blue-950 w-12"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {players.map((player) => (
+                    <React.Fragment key={player.id}>
+                      <tr className="hover:bg-blue-700/25 transition-colors">
+                        <td className="px-1 py-2 text-center border-b border-blue-900">
+                          <img 
+                            src={player.Image_URL} 
+                            alt="img" 
+                            className="w-8 h-8 rounded-full object-cover border border-white mx-auto"
+                            loading="lazy"
+                          />
+                        </td>
+                        <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900 font-medium">{player.name}</td>
+                        <td className="px-1 py-2 text-center border-b border-blue-900">
+                          <img
+                            src={`https://flagcdn.com/w40/${nationFlags[player.nation]}.png`}
+                            alt={player.nation}
+                            className="h-6 mx-auto"
+                            loading="lazy"
+                          />
+                        </td>
+                        <td className="px-1 py-2 text-center border-b border-blue-900">
+                          <img 
+                            src={`/badges/${player.club}.png`}
+                            alt="img" 
+                            className="w-10 h-10 rounded-full object-cover border-none mx-auto"
+                            loading="lazy"
+                          />
+                        </td>
+                        <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
+                          {player.pos}
+                        </td>
+                        <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
+                          {player.age}
+                        </td>
+                        <td className="px-1 py-2 border-b border-blue-900">
+                          <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.defense_ratings)} bg-opacity-80`}>
+                            {player.defense_ratings.toFixed(1)}
                           </div>
                         </td>
+                        <td className="px-1 py-2 border-b border-blue-900">
+                          <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.passing_ratings)} bg-opacity-80`}>
+                            {player.passing_ratings.toFixed(1)}
+                          </div>
+                        </td>
+                        <td className="px-1 py-2 border-b border-blue-900">
+                          <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.shooting_ratings)} bg-opacity-80`}>
+                            {player.shooting_ratings.toFixed(1)}
+                          </div>
+                        </td>
+                        <td className="px-1 py-2 border-b border-blue-900">
+                          <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
+                            {player.potential_ratings.toFixed(1)}
+                          </div>
+                        </td>
+                        <td className="px-1 py-2 border-b border-blue-900">
+                          <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
+                            {player.overall_ratings.toFixed(1)}
+                          </div>
+                        </td>
+                        <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
+                          {player.Market_Value === -1
+                            ? "Retired"
+                            : player.Market_Value === 0
+                            ? "<€25K"
+                            : player.Market_Value >= 1_000_000
+                            ? `€${(player.Market_Value / 1_000_000).toFixed(1)}M`
+                            : player.Market_Value >= 1_000
+                            ? `€${(player.Market_Value / 1_000).toFixed(1)}K`
+                            : `€${player.Market_Value}`}
+                        </td>
+                        <td className="px-1 py-2 text-center border-b border-blue-900 sticky right-0 bg-blue-950">
+                          <button
+                            onClick={() => toggleRow(player._id)}
+                            className="p-1 hover:bg-blue-800 rounded-full transition-colors"
+                            aria-label={expandedRows.has(player._id) ? "Hide details" : "Show details"}
+                          >
+                            {expandedRows.has(player._id) ? (
+                              <Minus className="w-4 h-4 text-blue-200" />
+                            ) : (
+                              <Plus className="w-4 h-4 text-blue-200" />
+                            )}
+                          </button>
+                        </td>
                       </tr>
-                    )}
-                  </React.Fragment>
-                ))}
-              </tbody>
-            </table>
+                      {expandedRows.has(player._id) && (
+                          <tr>
+                              <td colSpan="13" className="bg-blue-900/30 px-2 py-2 border-b border-blue-700">
+                                  <div className="text-blue-200 overflow-x-auto overflow-y-auto max-w-full">
+                                      <PlayerDashboard player={player} />
+                                  </div>
+                              </td>
+                          </tr>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {/* Pagination Controls */}
