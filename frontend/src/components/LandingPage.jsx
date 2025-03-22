@@ -235,7 +235,7 @@ const LandingPage = () => {
             </p>
           </motion.div>
           <motion.div 
-            className="mt-8 flex lg:mt-0 lg:flex-shrink-0 relative z-10"
+            className="mt-8 flex lg:mt-0 lg:flex-shrink-0 relative z-10 w-full lg:w-auto justify-center lg:justify-start"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}

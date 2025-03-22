@@ -363,15 +363,23 @@ const SquadPage = () => {
         onClick={() => onClick(player)}
         style={{ width: "80px", height: "90px" }}
       >
-        <div className={`w-14 h-18 flex items-center justify-center}`}>
-          <img src={jerseyImage} alt="Jersey" className="w-20 h-16" />
+        <div className="w-12 sm:w-14 h-16 sm:h-18 flex items-center justify-center">
+          <img 
+            src={jerseyImage} 
+            alt="Jersey" 
+            className="w-16 h-12 sm:w-20 sm:h-16" 
+          />
         </div>
         
-        <div className={`absolute top-[-20px] left-10 -translate-x-1/2 bg-purple-200 text-black px-2 py-0.5 rounded-md text-sm w-[120px] text-center ${isSelected ? 'ring-[2.5px] ring-black' : ''}`}>
-        {player.name}
-      </div>
+        <div 
+          className={`absolute top-[-30px] sm:top-[-20px] left-10 -translate-x-1/2 bg-purple-200 text-black px-1 py-0.5 rounded-md text-xs sm:text-sm w-16 sm:w-20 md:w-[120px] break-words text-center min-h-[40px] sm:min-h-[28px] flex items-center justify-center ${isSelected ? 'ring-[2.5px] ring-black' : ''}`}
+        >
+          {player.name}
+        </div>
         
-        <div className={`absolute bottom-3 left-10 -translate-x-1/2 bg-violet-800 text-white px-2 py-0.5 rounded-md text-xs ${isSelected ? 'ring-[2.5px] ring-black' : ''}`}>
+        <div 
+          className={`absolute bottom-3 left-10 -translate-x-1/2 bg-violet-800 text-white px-2 py-0.5 rounded-md text-xs ${isSelected ? 'ring-[2.5px] ring-black' : ''}`}
+        >
           {player.pos}
         </div>
       </div>
@@ -655,18 +663,18 @@ const SquadPage = () => {
         };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-blue-950 text-white p-4 pt-24 w-full overflow-hidden">
-      <h1 className="text-4xl md:text-5xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500">Build your ultimate dream squad ! </h1>
-      <h4 className="text-xl font-medium text-center mb-8 max-w-[60%] mx-auto text-blue-100 ">Select your filters, hit 'Generate,' and watch your perfect team come to life! </h4>
+    <div className="min-h-screen bg-gradient-to-b from-black to-blue-950 text-white p-3 md:p-4 pt-16 md:pt-24 w-full overflow-hidden">
+      <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 md:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500 text-center">Build your ultimate dream squad!</h1>
+      <h4 className="text-lg md:text-xl font-medium text-center mb-6 md:mb-8 mx-auto text-blue-100 max-w-full md:max-w-[80%] lg:max-w-[60%]">Select your filters, hit 'Generate,' and watch your perfect team come to life!</h4>
       
       {/* Filter section */}
-      <div className="max-w-7xl mx-auto bg-black border border-gray-600 rounded-lg py-4 px-4 mb-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="max-w-7xl mx-auto bg-black border border-gray-600 rounded-lg py-3 px-3 md:py-4 md:px-4 mb-6 md:mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {/* First row */}
           <div>
             <div className="font-semibold mb-1">Formation</div>
             <select
-              className="w-full bg-blue-950 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
+              className="w-full bg-blue-950 text-white px-3 py-2 rounded-md cursor-pointer border border-blue-800"
               value={formation}
               onChange={!squadGenerated ? handleFormationChange : undefined}
               disabled={squadGenerated}
@@ -682,7 +690,7 @@ const SquadPage = () => {
           <div>
             <div className="font-semibold mb-1">Experience Level</div>
             <select
-              className="w-full bg-blue-950 text-white px-4 py-2 rounded-md cursor-pointer border border-blue-800"
+              className="w-full bg-blue-950 text-white px-3 py-2 rounded-md cursor-pointer border border-blue-800"
               value={experienceLevel}
               onChange={handleExperienceLevelChange}
             >
@@ -699,7 +707,7 @@ const SquadPage = () => {
             <div className="text-sm mb-2 text-blue-200">
               ${(budgetRange[0]/1000000).toFixed(0)}M - ${(budgetRange[1]/1000000).toFixed(0)}M
             </div>
-            <div className="relative w-full flex items-center gap-4">
+            <div className="relative w-full flex items-center gap-2 md:gap-4">
               <input
                 type="range"
                 min="20000000"
@@ -754,56 +762,56 @@ const SquadPage = () => {
           </div>
           
           <div className="flex flex-col justify-between h-full">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
               <div>
-                <label className="block text-blue-100 mb-2 text-sm">
+                <label className="block text-blue-100 mb-1 text-xs md:text-sm">
                   Nation Boost
                 </label>
                 <div
                   onClick={() => setNationBoost((prev) => !prev)}
-                  className={`w-12 h-6 ml-10 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ${
+                  className={`w-10 md:w-12 h-5 md:h-6 ml-6 md:ml-10 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ${
                     nationBoost ? "bg-blue-900" : "bg-gray-500"
                   }`}
                 >
                   <div
-                    className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
-                      nationBoost ? "translate-x-6" : "translate-x-0"
+                    className={`w-3 md:w-4 h-3 md:h-4 bg-white rounded-full shadow-md transform transition ${
+                      nationBoost ? "translate-x-5 md:translate-x-6" : "translate-x-0"
                     }`}
                   ></div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-blue-100 mb-2 text-sm">
+                <label className="block text-blue-100 mb-1 text-xs md:text-sm">
                   Club Boost
                 </label>
                 <div
                   onClick={() => setClubBoost((prev) => !prev)}
-                  className={`w-12 h-6 ml-10 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ${
+                  className={`w-10 md:w-12 h-5 md:h-6 ml-6 md:ml-10 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ${
                     clubBoost ? "bg-blue-900" : "bg-gray-500"
                   }`}
                 >
                   <div
-                    className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
-                      clubBoost ? "translate-x-6" : "translate-x-0"
+                    className={`w-3 md:w-4 h-3 md:h-4 bg-white rounded-full shadow-md transform transition ${
+                      clubBoost ? "translate-x-5 md:translate-x-6" : "translate-x-0"
                     }`}
                   ></div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-blue-100 mb-2 text-xs">
+                <label className="block text-blue-100 mb-1 text-xs">
                   Top-5 Leagues
                 </label>
                 <div
                   onClick={() => setCurrentTopFive((prev) => !prev)}
-                  className={`w-12 h-6 ml-10 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ${
+                  className={`w-10 md:w-12 h-5 md:h-6 ml-6 md:ml-10 flex items-center rounded-full p-1 cursor-pointer transition duration-300 ${
                     currentTopFive ? "bg-blue-900" : "bg-gray-500"
                   }`}
                 >
                   <div
-                    className={`w-4 h-4 bg-white rounded-full shadow-md transform transition ${
-                      currentTopFive ? "translate-x-6" : "translate-x-0"
+                    className={`w-3 md:w-4 h-3 md:h-4 bg-white rounded-full shadow-md transform transition ${
+                      currentTopFive ? "translate-x-5 md:translate-x-6" : "translate-x-0"
                     }`}
                   ></div>
                 </div>
@@ -813,52 +821,53 @@ const SquadPage = () => {
         </div>
       </div>
 
-      <div className="max-w-[100%] mx-auto flex flex-row mb-16">
-        {/* Team info */}
+      {/* Main content - Responsive layout */}
+      <div className="max-w-full mx-auto flex flex-col lg:flex-row mb-8 md:mb-16">
+        {/* Team info - Moves to top on mobile/tablet */}
         {squadGenerated && (
-          <div className="w-1/4 flex-shrink-0 flex flex-col gap-12 mt-36 pr-4">
+          <div className="w-full lg:w-1/4 flex-shrink-0 flex flex-col gap-4 md:gap-8 lg:gap-12 lg:mt-36 lg:pr-4 mb-6 lg:mb-0">
             <div className="bg-blue-950 rounded-lg p-4 shadow-lg">
-              <h2 className="text-xl font-bold mb-3 border-b border-blue-800 pb-2 flex items-center">
+              <h2 className="text-lg md:text-xl font-bold mb-3 border-b border-blue-800 pb-2 flex items-center">
                 <Medal className="mr-2" size={20} />
                 Squad Overview
               </h2>
               
-              <div className="flex flex-wrap gap-4 mb-4">
+              <div className="flex flex-wrap gap-3 md:gap-4 mb-4">
                 <div className="bg-blue-900 p-3 rounded-md flex flex-col flex-1">
-                  <div className="flex items-center mb-1 text-gray-300 text-sm">
-                    <Star size={16} className="mr-1" />
+                  <div className="flex items-center mb-1 text-gray-300 text-xs md:text-sm">
+                    <Star size={14} className="mr-1" />
                     <span>Average Rating</span>
                   </div>
-                  <span className="text-2xl font-bold">{average_overall.toFixed(1)}</span>
+                  <span className="text-xl md:text-2xl font-bold">{average_overall.toFixed(1)}</span>
                 </div>
                 
                 <div className="bg-blue-900 p-3 rounded-md flex flex-col flex-1">
-                  <div className="flex items-center mb-1 text-gray-300 text-sm">
-                    <TrendingUp size={16} className="mr-1" />
+                  <div className="flex items-center mb-1 text-gray-300 text-xs md:text-sm">
+                    <TrendingUp size={14} className="mr-1" />
                     <span>Future Potential</span>
                   </div>
-                  <span className="text-2xl font-bold">{average_potential.toFixed(1)}</span>
+                  <span className="text-xl md:text-2xl font-bold">{average_potential.toFixed(1)}</span>
                 </div>
               </div>
               
-              <div className="bg-blue-900 p-3 rounded-md mb-4">
-                <div className="flex items-center mb-1 text-gray-300 text-sm">
-                  <DollarSign size={16} className="mr-1" />
+              <div className="bg-blue-900 p-3 rounded-md mb-3">
+                <div className="flex items-center mb-1 text-gray-300 text-xs md:text-sm">
+                  <DollarSign size={14} className="mr-1" />
                   <span>Total Market Value</span>
                 </div>
-                <span className="text-2xl font-bold">{formatMarketValue(totalMarketValue)}</span>
+                <span className="text-xl md:text-2xl font-bold">{formatMarketValue(totalMarketValue)}</span>
               </div>
               
-              <div className="text-center text-sm text-gray-300 italic mt-2">
+              <div className="text-center text-xs md:text-sm text-gray-300 italic mt-2">
                 Select any player on the field to view their detailed stats
               </div>
             </div>
           </div>
         )}
         
-        {/* Formation display - centered */}
+        {/* Formation display - Full width on mobile/tablet */}
         <div 
-          className={`${squadGenerated ? 'w-2/4' : 'w-3/4'} flex-shrink-0 rounded-2xl p-2 pt-8 relative h-[550px] mt-8 mx-auto`} 
+          className={`w-full ${squadGenerated ? 'lg:w-2/4' : 'lg:w-3/4'} flex-shrink-0 rounded-xl md:rounded-2xl p-2 pt-4 md:pt-8 relative h-[350px] sm:h-[450px] md:h-[550px] mt-4 md:mt-8 mx-auto`} 
           style={{ 
             backgroundImage: `url(${squadBg})`, 
             backgroundSize: 'cover', 
@@ -871,30 +880,30 @@ const SquadPage = () => {
               {/* Dark overlay with blur effect */}
               <div className="absolute inset-0 bg-black bg-opacity-70 backdrop-blur-xs rounded-lg"></div>
               
-              <div className="flex flex-col items-center gap-4 z-20">
+              <div className="flex flex-col items-center gap-3 md:gap-4 z-20 px-4">
                 {/* Error message when not enough players */}
                 {notEnoughPlayers && (
-                  <div className="bg-red-500/50 text-white px-6 py-3 rounded-lg text-center mb-2 max-w-md">
-                    <p className="font-medium">Not enough players to form a squad!</p>
-                    <p className="text-sm mt-1">Try adjusting your filters to include more players.</p>
+                  <div className="bg-red-500/50 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg text-center mb-2 max-w-md">
+                    <p className="font-medium text-sm md:text-base">Not enough players to form a squad!</p>
+                    <p className="text-xs md:text-sm mt-1">Try adjusting your filters to include more players.</p>
                   </div>
                 )}
                 
                 <button 
                   onClick={generateSquad}
                   disabled={loading}
-                  className={`flex items-center gap-2 text-lg font-semibold py-3 px-6 rounded-lg shadow-lg transition-all ${
+                  className={`flex items-center gap-2 text-base md:text-lg font-semibold py-2 md:py-3 px-4 md:px-6 rounded-lg shadow-lg transition-all ${
                     loading ? "bg-black text-teal-100" : "bg-teal-100 text-black hover:bg-black hover:text-teal-100"
                   }`}
                 >
                   {loading ? (
                     <>
-                      <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+                      <div className="animate-spin h-4 md:h-5 w-4 md:w-5 border-2 border-white border-t-transparent rounded-full"></div>
                       <span>Generating...</span>
                     </>
                   ) : (
                     <>
-                      <PlayCircle size={24} />
+                      <PlayCircle size={20} className="md:w-6 md:h-6" />
                       <span className="font-medium">Generate Squad</span>
                     </>
                   )}
@@ -909,9 +918,9 @@ const SquadPage = () => {
                   setPlayers([]);
                   setNotEnoughPlayers(false); // Reset the error state when resetting
                 }}
-                className="flex items-center gap-2 bg-teal-100 text-black hover:bg-black hover:text-teal-100 py-2 px-4 rounded-lg shadow-lg transition-all"
+                className="flex items-center gap-1 md:gap-2 bg-teal-100 text-black hover:bg-black hover:text-teal-100 py-1 md:py-2 px-3 md:px-4 rounded-lg shadow-lg transition-all text-sm md:text-base"
               >
-                <RefreshCw size={24} />
+                <RefreshCw size={16} className="md:w-5 md:h-5" />
                 <span className="font-medium">Reset</span>
               </button>
             </div>
@@ -920,33 +929,33 @@ const SquadPage = () => {
           {renderFormation()}
         </div>
         
-        {/* Player info */}
+        {/* Player info - Bottom on mobile/tablet */}
         {squadGenerated && selectedPlayer && (
-          <div className="w-1/4 flex-shrink-0 flex flex-col gap-6 mt-10 pl-4">
-            <div className="bg-gradient-to-br from-blue-950 to-blue-900 rounded-lg p-4 shadow-lg">
-              <div className="flex items-center mb-4">
+          <div className="w-full lg:w-1/4 flex-shrink-0 flex flex-col gap-4 md:gap-6 mt-6 lg:mt-10 lg:pl-4">
+            <div className="bg-gradient-to-br from-blue-950 to-blue-900 rounded-lg p-3 md:p-4 shadow-lg">
+              <div className="flex items-center mb-3 md:mb-4">
                 {/* Player name and flag */}
                 <div className="flex-1">
                   <div className="flex items-center mb-1">
-                    <h3 className="text-xl font-bold mr-2">{selectedPlayer.name}</h3>
+                    <h3 className="text-lg md:text-xl font-bold mr-2">{selectedPlayer.name}</h3>
                     {nationFlags[selectedPlayer.nation] && (
-                      <span className="text-lg">
+                      <span className="text-base md:text-lg">
                         <img
                         src={`https://flagcdn.com/w40/${nationFlags[selectedPlayer.nation]}.png`}
                         alt={selectedPlayer.nation}
-                        className="h-6 mx-auto"
+                        className="h-5 md:h-6 mx-auto"
                       />
                       </span>
                     )}
                   </div>
-                  <div className="text-sm text-gray-300">
+                  <div className="text-xs md:text-sm text-gray-300">
                     {selectedPlayer.club && `${selectedPlayer.club} • `}{selectedPlayer.league}
                   </div>
                 </div>
                 
                 {/* Player image */}
                 {selectedPlayer.Image_URL && (
-                  <div className="w-20 h-20 rounded-full overflow-hidden bg-blue-800 flex items-center justify-center">
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden bg-blue-800 flex items-center justify-center">
                     <img 
                       src={selectedPlayer.Image_URL} 
                       alt={selectedPlayer.name}
@@ -960,23 +969,22 @@ const SquadPage = () => {
                 )}
               </div>
               
-              {/* Rest of player details - primary stats, ratings, etc. */}
               {/* Primary stats */}
-              <div className="flex flex-wrap gap-3 mb-4">
-                <div className="bg-blue-800 p-3 rounded-md text-center flex-1">
+              <div className="flex flex-wrap gap-2 md:gap-3 mb-3 md:mb-4">
+                <div className="bg-blue-800 p-2 md:p-3 rounded-md text-center flex-1">
                   <h4 className="text-xs text-gray-300 mb-1">Age</h4>
-                  <p className="text-lg font-bold">{selectedPlayer.age}</p>
+                  <p className="text-base md:text-lg font-bold">{selectedPlayer.age}</p>
                   <p className="text-xs text-gray-300">Born {selectedPlayer.born}</p>
                 </div>
                 
-                <div className="bg-blue-800 p-3 rounded-md text-center flex-1">
+                <div className="bg-blue-800 p-2 md:p-3 rounded-md text-center flex-1">
                   <h4 className="text-xs text-gray-300 mb-1">Position</h4>
-                  <p className="text-lg font-bold">{selectedPlayer.pos}</p>
+                  <p className="text-base md:text-lg font-bold">{selectedPlayer.pos}</p>
                 </div>
                 
-                <div className="bg-blue-800 p-3 rounded-md text-center flex-1">
+                <div className="bg-blue-800 p-2 md:p-3 rounded-md text-center flex-1">
                   <h4 className="text-xs text-gray-300 mb-1">Value</h4>
-                  <p className="text-lg font-bold">
+                  <p className="text-base md:text-lg font-bold">
                     {selectedPlayer.Market_Value >= 1000000
                       ? `$${(selectedPlayer.Market_Value / 1000000).toFixed(1)}M`
                       : `$${(selectedPlayer.Market_Value / 1000).toFixed(0)}K`}
@@ -985,39 +993,39 @@ const SquadPage = () => {
               </div>
               
               {/* Ratings visualization */}
-              <div className="bg-blue-800 p-3 rounded-md mb-4">
-                <h4 className="text-sm font-semibold mb-3">Player Ratings</h4>
+              <div className="bg-blue-800 p-2 md:p-3 rounded-md mb-3 md:mb-4">
+                <h4 className="text-xs md:text-sm font-semibold mb-2 md:mb-3">Player Ratings</h4>
                 
-                <div className="flex items-center mb-4">
-                  <div className="w-16 text-sm">Overall</div>
-                  <div className="flex-1 h-6 bg-blue-950 rounded-full overflow-hidden">
+                <div className="flex items-center mb-3 md:mb-4">
+                  <div className="w-14 md:w-16 text-xs md:text-sm">Overall</div>
+                  <div className="flex-1 h-5 md:h-6 bg-blue-950 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full"
                       style={{ width: `${selectedPlayer.overall_ratings}%` }}
                     ></div>
                   </div>
-                  <div className="w-10 text-right font-bold">{selectedPlayer.overall_ratings.toFixed(1)}</div>
+                  <div className="w-8 md:w-10 text-right font-bold text-xs md:text-sm">{selectedPlayer.overall_ratings.toFixed(1)}</div>
                 </div>
                 
                 <div className="flex items-center">
-                  <div className="w-16 text-sm">Potential</div>
-                  <div className="flex-1 h-6 bg-blue-950 rounded-full overflow-hidden">
+                  <div className="w-14 md:w-16 text-xs md:text-sm">Potential</div>
+                  <div className="flex-1 h-5 md:h-6 bg-blue-950 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-gradient-to-r from-indigo-500 to-purple-400 rounded-full"
                       style={{ width: `${selectedPlayer.potential_ratings}%` }}
                     ></div>
                   </div>
-                  <div className="w-10 text-right font-bold">{selectedPlayer.potential_ratings.toFixed(1)}</div>
+                  <div className="w-8 md:w-10 text-right font-bold text-xs md:text-sm">{selectedPlayer.potential_ratings.toFixed(1)}</div>
                 </div>
               </div>
               
               {/* Position-specific stats */}
               {selectedPlayer.pos !== 'GK' && (
-                <div className="bg-blue-800 p-3 rounded-md">
-                  <h4 className="text-sm font-semibold mb-3">Skill Breakdown</h4>
+                <div className="bg-blue-800 p-2 md:p-3 rounded-md">
+                  <h4 className="text-xs md:text-sm font-semibold mb-2 md:mb-3">Skill Breakdown</h4>
                   <div className="flex justify-between">
                     <div className="text-center">
-                      <div className="relative w-16 h-16 mx-auto mb-1">
+                      <div className="relative w-12 h-12 md:w-16 md:h-16 mx-auto mb-1">
                         <svg viewBox="0 0 100 100" className="w-full h-full">
                           <circle cx="50" cy="50" r="45" fill="none" stroke="#1e3a8a" strokeWidth="10" />
                           <circle 
@@ -1030,7 +1038,7 @@ const SquadPage = () => {
                             strokeDasharray={`${selectedPlayer.defense_ratings * 2.83} 283`}
                             transform="rotate(-90 50 50)"
                           />
-                          <text x="50" y="55" textAnchor="middle" className="text-xl font-bold fill-current">
+                          <text x="50" y="55" textAnchor="middle" className="text-lg md:text-xl font-bold fill-current">
                             {selectedPlayer.defense_ratings?.toFixed(0) || '0'}
                           </text>
                         </svg>
@@ -1039,7 +1047,7 @@ const SquadPage = () => {
                     </div>
                     
                     <div className="text-center">
-                      <div className="relative w-16 h-16 mx-auto mb-1">
+                      <div className="relative w-12 h-12 md:w-16 md:h-16 mx-auto mb-1">
                         <svg viewBox="0 0 100 100" className="w-full h-full">
                           <circle cx="50" cy="50" r="45" fill="none" stroke="#1e3a8a" strokeWidth="10" />
                           <circle 
@@ -1052,7 +1060,7 @@ const SquadPage = () => {
                             strokeDasharray={`${selectedPlayer.passing_ratings * 2.83} 283`}
                             transform="rotate(-90 50 50)"
                           />
-                          <text x="50" y="55" textAnchor="middle" className="text-xl font-bold fill-current">
+                          <text x="50" y="55" textAnchor="middle" className="text-lg md:text-xl font-bold fill-current">
                             {selectedPlayer.passing_ratings?.toFixed(0) || '0'}
                           </text>
                         </svg>
@@ -1061,7 +1069,7 @@ const SquadPage = () => {
                     </div>
                     
                     <div className="text-center">
-                      <div className="relative w-16 h-16 mx-auto mb-1">
+                      <div className="relative w-12 h-12 md:w-16 md:h-16 mx-auto mb-1">
                         <svg viewBox="0 0 100 100" className="w-full h-full">
                           <circle cx="50" cy="50" r="45" fill="none" stroke="#1e3a8a" strokeWidth="10" />
                           <circle 
@@ -1074,7 +1082,7 @@ const SquadPage = () => {
                             strokeDasharray={`${selectedPlayer.shooting_ratings * 2.83} 283`}
                             transform="rotate(-90 50 50)"
                           />
-                          <text x="50" y="55" textAnchor="middle" className="text-xl font-bold fill-current">
+                          <text x="50" y="55" textAnchor="middle" className="text-lg md:text-xl font-bold fill-current">
                             {selectedPlayer.shooting_ratings?.toFixed(0) || '0'}
                           </text>
                         </svg>
@@ -1087,10 +1095,10 @@ const SquadPage = () => {
               
               {/* Goalkeeper specific stats */}
               {selectedPlayer.pos === 'GK' && (
-                <div className="bg-blue-800 p-3 rounded-md">
-                  <h4 className="text-sm font-semibold mb-3">Goalkeeper Rating</h4>
+                <div className="bg-blue-800 p-2 md:p-3 rounded-md">
+                  <h4 className="text-xs md:text-sm font-semibold mb-2 md:mb-3">Goalkeeper Rating</h4>
                   <div className="text-center">
-                    <div className="relative w-24 h-24 mx-auto mb-1">
+                    <div className="relative w-20 h-20 md:w-24 md:h-24 mx-auto mb-1">
                       <svg viewBox="0 0 100 100" className="w-full h-full">
                         <circle cx="50" cy="50" r="45" fill="none" stroke="#1e3a8a" strokeWidth="10" />
                         <circle 
@@ -1103,19 +1111,19 @@ const SquadPage = () => {
                           strokeDasharray={`${selectedPlayer.keeping_ratings * 2.83} 283`}
                           transform="rotate(-90 50 50)"
                         />
-                        <text x="50" y="55" textAnchor="middle" className="text-2xl font-bold fill-current">
+                        <text x="50" y="55" textAnchor="middle" className="text-xl md:text-2xl font-bold fill-current">
                           {selectedPlayer.keeping_ratings?.toFixed(1) || '0'}
                         </text>
                       </svg>
                     </div>
-                    <p className="text-sm">Goalkeeping</p>
+                    <p className="text-xs md:text-sm">Goalkeeping</p>
                   </div>
                 </div>
               )}
               
               {/* Last played info */}
               {selectedPlayer.Last_played && (
-                <div className="mt-3 text-xs text-gray-400 text-right">
+                <div className="mt-2 md:mt-3 text-xs text-gray-400 text-right">
                   Last Match: {selectedPlayer.Last_played}
                 </div>
               )}
