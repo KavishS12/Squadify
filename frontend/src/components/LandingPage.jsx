@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, Database, TrendingUp, Shield, Users } from 'lucide-react';
 import heroImage from '../assets/hero-main.png';
+import heroImagenMobile from '../assets/hero-mobile.png';
 import {Link} from 'react-router-dom';
 
 const LandingPage = () => {
@@ -47,21 +48,25 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
-      {/* Hero Section */}
       <div className="relative min-h-screen">
-        <motion.div 
-          className="h-screen"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.2 }}
-        >
-          <img
-            src={heroImage}
-            alt="Football Squad"
-            className="w-full h-full object-cover"
-          />
-        </motion.div>
-      </div>
+      <motion.div
+        className="h-screen md:h-screen sm:h-[80vh]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2 }}
+      >
+        <img
+          src={heroImage}
+          alt="Football Squad"
+          className="hidden lg:block w-full h-full object-cover"
+        />
+        <img
+          src={heroImagenMobile}
+          alt="Football Squad Mobile"
+          className="block lg:hidden w-full h-[100vh] object-cover"
+        />
+      </motion.div>
+    </div>
 
       {/* Features Section */}
       <div id="features" className="py-16 bg-gradient-to-b from-black to-gray-900 text-white">
