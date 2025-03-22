@@ -183,7 +183,7 @@ def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubb
     }
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/*": {"origins": ["http://localhost:5173","https://squadify-haxophone.netlify.app"]}})
 
 @app.route("/select_squad", methods=["POST"])
 def select_squad():
