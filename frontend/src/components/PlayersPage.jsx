@@ -92,12 +92,6 @@ const PlayersPage = () => {
     fetchPlayers();
   }, [currentPage, searchTerm, selectedNation, selectedPosition, ageRange, minOverall, minPotential]);
 
-  {allNations.map(nation => (
-    <option key={nation} value={nation}>
-      {nation}
-    </option>
-  ))}
-
   const allPositions = ["GK", "DF", "MF", "FW"];
 
   const handlePageChange = (newPage) => {
@@ -142,11 +136,6 @@ const PlayersPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-black to-blue-950 pt-8">
-      {isLoading && (
-        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="text-white text-lg font-bold">Loading...</div>
-        </div>
-      )}
       <div className="max-w-[90vw] mx-auto p-4">
         {/* Filters Section */}
         <div className="mb-6 mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 bg-black border border-gray-600 p-4 rounded-lg">
@@ -278,122 +267,127 @@ const PlayersPage = () => {
         </div>
 
         {/* Table Section */}
-        <div className="overflow-hidden rounded-lg shadow-lg border border-blue-900">
-          <div className="table-container max-h-[600px] overflow-auto relative">
-          <table className="min-w-full table-auto">
-            <thead className="sticky top-0 z-10">
-              <tr className="bg-blue-950 shadow-md">
-                <th className="p-2 text-center text-blue-100 font-semibold"></th>
-                <th className="p-2 text-center text-blue-100 font-semibold">Name</th>
-                <th className="p-2 text-center text-blue-100 font-semibold">Nation</th>
-                <th className="p-2 text-center text-blue-100 font-semibold">Club</th>
-                <th className="p-2 text-center text-blue-100 font-semibold">Pos</th>
-                <th className="p-2 text-center text-blue-100 font-semibold">Age</th>
-                <th className="p-2 text-center text-blue-100 font-semibold">Defense</th>
-                <th className="p-2 text-center text-blue-100 font-semibold">Passing</th>
-                <th className="p-2 text-center text-blue-100 font-semibold">Shooting</th>
-                <th className="p-2 text-center text-blue-100 font-semibold">Potential</th>
-                <th className="p-2 text-center text-blue-100 font-semibold">Overall</th>
-                <th className="p-2 text-center text-blue-100 font-semibold">Market Value</th>
-                <th className="p-2 text-center text-blue-100 font-semibold w-8"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {players.map((player) => (
-                <React.Fragment key={player.id}>
-                  <tr className="hover:bg-blue-700/25 transition-colors">
-                    <td className="px-1 py-2 text-center border-b border-blue-900">
-                      <img 
-                        src={player.Image_URL} 
-                        alt="img" 
-                        className="w-8 h-8 rounded-full object-cover border border-white mx-auto"
-                      />
-                    </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900 font-medium">{player.name}</td>
-                    <td className="px-1 py-2 text-center border-b border-blue-900">
-                      <img
-                        src={`https://flagcdn.com/w40/${nationFlags[player.nation]}.png`}
-                        alt={player.nation}
-                        className="h-6 mx-auto"
-                      />
-                    </td>
-                    <td className="px-1 py-2 text-center border-b border-blue-900">
-                      <img 
-                        src={`/badges/${player.club}.png`}
-                        alt="img" 
-                        className="w-10 h-10 rounded-full object-cover border-none mx-auto"
-                      />
-                    </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
-                      {player.pos}
-                    </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
-                      {player.age}
-                    </td>
-                    <td className="px-1 py-2 border-b border-blue-900">
-                      <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.defense_ratings)} bg-opacity-80`}>
-                        {player.defense_ratings.toFixed(1)}
-                      </div>
-                    </td>
-                    <td className="px-1 py-2 border-b border-blue-900">
-                      <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.passing_ratings)} bg-opacity-80`}>
-                        {player.passing_ratings.toFixed(1)}
-                      </div>
-                    </td>
-                    <td className="px-1 py-2 border-b border-blue-900">
-                      <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.shooting_ratings)} bg-opacity-80`}>
-                        {player.shooting_ratings.toFixed(1)}
-                      </div>
-                    </td>
-                    <td className="px-1 py-2 border-b border-blue-900">
-                      <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
-                        {player.potential_ratings.toFixed(1)}
-                      </div>
-                    </td>
-                    <td className="px-1 py-2 border-b border-blue-900">
-                      <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
-                        {player.overall_ratings.toFixed(1)}
-                      </div>
-                    </td>
-                    <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
-                      {player.Market_Value === -1
-                        ? "Retired"
-                        : player.Market_Value === 0
-                        ? "<€25K"
-                        : player.Market_Value >= 1_000_000
-                        ? `€${(player.Market_Value / 1_000_000).toFixed(1)}M`
-                        : player.Market_Value >= 1_000
-                        ? `€${(player.Market_Value / 1_000).toFixed(1)}K`
-                        : `€${player.Market_Value}`}
-                    </td>
-
-
-                    <td className="px-1 py-2 text-center border-b border-blue-900">
-                      <button
-                        onClick={() => toggleRow(player._id)}
-                        className="p-1 hover:bg-blue-800 rounded-full transition-colors"
-                      >
-                        {expandedRows.has(player._id) ? (
-                          <Minus className="w-4 h-4 text-blue-200" />
-                        ) : (
-                          <Plus className="w-4 h-4 text-blue-200" />
-                        )}
-                      </button>
-                    </td>
-                  </tr>
-                  {expandedRows.has(player._id) && (
-                    <tr>
-                      <td colSpan="13" className="bg-blue-900/30 px-4 py-3 border-b border-blue-700">
-                        <div className="text-blue-200">
-                          <PlayerDashboard player={player} />
+        <div className="overflow-hidden rounded-lg shadow-lg border border-blue-900 relative">
+          {isLoading && (
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div className="text-white text-lg font-bold">Loading...</div>
+            </div>
+          )}
+          <div className="table-container max-h-[600px] overflow-auto">
+            <table className="min-w-full table-auto">
+              <thead className="sticky top-0 z-10">
+                <tr className="bg-blue-950 shadow-md">
+                  <th className="p-2 text-center text-blue-100 font-semibold"></th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Name</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Nation</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Club</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Pos</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Age</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Defense</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Passing</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Shooting</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Potential</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Overall</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold">Market Value</th>
+                  <th className="p-2 text-center text-blue-100 font-semibold w-8"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {players.map((player) => (
+                  <React.Fragment key={player.id}>
+                    <tr className="hover:bg-blue-700/25 transition-colors">
+                      <td className="px-1 py-2 text-center border-b border-blue-900">
+                        <img 
+                          src={player.Image_URL} 
+                          alt="img" 
+                          className="w-8 h-8 rounded-full object-cover border border-white mx-auto"
+                        />
+                      </td>
+                      <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900 font-medium">{player.name}</td>
+                      <td className="px-1 py-2 text-center border-b border-blue-900">
+                        <img
+                          src={`https://flagcdn.com/w40/${nationFlags[player.nation]}.png`}
+                          alt={player.nation}
+                          className="h-6 mx-auto"
+                        />
+                      </td>
+                      <td className="px-1 py-2 text-center border-b border-blue-900">
+                        <img 
+                          src={`/badges/${player.club}.png`}
+                          alt="img" 
+                          className="w-10 h-10 rounded-full object-cover border-none mx-auto"
+                        />
+                      </td>
+                      <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
+                        {player.pos}
+                      </td>
+                      <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
+                        {player.age}
+                      </td>
+                      <td className="px-1 py-2 border-b border-blue-900">
+                        <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.defense_ratings)} bg-opacity-80`}>
+                          {player.defense_ratings.toFixed(1)}
                         </div>
                       </td>
+                      <td className="px-1 py-2 border-b border-blue-900">
+                        <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.passing_ratings)} bg-opacity-80`}>
+                          {player.passing_ratings.toFixed(1)}
+                        </div>
+                      </td>
+                      <td className="px-1 py-2 border-b border-blue-900">
+                        <div className={`w-16 mx-auto px-2 py-1.5 text-center text-white rounded ${getRatingColor(player.shooting_ratings)} bg-opacity-80`}>
+                          {player.shooting_ratings.toFixed(1)}
+                        </div>
+                      </td>
+                      <td className="px-1 py-2 border-b border-blue-900">
+                        <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
+                          {player.potential_ratings.toFixed(1)}
+                        </div>
+                      </td>
+                      <td className="px-1 py-2 border-b border-blue-900">
+                        <div className="bg-blue-950 border-2 text-blue-100 px-2.5 py-1.5 rounded w-16 text-center font-bold mx-auto">
+                          {player.overall_ratings.toFixed(1)}
+                        </div>
+                      </td>
+                      <td className="px-1 py-2 text-center text-blue-200 border-b border-blue-900">
+                        {player.Market_Value === -1
+                          ? "Retired"
+                          : player.Market_Value === 0
+                          ? "<€25K"
+                          : player.Market_Value >= 1_000_000
+                          ? `€${(player.Market_Value / 1_000_000).toFixed(1)}M`
+                          : player.Market_Value >= 1_000
+                          ? `€${(player.Market_Value / 1_000).toFixed(1)}K`
+                          : `€${player.Market_Value}`}
+                      </td>
+
+
+                      <td className="px-1 py-2 text-center border-b border-blue-900">
+                        <button
+                          onClick={() => toggleRow(player._id)}
+                          className="p-1 hover:bg-blue-800 rounded-full transition-colors"
+                        >
+                          {expandedRows.has(player._id) ? (
+                            <Minus className="w-4 h-4 text-blue-200" />
+                          ) : (
+                            <Plus className="w-4 h-4 text-blue-200" />
+                          )}
+                        </button>
+                      </td>
                     </tr>
-                  )}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
+                    {expandedRows.has(player._id) && (
+                      <tr>
+                        <td colSpan="13" className="bg-blue-900/30 px-4 py-3 border-b border-blue-700">
+                          <div className="text-blue-200">
+                            <PlayerDashboard player={player} />
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </table>
           </div>
 
           {/* Pagination Controls */}
