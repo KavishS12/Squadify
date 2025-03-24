@@ -17,6 +17,7 @@ app.use(
       origin: [
         "http://localhost:5173",
         "https://squadify-haxophone.netlify.app",
+        "https://squadify-haxophone.vercel.app",
       ],
       credentials: true,
     })
