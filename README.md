@@ -221,7 +221,7 @@ If you want to switch between a local and deployed backend, update the API URLs 
 ---
 
 ## Team
-Developed by **Team Haxophone** as part of a Hacksplosion - Deloitte India Hackathon 2025.
+Developed by **Team Haxophone** as part of Hacksplosion - Deloitte India Hackathon 2025.
 
 ---
 
