@@ -68,7 +68,7 @@ def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubb
     "5-4-1": [1, 5, 4, 1],   # 5 Defenders, 4 Midfielders, 1 Forward
     }
     
-    scoring_weights = {
+    scoring_weights = { #Scoring weights can be tuned to requirements, the names of the strategy chosen is not strictly accurate when converted to the app, names can be different
         "onlypotential": (0, 1),
         "futurestars": (0.15, 0.85),
         "peakplayers": (0.5, 0.5),
@@ -90,12 +90,12 @@ def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubb
             base_score = w_overall * overall[i] + w_potential * potential[i]
             total_score += base_score
             total_market_value += market_value[i]
-            max_boost = max((compatibility_boosts.get((i, j), 0) for j in individual if i != j), default=0)
+            max_boost = max((compatibility_boosts.get((i, j), 0) for j in individual if i != j), default=0)#Chooses max boost among Nation and Club and DOESNT STACK! (Can be changed to stack boosts)
             total_score += max_boost * overall[i]
         
-        if total_market_value > max_budget:
+        if total_market_value > max_budget:#Huge penalty for exceeding Max Budget
             return (-100000,)
-        elif total_market_value < min_budget:
+        elif total_market_value < min_budget:#Large penalty for not reaching Min Budget Utilisation
             return (total_score - 50000,)
         
         return (total_score,)
@@ -181,7 +181,7 @@ def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubb
         "average_overall": avg_overall,
         "average_potential": avg_potential
     }
-
+#Flask API for ML Integration
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ["http://localhost:5173","https://squadify-haxophone.netlify.app","https://squadify-haxophone.vercel.app"]}})
 
