@@ -152,8 +152,8 @@ def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubb
     best_overall_ind = None
     best_overall_fitness = float('-inf')
     
-    for gen in range(nogens):
-        offspring = algorithms.varAnd(population, toolbox, cxpb=0.7, mutpb=0.2)
+    for gen in range(nogens):#no gens slider can be added to the website for hyperparameter tuning (maybe an advanced option)
+        offspring = algorithms.varAnd(population, toolbox, cxpb=0.7, mutpb=0.2) #mutpb can be increased to increase probabality of mutation
         for ind in offspring:
             ind.fitness.values = toolbox.evaluate(ind)
         
@@ -164,7 +164,7 @@ def select_best_squad(min_budget, max_budget, formation, scoring_strategy, clubb
             best_overall_ind = creator.Individual(current_best)
             best_overall_fitness = current_best_fitness
         
-        elites = tools.selBest(population, k=5)
+        elites = tools.selBest(population, k=5) #k can be increased to increase elitism; keeps best players regardless of the individual squad fitness
         population[:] = tools.selBest(offspring, k=len(population) - 5) + elites
     
     best_squad = best_overall_ind
